@@ -406,6 +406,8 @@ export default function Home() {
             SaralGST
           </div>
           <p className="text-text-secondary mb-4">sahigst.in</p>
+          <p className="text-sm text-text-muted mb-2">v1.0.0 — Updated Sept 2025</p>
+          <a href="/changelog" className="text-xs text-text-muted hover:text-accent transition-colors block mb-2">What&apos;s new</a>
           <p className="text-sm text-text-muted">
             GST 2.0 data updated Sept 22, 2025
           </p>
