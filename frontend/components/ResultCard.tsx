@@ -71,7 +71,7 @@ export default function ResultCard({ result }: ResultCardProps) {
         {result.description}
       </h3>
       {result.description_hi && (
-        <p className="text-lg text-text-secondary mb-6">{result.description_hi}</p>
+        <p className="text-lg text-text-secondary mb-6 font-inter font-sans">{result.description_hi}</p>
       )}
 
       {/* Rate comparison */}

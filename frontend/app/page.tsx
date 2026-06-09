@@ -119,13 +119,13 @@ export default function Home() {
       {/* PROBLEM STRIP */}
       <section className="py-6 bg-bg-2 border-y border-border overflow-hidden">
         <div className="flex whitespace-nowrap animate-marquee">
-          <span className="mx-8 text-text-secondary font-space-grotesk text-lg">
+          <span className="mx-8 text-text-secondary font-space-grotesk text-lg tracking-widest uppercase">
             GST 2.0 · Sept 2025 · Rates Changed · 12% → 5% · 28% → 18% · Kya aapka rate sahi hai? ·
           </span>
-          <span className="mx-8 text-text-secondary font-space-grotesk text-lg">
+          <span className="mx-8 text-text-secondary font-space-grotesk text-lg tracking-widest uppercase">
             GST 2.0 · Sept 2025 · Rates Changed · 12% → 5% · 28% → 18% · Kya aapka rate sahi hai? ·
           </span>
-          <span className="mx-8 text-text-secondary font-space-grotesk text-lg">
+          <span className="mx-8 text-text-secondary font-space-grotesk text-lg tracking-widest uppercase">
             GST 2.0 · Sept 2025 · Rates Changed · 12% → 5% · 28% → 18% · Kya aapka rate sahi hai? ·
           </span>
         </div>
