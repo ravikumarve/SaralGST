@@ -1,0 +1,49 @@
+# SaralGST - Git Ignore
+# These files contain documentation, architecture plans, and project metadata
+# that should not be committed to the repository
+
+# Architecture and Planning Documents
+ACCESSIBILITY_REQUIREMENTS.md
+AGENTS.md
+API_TESTING_STRATEGY.md
+ARCHITECTURE_APPROVAL_SUMMARY.md
+BACKEND_ARCHITECTURE.md
+DEVOPS_STRATEGY.md
+FINAL_SUMMARY.md
+FRONTEND_ARCHITECTURE.md
+IMPLEMENTATION_PLAN.md
+PERFORMANCE_TESTING_PLAN.md
+PRD.md
+PROJECT_SETUP_COMPLETE.md
+SECURITY_ARCHITECTURE.md
+SGT.md
+
+# Any other documentation or temporary files
+*.md
+*.txt
+*.log
+*.tmp
+
+# IDE and Editor Configuration
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Python Virtual Environment
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node.js
+node_modules/
+*.log
+
+# Build and Distribution
+dist/
+build/
+*.egg-info/
