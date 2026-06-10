@@ -19,12 +19,20 @@ Version: 1.0.0
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from pydantic import BaseModel
 import json
 import os
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
+from contextlib import asynccontextmanager
 import logging
+
+# Import config and routers
+from config import Config
+from routers import lookup, validate
 
 # Configure logging
 logging.basicConfig(
@@ -42,41 +50,6 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Configuration
-class Config:
-    """Application configuration"""
-    
-    # Data paths
-    BASE_DIR = Path(__file__).parent
-    DATA_DIR = BASE_DIR / "data"
-    RATES_FILE = DATA_DIR / "gst_rates.json"
-    
-    # API configuration
-    API_VERSION = "1.0.0"
-    DATA_VERSION = "GST_2.0_Sept2025"
-    
-    # Rate limiting
-    RATE_LIMIT_FREE = int(os.getenv("RATE_LIMIT_FREE", "3"))
-    RATE_LIMIT_PAID = int(os.getenv("RATE_LIMIT_PAID", "1000"))
-    
-    # CORS
-    ALLOWED_ORIGINS = os.getenv(
-        "ALLOWED_ORIGINS",
-        "http://localhost:3000,https://saralgst.in"
-    ).split(",")
-    
-    # Security
-    HMAC_SECRET = os.getenv("HMAC_SECRET", "")
-    
-    @classmethod
-    def validate(cls):
-        """Validate configuration"""
-        if not cls.HMAC_SECRET:
-            logger.warning("HMAC_SECRET not set - using default (INSECURE!)")
-        if not cls.RATES_FILE.exists():
-            raise FileNotFoundError(f"Rates file not found: {cls.RATES_FILE}")
-        logger.info(f"Configuration validated - Data version: {cls.DATA_VERSION}")
-
 # Validate configuration on startup
 try:
     Config.validate()
@@ -92,6 +65,34 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# API Version middleware
+@app.middleware("http")
+async def add_api_version_header(request: Request, call_next):
+    """Add X-API-Version header to all responses."""
+    response = await call_next(request)
+    response.headers["X-API-Version"] = Config.API_VERSION
+    return response
+# Rate limiting
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+
+# Rate limit exceeded handler
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
+    """Handle rate limit exceeded errors"""
+    return JSONResponse(
+        status_code=429,
+        content={
+            "error": "rate_limit_exceeded",
+            "message": "Aaj ke 3 lookups ho gaye. Kal phir aayein ya upgrade karein.",
+            "details": "Free tier: 3 lookups per day per IP address.",
+            "upgrade_url": "https://saralgst.in/upgrade"
+        }
+    )
+
+# Include routers
+app.include_router(lookup.router)
+app.include_router(validate.router)
 
 # Load GST rates data at startup
 def load_rates_data():
@@ -126,7 +127,6 @@ class HealthResponse(BaseModel):
 async def health_check():
     """
     Health check endpoint
-    
     Returns API status, version, and data version.
     Used for monitoring and uptime checks.
     """
@@ -134,7 +134,7 @@ async def health_check():
         status="ok",
         version=Config.API_VERSION,
         data_version=Config.DATA_VERSION,
-        timestamp=datetime.utcnow().isoformat(),
+        timestamp=datetime.now(timezone.utc).isoformat(),
         items_count=len(rates_data["items"])
     )
 
