@@ -32,7 +32,7 @@ import logging
 
 # Import config and routers
 from config import Config
-from routers import lookup, validate
+from routers import lookup, validate, v1_gst
 
 # Configure logging
 logging.basicConfig(
@@ -93,6 +93,7 @@ async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
 # Include routers
 app.include_router(lookup.router)
 app.include_router(validate.router)
+app.include_router(v1_gst.router, prefix="/api/v1/gst", tags=["GST V1 API"])
 
 # Load GST rates data at startup
 def load_rates_data():
