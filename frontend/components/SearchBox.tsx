@@ -11,6 +11,7 @@ interface SearchBoxProps {
 export default function SearchBox({ onSearch, loading = false, placeholder }: SearchBoxProps) {
   const [query, setQuery] = useState('');
   const [language, setLanguage] = useState<'en' | 'hi'>('en');
+  const [mode, setMode] = useState<'product' | 'hsn'>('product');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,24 +24,46 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
     setLanguage((prev) => (prev === 'en' ? 'hi' : 'en'));
   };
 
+  const handleModeToggle = () => {
+    setMode((prev) => (prev === 'product' ? 'hsn' : 'product'));
+    setQuery(''); // Clear query when switching modes for better UX
+  };
+
   const getPlaceholder = () => {
     if (placeholder) return placeholder;
+    if (mode === 'hsn') {
+      return language === 'en'
+        ? "Enter HSN code... e.g. '8517'"
+        : "HSN कोड लिखें... जैसे '8517'";
+    }
     return language === 'en'
-      ? "Product ka naam likhein... jaise 'LED TV' ya 'cement' ya HSN code '8528'"
-      : "उत्पाद का नाम लिखें... जैसे 'LED TV' या 'cement' या HSN code '8528'";
+      ? "Product ka naam likhein... jaise 'LED TV' ya 'cement'"
+      : "उत्पाद का नाम लिखें... जैसे 'LED TV' या 'cement'";
   };
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl">
       <div className="relative">
-        {/* Language toggle */}
-        <button
-          type="button"
-          onClick={handleLanguageToggle}
-          className="absolute left-4 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-accent hover:text-accent-2 transition-colors border border-accent/30 rounded-full"
-        >
-          {language === 'en' ? 'EN' : 'हिं'}
-        </button>
+        {/* Controls Group */}
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2 z-10">
+          {/* Language toggle */}
+          <button
+            type="button"
+            onClick={handleLanguageToggle}
+            className="px-2 py-1 text-xs font-medium text-accent hover:text-accent-2 transition-colors border border-accent/30 rounded-full bg-bg/50 backdrop-blur-sm"
+          >
+            {language === 'en' ? 'EN' : 'हिं'}
+          </button>
+
+          {/* Mode toggle */}
+          <button
+            type="button"
+            onClick={handleModeToggle}
+            className="px-2 py-1 text-xs font-medium text-text-secondary hover:text-text-primary transition-colors border border-border rounded-full bg-bg/50 backdrop-blur-sm"
+          >
+            {mode === 'product' ? '📦 Product' : '🔢 HSN'}
+          </button>
+        </div>
 
         {/* Input */}
         <div className={`${loading ? 'rounded-full animate-shimmer p-[2px]' : ''}`}>
@@ -51,9 +74,11 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
             placeholder={getPlaceholder()}
             maxLength={200}
             disabled={loading}
-            className={`w-full pl-20 pr-24 py-4 bg-surface border ${
+            className={`w-full pl-32 pr-24 py-4 bg-surface border ${
               loading ? 'border-transparent' : 'border-border'
-            } rounded-full text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-bg transition-all duration-200`}
+            } rounded-full text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 focus:ring-offset-bg transition-all duration-200 ${
+              mode === 'hsn' ? 'font-jetbrains-mono' : 'font-inter'
+            }`}
           />
         </div>
 

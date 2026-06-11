@@ -2,12 +2,7 @@
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
 
-export interface LookupRequest {
-  query: string;
-  query_type?: 'auto' | 'hsn' | 'product_name';
-  language?: 'en' | 'hi';
-}
-
+// Matches backend models/lookup.py LookupResponse
 export interface LookupResponse {
   hsn_code: string;
   description: string;
@@ -22,6 +17,22 @@ export interface LookupResponse {
   confidence: number;
   interpreted_from: string;
   warning?: string;
+}
+
+export interface CalculationResponse {
+  base_price: number;
+  gst_rate: number;
+  cgst: number;
+  sgst: number;
+  igst: number;
+  total_amount: number;
+}
+
+export interface ExplanationResponse {
+  item: string;
+  rate: number;
+  category: string;
+  explanation: string;
 }
 
 export interface ErrorResponse {
@@ -58,16 +69,46 @@ export class ApiClient {
     return headers;
   }
 
-  async lookup(request: LookupRequest): Promise<LookupResponse> {
-    const response = await fetch(`${this.baseUrl}/api/lookup`, {
-      method: 'POST',
+  async lookup(query: string, queryType: string = 'auto', language: string = 'en'): Promise<LookupResponse> {
+    const params = new URLSearchParams({ query, query_type: queryType, language });
+    const response = await fetch(`${this.baseUrl}/api/v1/gst/lookup?${params}`, {
+      method: 'GET',
       headers: this.getHeaders(),
-      body: JSON.stringify(request),
     });
 
     if (!response.ok) {
       const error: ErrorResponse = await response.json();
       throw new Error(error.message || 'Lookup failed');
+    }
+
+    return response.json();
+  }
+
+  async explain(itemName: string): Promise<ExplanationResponse> {
+    const params = new URLSearchParams({ item_name: itemName });
+    const response = await fetch(`${this.baseUrl}/api/v1/gst/explain?${params}`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    });
+
+    if (!response.ok) {
+      const error: ErrorResponse = await response.json();
+      throw new Error(error.message || 'Explanation failed');
+    }
+
+    return response.json();
+  }
+
+  async calculate(basePrice: number, gstRate: number): Promise<CalculationResponse> {
+    const response = await fetch(`${this.baseUrl}/api/v1/gst/calculate`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ base_price: basePrice, gst_rate: gstRate }),
+    });
+
+    if (!response.ok) {
+      const error: ErrorResponse = await response.json();
+      throw new Error(error.message || 'Calculation failed');
     }
 
     return response.json();

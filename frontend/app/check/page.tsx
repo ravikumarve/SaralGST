@@ -7,6 +7,7 @@ import ResultCard from '@/components/ResultCard';
 import RateComparison from '@/components/RateComparison';
 import UsageCounter from '@/components/UsageCounter';
 import UpgradeModal from '@/components/UpgradeModal';
+import TaxCalculator from '@/components/TaxCalculator';
 import { apiClient, LookupResponse } from '@/lib/api';
 import { storageManager } from '@/lib/storage';
 
@@ -42,7 +43,6 @@ export default function CheckPage() {
   }, []);
 
   const handleSearch = async (query: string) => {
-    // Check rate limit
     if (storageManager.hasReachedDailyLimit()) {
       setShowUpgradeModal(true);
       return;
@@ -53,24 +53,20 @@ export default function CheckPage() {
     setResult(null);
 
     try {
-      // Check if query is numeric (HSN code)
       const isNumeric = /^\d+$/.test(query);
 
-      const response = await apiClient.lookup({
+      const response = await apiClient.lookup(
         query,
-        query_type: isNumeric ? 'hsn' : 'auto',
-        language: storageManager.getLanguage(),
-      });
+        isNumeric ? 'hsn' : 'auto',
+        storageManager.getLanguage(),
+      );
 
       setResult(response);
-
-      // Increment lookups counter
       storageManager.incrementLookups();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Lookup failed';
       setError(errorMessage);
 
-      // Check if it's a rate limit error
       if (errorMessage.includes('rate limit') || errorMessage.includes('limit')) {
         setShowUpgradeModal(true);
       }
@@ -85,14 +81,11 @@ export default function CheckPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-bg relative overflow-hidden">
-      {/* Ambient glow orbs */}
       <div ref={orb1Ref} className="glow-orb glow-orb-1 absolute top-20 left-20" />
       <div ref={orb2Ref} className="glow-orb glow-orb-2 absolute bottom-20 right-20" />
 
-      {/* Usage counter */}
       <UsageCounter onLimitReached={handleLimitReached} />
 
-      {/* Main content */}
       <main className="relative z-10 flex flex-col items-center justify-center px-6 py-20 w-full max-w-4xl">
         <h1 className="text-4xl md:text-6xl font-bold font-space-grotesk mb-8 text-center">
           <span className="text-gradient">GST Rate Checker</span>
@@ -102,28 +95,33 @@ export default function CheckPage() {
           Product ka naam likhein... jaise &apos;LED TV&apos; ya &apos;cement&apos; ya HSN code &apos;8528&apos;
         </p>
 
-        {/* Search box */}
         <SearchBox onSearch={handleSearch} loading={loading} />
 
-        {/* Error message */}
         {error && (
           <div className="mt-8 p-4 bg-red/10 border border-red/30 rounded-xl max-w-2xl">
             <p className="text-red text-center">{error}</p>
           </div>
         )}
 
-        {/* Result */}
         {result && !loading && (
-          <div className="mt-12 w-full">
+          <div className="mt-12 w-full space-y-8">
             <ResultCard result={result} />
-            <div className="mt-6">
-              <RateComparison result={result} />
+
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="w-full">
+                <RateComparison result={result} />
+              </div>
+              <div className="w-full">
+                <TaxCalculator
+                  gstRate={result.new_rate || 0}
+                  itemName={result.description || 'Selected Item'}
+                />
+              </div>
             </div>
           </div>
         )}
       </main>
 
-      {/* Upgrade modal */}
       <UpgradeModal
         open={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}

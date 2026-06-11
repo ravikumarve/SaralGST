@@ -18,17 +18,6 @@ export default function ResultCard({ result }: ResultCardProps) {
     }
   };
 
-  const getMovementIcon = () => {
-    switch (result.movement) {
-      case 'down':
-        return '↓';
-      case 'up':
-        return '↑';
-      default:
-        return '→';
-    }
-  };
-
   const getMovementLabel = () => {
     switch (result.movement) {
       case 'down':

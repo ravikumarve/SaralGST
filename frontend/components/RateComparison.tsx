@@ -83,7 +83,7 @@ export default function RateComparison({ result }: RateComparisonProps) {
         {/* Old rate bar */}
         <div
           className="absolute left-0 top-0 h-full bg-surface border-r border-border flex items-center justify-end pr-3 transition-all duration-700 ease-out"
-          style={{ width: animated ? `${result.old_rate}%` : '0%' }}
+          style={{ width: animated ? `${Math.max(result.old_rate, 5)}%` : '0%' }}
         >
           <span className="text-sm font-bold text-text-primary">{result.old_rate}%</span>
         </div>
@@ -98,7 +98,7 @@ export default function RateComparison({ result }: RateComparisonProps) {
               : 'bg-accent/30'
           } flex items-center justify-end pr-3 transition-all duration-700 ease-out`}
           style={{
-            width: animated ? `${result.new_rate}%` : '0%',
+            width: animated ? `${Math.max(result.new_rate, 5)}%` : '0%',
             transitionDelay: '200ms',
           }}
         >
