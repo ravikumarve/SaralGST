@@ -28,17 +28,17 @@ export default function Home() {
     <div className="max-w-[1280px] mx-auto px-8">
       {/* ===== Hero ===== */}
       <section className="pt-32 pb-16 text-center flex flex-col items-center">
-        <div className="status-badge mb-8">
+        <div className="status-badge mb-10">
           v1.0.0 &middot; GST 2.0 Ready
         </div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] leading-none font-bold max-w-[1000px] mb-6">
+        <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] leading-none font-bold max-w-[1000px] mb-8">
           Sahi rate.
           <br />
           <span className="text-gradient">Seedha jawab.</span>
         </h1>
 
-        <p className="text-lg md:text-xl text-[#a1a1aa] max-w-[600px] mb-12 leading-relaxed">
+        <p className="text-lg md:text-xl text-[#a1a1aa] max-w-[600px] mb-16 leading-relaxed">
           Eliminate revenue leakage and bypass legacy ERP updates.
           India&apos;s smartest, fastest API for resolving GST rate confusion,
           engineered for Tier 2 &amp; Tier 3 scale.
@@ -167,7 +167,7 @@ export default function Home() {
 
       {/* ===== Pricing ===== */}
       <section id="pricing" className="py-24">
-        <div className="section-header text-center mx-auto">
+        <div className="section-header" style={{ margin: '0 auto', textAlign: 'center' }}>
           <h2>
             Transparent <span className="text-accent">Access</span>.
           </h2>
