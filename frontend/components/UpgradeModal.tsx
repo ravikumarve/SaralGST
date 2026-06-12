@@ -78,14 +78,12 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
       <Dialog.Portal>
-        {/* L3 glass overlay — backdrop-blur */}
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/80" />
         <Dialog.Content className="fixed inset-0 z-50 flex items-center justify-center p-6">
-          {/* L3 glass dialog */}
-          <div className="w-full max-w-md glass-card p-8 border border-white/10">
+          <div className="w-full max-w-md bg-[#0d0d0d] border border-[#262626] rounded-2xl p-8 shadow-2xl">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-[#f0f0ff] font-space-grotesk mb-2">
+                <h2 className="text-2xl font-bold text-[#ededed] font-space-grotesk mb-2">
                   Aaj ki limit ho gayi
                 </h2>
                 <p className="text-sm text-[#71717a]">
@@ -93,7 +91,7 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                 </p>
               </div>
               <Dialog.Close asChild>
-                <button className="text-[#4a4a5a] hover:text-[#f0f0ff] transition-colors">
+                <button className="text-[#71717a] hover:text-[#ededed] transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -101,19 +99,19 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
               </Dialog.Close>
             </div>
 
-            {/* Plan selection — L2 border system */}
+            {/* Plan selection */}
             <div className="space-y-4 mb-6">
               <button
                 onClick={() => setSelectedPlan('individual')}
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   selectedPlan === 'individual'
-                    ? 'border-[#00f0ff] bg-[#00f0ff]/5'
-                    : 'border-[#262626] bg-[#0d0d0d] hover:border-[#404040]'
+                    ? 'border-[#00f0ff] bg-[rgba(0,240,255,0.05)]'
+                    : 'border-[#262626] bg-[#141414] hover:border-[#404040]'
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-medium text-[#f0f0ff]">Individual</span>
-                  <span className="text-xl font-bold text-gradient">₹499</span>
+                  <span className="font-medium text-[#ededed]">Individual</span>
+                  <span className="text-xl font-bold text-[#00f0ff]">₹499</span>
                 </div>
                 <div className="text-sm text-[#71717a]">Unlimited lookups per month</div>
               </button>
@@ -122,28 +120,28 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                 onClick={() => setSelectedPlan('ca_firm')}
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   selectedPlan === 'ca_firm'
-                    ? 'border-[#00f0ff] bg-[#00f0ff]/5'
-                    : 'border-[#262626] bg-[#0d0d0d] hover:border-[#404040]'
+                    ? 'border-[#00f0ff] bg-[rgba(0,240,255,0.05)]'
+                    : 'border-[#262626] bg-[#141414] hover:border-[#404040]'
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-medium text-[#f0f0ff]">CA Firm</span>
-                  <span className="text-xl font-bold text-gradient">₹1,999</span>
+                  <span className="font-medium text-[#ededed]">CA Firm</span>
+                  <span className="text-xl font-bold text-[#00f0ff]">₹1,999</span>
                 </div>
                 <div className="text-sm text-[#71717a]">50 GSTINs per month</div>
               </button>
             </div>
 
-            {/* CTA — L1 gradient */}
+            {/* CTA */}
             <button
               onClick={handlePayment}
               disabled={loading}
-              className="w-full py-3.5 bg-gradient-to-r from-[#00f0ff] to-[#8a2be2] text-black font-bold rounded-xl hover:shadow-lg hover:shadow-[#00f0ff]/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full py-3.5 bg-[#ededed] text-[#050505] font-bold rounded-xl hover:bg-white/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               {loading ? 'Processing...' : 'Pay Now'}
             </button>
 
-            <p className="mt-4 text-xs text-[#4a4a5a] text-center font-jetbrains-mono">
+            <p className="mt-4 text-[10px] text-[#71717a] text-center mono">
               Secure payment powered by Razorpay
             </p>
           </div>

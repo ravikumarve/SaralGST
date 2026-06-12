@@ -20,15 +20,6 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
     }
   };
 
-  const handleLanguageToggle = () => {
-    setLanguage((prev) => (prev === 'en' ? 'hi' : 'en'));
-  };
-
-  const handleModeToggle = () => {
-    setMode((prev) => (prev === 'product' ? 'hsn' : 'product'));
-    setQuery('');
-  };
-
   const getPlaceholder = () => {
     if (placeholder) return placeholder;
     if (mode === 'hsn') {
@@ -43,41 +34,26 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl">
-      <div className="gradient-border rounded-xl">
-        <div
-          className={`relative bg-[#040814] rounded-xl border ${
-            loading
-              ? 'border-transparent'
-              : 'border-[#262626] focus-within:border-[#404040]'
-          } transition-colors duration-200 overflow-hidden`}
-        >
-          {/* Scanline loading animation */}
-          {loading && (
-            <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent animate-scanline" />
-            </div>
-          )}
+      <div className="bg-[#0d0d0d] border border-[#262626] rounded-xl overflow-hidden focus-within:border-[#404040] transition-colors">
+        {/* Controls + Input */}
+        <div className="flex items-center gap-2 pl-4 pr-2 py-2">
+          {/* Language toggle */}
+          <button
+            type="button"
+            onClick={() => setLanguage((p) => (p === 'en' ? 'hi' : 'en'))}
+            className="mono text-[11px] text-[#71717a] bg-[#141414] border border-[#262626] px-2 py-1 rounded-md hover:border-[#404040] transition-colors shrink-0"
+          >
+            {language === 'en' ? 'EN' : 'हिं'}
+          </button>
 
-          {/* Controls Group */}
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-10">
-            {/* Language toggle — L3 tag-violet pill */}
-            <button
-              type="button"
-              onClick={handleLanguageToggle}
-              className="tag-violet !text-[10px] !px-2 !py-1 hover:bg-[rgba(157,0,255,0.2)] transition-colors"
-            >
-              {language === 'en' ? 'EN' : 'हिं'}
-            </button>
-
-            {/* Mode toggle — L3 tag-emerald pill */}
-            <button
-              type="button"
-              onClick={handleModeToggle}
-              className="tag-emerald !text-[10px] !px-2 !py-1 hover:bg-[rgba(0,255,102,0.2)] transition-colors"
-            >
-              {mode === 'product' ? 'Product' : 'HSN'}
-            </button>
-          </div>
+          {/* Mode toggle */}
+          <button
+            type="button"
+            onClick={() => { setMode((p) => (p === 'product' ? 'hsn' : 'product')); setQuery(''); }}
+            className="mono text-[11px] text-[#71717a] bg-[#141414] border border-[#262626] px-2 py-1 rounded-md hover:border-[#404040] transition-colors shrink-0"
+          >
+            {mode === 'product' ? 'Product' : 'HSN'}
+          </button>
 
           {/* Input */}
           <input
@@ -87,16 +63,16 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
             placeholder={getPlaceholder()}
             maxLength={200}
             disabled={loading}
-            className={`w-full pl-28 pr-16 py-4 bg-transparent text-[#f0f0ff] placeholder-[#4a4a5a] focus:outline-none text-base transition-all ${
-              mode === 'hsn' ? 'font-jetbrains-mono' : 'font-inter'
+            className={`flex-1 px-3 py-2 bg-transparent text-[#ededed] placeholder-[#71717a] focus:outline-none text-base ${
+              mode === 'hsn' ? 'mono font-normal' : 'font-inter'
             }`}
           />
 
-          {/* Submit button — L1 gradient */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading || !query.trim()}
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 py-2 bg-gradient-to-r from-[#00f0ff] to-[#8a2be2] text-black font-bold text-sm rounded-lg hover:shadow-lg hover:shadow-[#00f0ff]/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
+            className="shrink-0 px-4 py-2 bg-[#ededed] text-[#050505] text-sm font-medium rounded-lg hover:bg-white/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             {loading ? (
               <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -113,7 +89,7 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
       </div>
 
       {/* Character count */}
-      <div className="text-right mt-2 text-xs text-[#4a4a5a] font-jetbrains-mono">
+      <div className="text-right mt-2 text-[10px] text-[#71717a] mono">
         {query.length}/200
       </div>
     </form>

@@ -51,28 +51,25 @@ export default function CheckPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#040814] relative">
-      {/* L2 precision grid background */}
-      <div className="fixed inset-0 -z-20 bg-grid opacity-40" />
-
-      {/* L3 holographic orbs — CSS float-orb animation, no GSAP */}
-      <div className="fixed -top-24 -left-24 w-[400px] h-[400px] rounded-full bg-[#8a2be2] opacity-20 blur-[80px] -z-10 animate-float-orb pointer-events-none" />
-      <div className="fixed -bottom-32 -right-24 w-[500px] h-[500px] rounded-full bg-[#00FF66] opacity-15 blur-[80px] -z-10 animate-float-orb pointer-events-none" style={{ animationDelay: '-5s' }} />
-      <div className="fixed top-1/3 left-1/3 w-[300px] h-[300px] rounded-full bg-[#00f0ff] opacity-10 blur-[80px] -z-10 animate-float-orb pointer-events-none" style={{ animationDelay: '-10s' }} />
-
-      {/* Usage counter — L2 panel + L3 status dot */}
+    <>
+      {/* Usage counter */}
       <UsageCounter onLimitReached={handleLimitReached} />
 
       {/* Main content */}
-      <main className="relative z-10 flex flex-col items-center justify-center px-6 py-28 md:py-20 w-full max-w-4xl mx-auto flex-1">
-        {/* L3 Outfit 900 heading — brutalist */}
-        <h1 className="font-outfit font-black text-5xl md:text-6xl lg:text-7xl uppercase text-center mb-4 text-[#f0f0ff] leading-tight">
+      <main className="min-h-screen flex flex-col items-center justify-center px-6 py-28 md:py-20 w-full max-w-4xl mx-auto">
+        {/* Status badge */}
+        <div className="status-badge mb-6">
+          GST Rate Checker
+        </div>
+
+        {/* Heading */}
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-space-grotesk text-center mb-4 text-[#ededed] leading-tight">
           GST Rate<br />
-          <span className="text-gradient">Checker</span>
+          <span className="text-accent">Checker</span>
         </h1>
 
-        {/* L2 muted subtitle */}
-        <p className="text-base md:text-lg text-[#71717a] mb-12 text-center max-w-xl leading-relaxed">
+        {/* Subtitle */}
+        <p className="text-base md:text-lg text-[#a1a1aa] mb-10 text-center max-w-xl leading-relaxed">
           Product ka naam likhein&hellip; jaise &apos;LED TV&apos; ya &apos;cement&apos; ya HSN code &apos;8528&apos;
         </p>
 
@@ -81,8 +78,8 @@ export default function CheckPage() {
 
         {/* Error */}
         {error && (
-          <div className="mt-8 p-4 border-l-2 border-[#ff3366] bg-[#ff3366]/5 rounded-r-xl max-w-2xl w-full">
-            <p className="text-sm text-[#ff3366]">{error}</p>
+          <div className="mt-8 p-4 border-l-2 border-[#8a2be2] bg-[rgba(138,43,226,0.05)] rounded-r-xl max-w-2xl w-full">
+            <p className="text-sm text-[#8a2be2]">{error}</p>
           </div>
         )}
 
@@ -111,6 +108,6 @@ export default function CheckPage() {
         open={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
       />
-    </div>
+    </>
   );
 }
