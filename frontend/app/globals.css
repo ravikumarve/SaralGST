@@ -1,32 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  /* Core palette */
+  /* === KEPT FROM CURRENT (neutral base) === */
   --bg: #050508;
   --bg-2: #0a0a12;
-  --surface: #111120;
-  --border: rgba(255,255,255,0.06);
-  --border-glow: rgba(99,102,241,0.3);
-
-  /* Text */
   --text-primary: #f0f0ff;
-  --text-secondary: rgba(240,240,255,0.5);
-  --text-muted: rgba(240,240,255,0.25);
-
-  /* Accent — Indigo/Violet (India's digital colors) */
-  --accent: #6366f1;
-  --accent-2: #8b5cf6;
-  --accent-glow: rgba(99,102,241,0.15);
-
-  /* Status */
+  --text-secondary: rgba(240, 240, 255, 0.5);
+  --text-muted: rgba(240, 240, 255, 0.25);
   --green: #10b981;
-  --red: #ef4444;
   --amber: #f59e0b;
+
+  /* === REPLACED ACCENTS (indigo → cyan + violet) === */
+  --accent: #00f0ff;           /* was #6366f1 — now electric cyan */
+  --accent-2: #8a2be2;         /* was #8b5cf6 — now electric violet */
+  --accent-gradient: linear-gradient(135deg, #00f0ff 0%, #8a2be2 100%);
+
+  /* === REPLACED COLORS === */
+  --red: #ff3366;               /* was #ef4444 — now alert red */
+  --surface: #0d0d0d;           /* was #111120 — now pure dark panel */
+  --border: #262626;            /* was rgba(255,255,255,0.06) — now solid subtle */
+
+  /* === NEW FROM LANDING-1: Industrial After-Dark === */
+  --electric-cyan: #00f0ff;
+  --electric-violet: #8a2be2;
+  --midnight-blue: #040814;
+  --carbon-gray: #151a22;
+  --carbon-light: #1e2532;
+  --alert-red: #ff3366;
+
+  /* === NEW FROM LANDING-2: Engineering Precision === */
+  --border-subtle: #262626;
+  --border-hover: #404040;
+  --bg-panel: #0d0d0d;
+  --bg-surface-l2: #141414;
+  --text-tertiary: #71717a;
+
+  /* === NEW FROM LANDING-3: Neo-Brutalist / Holographic === */
+  --neon-emerald: #00FF66;
+  --neon-violet: #9D00FF;
+  --neon-cyan: #00FFFF;
+  --surface-glass: rgba(20, 20, 20, 0.6);
+  --border-glass: rgba(255, 255, 255, 0.1);
+
+  /* === GLOW SHADOWS === */
+  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.3);
+  --glow-violet: 0 0 20px rgba(138, 43, 226, 0.3);
+  --glow-emerald: 0 0 20px rgba(0, 255, 102, 0.3);
 
   /* Rate movement colors */
   --rate-down: #10b981;
-  --rate-up: #ef4444;
-  --rate-same: rgba(240,240,255,0.3);
+  --rate-up: #ff3366;
+  --rate-same: rgba(240, 240, 255, 0.3);
 }
 
 @theme inline {
@@ -34,13 +58,11 @@
   --color-bg-2: var(--bg-2);
   --color-surface: var(--surface);
   --color-border: var(--border);
-  --color-border-glow: var(--border-glow);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
-  --color-accent-glow: var(--accent-glow);
   --color-green: var(--green);
   --color-red: var(--red);
   --color-amber: var(--amber);
@@ -50,6 +72,8 @@
   --font-space-grotesk: var(--font-space-grotesk);
   --font-inter: var(--font-inter);
   --font-jetbrains-mono: var(--font-jetbrains-mono);
+  --font-syncopate: var(--font-syncopate);
+  --font-outfit: var(--font-outfit);
 }
 
 * {
@@ -83,13 +107,14 @@ body::after {
   pointer-events: none;
   z-index: 9999;
 }
-/* Fallback for browsers without SVG filter support */
+
 @supports not (filter: url(#noiseFilter)) {
   body::after {
     opacity: 0.06;
   }
 }
-/* Ambient glow orbs */
+
+/* === AMBIENT ORBS === */
 .glow-orb {
   position: absolute;
   border-radius: 50%;
@@ -100,14 +125,14 @@ body::after {
 .glow-orb-1 {
   width: 400px;
   height: 400px;
-  background: var(--accent);
+  background: var(--electric-cyan);
   opacity: 0.15;
 }
 
 .glow-orb-2 {
   width: 300px;
   height: 300px;
-  background: var(--accent-2);
+  background: var(--electric-violet);
   opacity: 0.12;
 }
 
@@ -122,7 +147,7 @@ body::after {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-glow);
+  background: var(--border-subtle);
   border-radius: 4px;
 }
 
@@ -132,7 +157,7 @@ body::after {
 
 /* Selection */
 ::selection {
-  background: var(--accent-glow);
+  background: rgba(0, 240, 255, 0.15);
   color: var(--text-primary);
 }
 
@@ -170,26 +195,142 @@ textarea {
   outline: none;
 }
 
-/* Utility classes */
+/* === UTILITY CLASSES === */
+
+/* Gradient text (L1 — updated to cyan→violet) */
 .text-gradient {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  background: var(--accent-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* Border glow */
 .border-glow {
-  box-shadow: 0 0 20px var(--accent-glow);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
 }
 
-/* Animation utilities */
+/* Precision grid background (L2) */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center top;
+}
+
+/* Glassmorphism card (L3) */
+.glass-card {
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+}
+
+/* Gradient border glow (L1) */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: var(--accent-gradient);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+/* Tag pills (L3) */
+.tag-violet {
+  background: rgba(157, 0, 255, 0.1);
+  color: var(--neon-violet);
+  border: 1px solid rgba(157, 0, 255, 0.3);
+  border-radius: 100px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tag-emerald {
+  background: rgba(0, 255, 102, 0.1);
+  color: var(--neon-emerald);
+  border: 1px solid rgba(0, 255, 102, 0.3);
+  border-radius: 100px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* === KEYFRAME ANIMATIONS === */
+
+/* Terminal scanline (L3) */
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-scanline {
+  animation: scanline 2s infinite linear;
+}
+
+/* Ticker tape (L3) */
+@keyframes ticker {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+.animate-ticker {
+  animation: ticker 20s linear infinite;
+}
+
+/* Ambient orb float (L3) — CSS only, no GSAP */
+@keyframes float-orb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(100px, -80px) scale(1.3); }
+  100% { transform: translate(-50px, 60px) scale(0.9); }
+}
+
+.animate-float-orb {
+  animation: float-orb 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Pulse dot (L1) */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s infinite;
+}
+
+/* CSS scroll reveal — replaces GSAP for simple reveals */
+@keyframes fade-up {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-up 0.6s ease-out forwards;
+}
+
+.reveal-card:nth-child(1) { animation-delay: 0ms; }
+.reveal-card:nth-child(2) { animation-delay: 150ms; }
+.reveal-card:nth-child(3) { animation-delay: 300ms; }
+.reveal-card:nth-child(4) { animation-delay: 450ms; }
+
+/* Shimmer (keep for backward compat, will phase out) */
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-shimmer {
@@ -203,54 +344,51 @@ textarea {
   background-size: 200% 100%;
 }
 
+/* Float animation (keep for backward compat) */
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
 }
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
 
+/* Pulse glow (keep for backward compat) */
 @keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+/* Marquee (keep for backward compat until Phase 2 replaces it) */
 @keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .animate-marquee {
   animation: marquee 30s linear infinite;
 }
 
+/* Bounce (keep for backward compat) */
 @keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
 }
 
 .animate-bounce {
   animation: bounce 2s ease-in-out infinite;
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

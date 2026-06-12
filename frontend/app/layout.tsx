@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import {
+  Space_Grotesk,
+  Inter,
+  JetBrains_Mono,
+  Syncopate,
+  Outfit,
+} from "next/font/google";
+import FloatingNav from "@/components/FloatingNav";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -20,10 +27,33 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const syncopate = Syncopate({
+  variable: "--font-syncopate",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  weight: ["900"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "SaralGST - Sahi GST rate. Seedha jawab.",
-  description: "India's simplest GST rate checker. Type a product, get the correct rate under GST 2.0. Built for small business owners, traders, and CA firms.",
-  keywords: ["GST", "GST 2.0", "GST rates", "HSN code", "SAC code", "India GST", "GST calculator"],
+  description:
+    "India's simplest GST rate checker. Type a product, get the correct rate under GST 2.0. Built for small business owners, traders, and CA firms.",
+  keywords: [
+    "GST",
+    "GST 2.0",
+    "GST rates",
+    "HSN code",
+    "SAC code",
+    "India GST",
+    "GST calculator",
+  ],
 };
 
 export default function RootLayout({
@@ -34,9 +64,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} ${syncopate.variable} ${outfit.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <FloatingNav />
+        {children}
+      </body>
     </html>
   );
 }
