@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Link from 'next/link';
+import ParticleCanvas from '@/components/ParticleCanvas';
+import TerminalSequence from '@/components/TerminalSequence';
 
 // Register GSAP plugins
 if (typeof window !== 'undefined') {
@@ -12,8 +14,6 @@ if (typeof window !== 'undefined') {
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const orb1Ref = useRef<HTMLDivElement>(null);
-  const orb2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Hero text stagger reveal
@@ -25,29 +25,6 @@ export default function Home() {
         stagger: 0.08,
         ease: 'power3.out',
         delay: 0.3,
-      });
-    }
-
-    // Glow orb slow float
-    if (orb1Ref.current) {
-      gsap.to(orb1Ref.current, {
-        x: 60,
-        y: -40,
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-    }
-
-    if (orb2Ref.current) {
-      gsap.to(orb2Ref.current, {
-        x: -60,
-        y: 40,
-        duration: 10,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
       });
     }
 
@@ -72,36 +49,58 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-bg relative overflow-hidden">
-      {/* Ambient glow orbs */}
-      <div ref={orb1Ref} className="glow-orb glow-orb-1 absolute top-20 left-20" />
-      <div ref={orb2Ref} className="glow-orb glow-orb-2 absolute bottom-20 right-20" />
+      {/* Particle canvas background — L1 cinematic network */}
+      <ParticleCanvas opacity={0.45} />
 
       {/* HERO Section */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6 py-20 text-center relative z-10">
-        <div ref={heroRef} className="max-w-5xl">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold font-space-grotesk mb-6 leading-tight">
-            <span className="hero-line block text-text-primary">Sahi GST rate.</span>
-            <span className="hero-line block text-gradient">Seedha jawab.</span>
+      <section className="min-h-screen flex flex-col items-center justify-center px-6 py-28 md:py-20 text-center relative z-10">
+        <div ref={heroRef} className="max-w-4xl flex flex-col items-center">
+          {/* Status badge — L2 style */}
+          <div className="hero-line inline-flex items-center gap-2 px-4 py-1.5 bg-[#00f0ff]/5 border border-[#00f0ff]/20 rounded-full text-sm font-jetbrains-mono text-[#00f0ff] mb-8">
+            <span className="w-2 h-2 bg-[#00f0ff] rounded-full animate-pulse-dot shadow-lg shadow-[#00f0ff]/50" />
+            v1.0.0 · GST 2.0 Ready
+          </div>
+
+          {/* Syncopate H1 — L1 industrial heading */}
+          <h1 className="hero-line font-syncopate text-5xl md:text-7xl lg:text-8xl font-bold uppercase leading-tight mb-6 text-[#f0f0ff]">
+            Sahi Rate.
+            <br />
+            <span className="text-gradient">Seedha Jawab.</span>
           </h1>
 
-          <p className="hero-line text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-12 font-inter">
-            GST 2.0 ke baad rates badal gaye. Kya aap sahi rate file kar rahe hain?
+          {/* Subtitle — L2 muted text */}
+          <p className="hero-line text-base md:text-lg text-[#a1a1aa] max-w-xl mb-10 leading-relaxed font-inter font-light">
+            Empowering Tier 2 and Tier 3 businesses to handle compliance without
+            the legacy overhead. India&apos;s smartest API for resolving GST rate
+            confusion, powered by Gemini Flash AI.
           </p>
 
-          <div className="hero-line">
+          {/* Terminal Sequence — L3 hero centerpiece */}
+          <div className="hero-line w-full max-w-2xl mb-10">
+            <TerminalSequence />
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="hero-line flex items-center gap-4">
             <Link
               href="/check"
-              className="inline-block px-8 py-4 bg-accent hover:bg-accent-2 text-white rounded-full font-medium transition-all duration-300 hover:scale-105 border-glow"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#00f0ff] to-[#8a2be2] text-black font-bold text-sm uppercase tracking-wider rounded-full hover:shadow-lg hover:shadow-[#00f0ff]/30 transition-all duration-200 hover:-translate-y-0.5"
             >
-              Rate Check Karein →
+              Check Rate
+            </Link>
+            <Link
+              href="http://localhost:8001/docs"
+              className="inline-flex items-center px-6 py-3 bg-transparent border border-[#262626] text-[#a1a1aa] text-sm uppercase tracking-wider rounded-full hover:border-[#404040] hover:text-white transition-all duration-200 font-medium"
+            >
+              View Docs
             </Link>
           </div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
           <svg
-            className="w-6 h-6 text-text-muted"
+            className="w-5 h-5 text-[#4a4a5a] animate-bounce"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -220,8 +219,8 @@ export default function Home() {
                     <div className="text-2xl font-bold text-text-primary">{item.old}%</div>
                   </div>
 
-                  <div className={`text-2xl ${item.movement === 'down' ? 'text-green' : 'text-red'}`}>
-                    →→→
+                  <div className={`text-2xl rate-change-arrow ${item.movement === 'down' ? 'text-green' : 'text-red'}`}>
+                    →
                   </div>
 
                   <div className="text-center">
@@ -242,7 +241,7 @@ export default function Home() {
           <div className="reveal-card text-center mt-12">
             <Link
               href="/check"
-              className="inline-block px-8 py-4 bg-accent hover:bg-accent-2 text-white rounded-full font-medium transition-all duration-300 hover:scale-105"
+              className="inline-block px-8 py-4 bg-accent hover:bg-accent-2 text-black rounded-full font-medium transition-all duration-300 hover:scale-105"
             >
               Apna product check karein →
             </Link>
@@ -272,6 +271,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       {/* FOR CA FIRMS */}
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
@@ -351,7 +351,7 @@ export default function Home() {
 
             {/* Pro Plan */}
             <div className="reveal-card p-8 bg-surface border-2 border-accent rounded-2xl border-glow relative hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-accent text-white text-sm rounded-full">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-accent text-black text-sm rounded-full font-medium">
                 Popular
               </div>
               <h3 className="text-2xl font-bold text-text-primary mb-2 font-space-grotesk">
@@ -391,7 +391,7 @@ export default function Home() {
                   Cancel anytime
                 </li>
               </ul>
-              <button className="block w-full py-3 text-center bg-accent hover:bg-accent-2 text-white rounded-full transition-colors">
+              <button className="block w-full py-3 text-center bg-accent hover:bg-accent-2 text-black rounded-full transition-colors font-medium">
                 Upgrade Now
               </button>
             </div>
@@ -407,7 +407,9 @@ export default function Home() {
           </div>
           <p className="text-text-secondary mb-4">sahigst.in</p>
           <p className="text-sm text-text-muted mb-2">v1.0.0 — Updated Sept 2025</p>
-          <a href="/changelog" className="text-xs text-text-muted hover:text-accent transition-colors block mb-2">What&apos;s new</a>
+          <a href="/changelog" className="text-xs text-text-muted hover:text-accent transition-colors block mb-2">
+            What&apos;s new
+          </a>
           <p className="text-sm text-text-muted">
             GST 2.0 data updated Sept 22, 2025
           </p>
