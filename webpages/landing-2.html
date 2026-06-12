@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaralGST | The GST 2.0 API Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Structured Dark Palette */
+            --bg-base: #050505;
+            --bg-panel: #0d0d0d;
+            --bg-surface: #141414;
+            --border-subtle: #262626;
+            --border-hover: #404040;
+            
+            /* Neon Accents */
+            --accent-cyan: #00f0ff;
+            --accent-violet: #8a2be2;
+            --accent-emerald: #10b981;
+            
+            /* Text */
+            --text-primary: #ededed;
+            --text-secondary: #a1a1aa;
+            --text-tertiary: #71717a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            /* Precise engineering grid background */
+            background-image: 
+                linear-gradient(var(--border-subtle) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+            background-size: 60px 60px;
+            background-position: center top;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, .display-font {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.03em;
+        }
+
+        .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-tertiary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-accent {
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-violet) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto;
+            max-width: 1280px;
+            background: rgba(13, 13, 13, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 100px;
+            position: sticky;
+            top: 2rem;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--accent-cyan);
+            border-radius: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg-base);
+            border: 1px solid transparent;
+        }
+
+        .btn-primary:hover {
+            background: #d4d4d8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-hover);
+            background: var(--border-subtle);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 4rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.4rem 1rem;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 100px;
+            color: var(--accent-cyan);
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 5.5rem;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            max-width: 1000px;
+        }
+
+        .hero p.lead {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Bento Grid System */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(180px, auto);
+            gap: 1.5rem;
+            margin-top: 5rem;
+        }
+
+        .bento-box {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bento-box:hover {
+            border-color: var(--border-hover);
+        }
+
+        /* Subtle glowing corner effect */
+        .bento-box::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 150px; height: 150px;
+            background: radial-gradient(circle at top right, rgba(138, 43, 226, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        .box-large { grid-column: span 8; grid-row: span 2; }
+        .box-medium { grid-column: span 4; grid-row: span 2; }
+        .box-wide { grid-column: span 8; grid-row: span 1; }
+        .box-square { grid-column: span 4; grid-row: span 1; }
+
+        .bento-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .bento-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Interactive Search Mockup inside Bento */
+        .search-ui {
+            margin-top: auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .search-ui-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .live-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .rate-large {
+            font-size: 4rem;
+            line-height: 1;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent-emerald);
+        }
+
+        /* Code Block inside Bento */
+        .code-block {
+            background: #000;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .code-line {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-num { color: var(--text-tertiary); user-select: none; }
+        .code-txt { color: var(--text-secondary); }
+        .code-kw { color: var(--accent-cyan); }
+        .code-str { color: var(--accent-emerald); }
+
+        /* Metrics inside Bento */
+        .metric-value {
+            font-size: 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-primary);
+            margin-top: auto;
+        }
+
+        /* Section specific overrides */
+        .section-header {
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Pricing Section */
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .price-tier {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-tier.popular {
+            border-color: var(--accent-violet);
+            background: linear-gradient(180deg, rgba(138, 43, 226, 0.05) 0%, transparent 100%);
+            box-shadow: 0 0 0 1px var(--accent-violet);
+        }
+
+        .tier-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-price {
+            font-size: 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 2rem;
+        }
+
+        .tier-price span {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .tier-features {
+            list-style: none;
+            flex-grow: 1;
+            margin-bottom: 2.5rem;
+        }
+
+        .tier-features li {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tier-features li::before {
+            content: '';
+            width: 6px; height: 6px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 4rem 0;
+            margin-top: 4rem;
+            background: var(--bg-base);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-col h5 {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .bento-grid { display: flex; flex-direction: column; }
+            .pricing-cards { grid-template-columns: 1fr 1fr; }
+            .hero h1 { font-size: 4rem; }
+        }
+
+        @media (max-width: 768px) {
+            nav { border-radius: 0; margin: 0; padding: 1rem; }
+            .nav-links { display: none; }
+            .pricing-cards { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">
+            <div class="logo-dot"></div>
+            SaralGST
+        </a>
+        <div class="nav-links mono-font">
+            <a href="#platform">01. Platform</a>
+            <a href="#api">02. Developers</a>
+            <a href="#pricing">03. Pricing</a>
+        </div>
+        <a href="http://localhost:8000/docs" class="btn btn-secondary mono-font">API Docs →</a>
+    </nav>
+
+    <div class="container">
+        
+        <section class="hero">
+            <div class="status-badge mono-font">
+                System Status: v1.0.0 (GST 2.0 Ready)
+            </div>
+            
+            <h1>
+                Sahi rate. <br>
+                <span class="text-gradient">Seedha jawab.</span>
+            </h1>
+            
+            <p class="lead">
+                Eliminate revenue leakage and bypass legacy ERP updates. India’s smartest, fastest API for resolving GST rate confusion, engineered for Tier 2 & Tier 3 scale.
+            </p>
+            
+            <div class="hero-actions">
+                <a href="#pricing" class="btn btn-primary">Deploy Now</a>
+                <a href="#api" class="btn btn-secondary">View Documentation</a>
+            </div>
+        </section>
+
+        <section id="platform">
+            <div class="section-header">
+                <h2>The Compliance <span class="text-accent">Engine</span>.</h2>
+                <p>We replaced brittle, localized tax tables with a centralized, AI-driven backend API. Designed to integrate directly into your software stack.</p>
+            </div>
+
+            <div class="bento-grid">
+                
+                <div class="bento-box box-large">
+                    <h3 class="bento-title">AI-Powered NLP Mapping</h3>
+                    <p class="bento-desc" style="max-width: 400px;">
+                        Pass colloquial product names in English or Hindi. Our Gemini Flash integration maps "LED TV" directly to the official CBIC nomenclature and 4-digit HSN code instantly.
+                    </p>
+                    
+                    <div class="search-ui">
+                        <div class="search-ui-header mono-font">
+                            <span style="color: var(--text-tertiary);">Query: "टेलीविजन (32 इंच से बड़े)"</span>
+                            <span style="color: var(--accent-violet);">Confidence: 0.90</span>
+                        </div>
+                        <div class="live-result">
+                            <div>
+                                <div style="color: var(--text-primary); font-weight: 500; font-size: 1.1rem; margin-bottom: 5px;">Television sets (LCD/LED)</div>
+                                <div class="mono-font" style="color: var(--text-secondary);">HSN Code: 8528</div>
+                                <div class="mono-font" style="color: var(--text-tertiary); margin-top: 10px;">Ref: Notif. 8/2025-CT</div>
+                            </div>
+                            <div class="rate-large">18%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-box box-medium">
+                    <h3 class="bento-title">FastAPI Backend</h3>
+                    <p class="bento-desc">Engineered for brutal efficiency in high-volume POS environments.</p>
+                    <div class="metric-value text-accent"><200<span style="font-size: 1rem; color: var(--text-secondary);">ms</span></div>
+                    <div class="mono-font" style="color: var(--text-tertiary); margin-top: 5px;">p95 Response Time</div>
+                </div>
+
+                <div class="bento-box box-medium">
+                    <h3 class="bento-title">Historical Tracking</h3>
+                    <p class="bento-desc">Side-by-side old vs new rate comparisons post GST 2.0 reform.</p>
+                    <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: var(--text-tertiary); text-decoration: line-through; font-size: 1.5rem;">28%</span>
+                        <span style="color: var(--text-tertiary);">→</span>
+                        <span style="color: var(--accent-emerald); font-size: 2rem; font-weight: 700;">18%</span>
+                    </div>
+                </div>
+
+                <div class="bento-box box-large" id="api">
+                    <h3 class="bento-title">Developer First</h3>
+                    <p class="bento-desc">A completely headless, JSON-driven API that gets out of your way.</p>
+                    
+                    <div class="code-block mono-font">
+                        <div class="code-line">
+                            <span class="code-num">01</span>
+                            <span class="code-txt"><span class="code-kw">POST</span> /api/lookup</span>
+                        </div>
+                        <div class="code-line">
+                            <span class="code-num">02</span>
+                            <span class="code-txt">{</span>
+                        </div>
+                        <div class="code-line">
+                            <span class="code-num">03</span>
+                            <span class="code-txt" style="padding-left: 1.5rem;">"query": <span class="code-str">"LED TV"</span>,</span>
+                        </div>
+                        <div class="code-line">
+                            <span class="code-num">04</span>
+                            <span class="code-txt" style="padding-left: 1.5rem;">"language": <span class="code-str">"en"</span></span>
+                        </div>
+                        <div class="code-line">
+                            <span class="code-num">05</span>
+                            <span class="code-txt">}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <h2>Built for <span class="text-accent">Scale</span>.</h2>
+                <p>Targeting the specific operational bottlenecks of Indian commerce.</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                <div style="border-left: 2px solid var(--border-subtle); padding-left: 1.5rem;">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">POS Systems</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Stop pushing manual database updates to remote retail terminals. Fetch real-time tax brackets dynamically during checkout.</p>
+                </div>
+                <div style="border-left: 2px solid var(--accent-cyan); padding-left: 1.5rem;">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text-primary);">ERP Integrators</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Validate batch SKU uploads. Ensure HSN codes and exact GST rates are verified instantly to prevent downstream billing errors.</p>
+                </div>
+                <div style="border-left: 2px solid var(--border-subtle); padding-left: 1.5rem;">
+                    <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">CA Firms</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem;">Cross-check client ledgers against official GST 2.0 notifications via our high-volume auditing endpoints.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing">
+            <div class="section-header text-center" style="margin: 0 auto; text-align: center;">
+                <h2>Transparent <span class="text-accent">Access</span>.</h2>
+                <p>Secure your HMAC token and start querying immediately.</p>
+            </div>
+
+            <div class="pricing-cards">
+                
+                <div class="price-tier">
+                    <div class="tier-name">Sandbox</div>
+                    <div class="tier-price">₹0<span>/forever</span></div>
+                    <ul class="tier-features">
+                        <li>3 API Lookups / day</li>
+                        <li>Plain language NLP search</li>
+                        <li>Standard JSON responses</li>
+                        <li>Community Support</li>
+                    </ul>
+                    <a href="http://localhost:8000/docs" class="btn btn-secondary mono-font" style="width: 100%;">Test API Locally</a>
+                </div>
+
+                <div class="price-tier popular">
+                    <div style="color: var(--accent-violet); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 1rem;">Production Ready</div>
+                    <div class="tier-name">Pro Integration</div>
+                    <div class="tier-price">₹999<span>/month</span></div>
+                    <ul class="tier-features">
+                        <li>1,000 API Lookups / day</li>
+                        <li>Secure HMAC Token Auth</li>
+                        <li>< 200ms Response Time</li>
+                        <li>Priority Email Support</li>
+                    </ul>
+                    <a href="https://gumroad.com" target="_blank" class="btn btn-primary mono-font" style="width: 100%;">Acquire Token</a>
+                </div>
+
+                <div class="price-tier">
+                    <div class="tier-name">CA / Enterprise</div>
+                    <div class="tier-price">Custom</div>
+                    <ul class="tier-features">
+                        <li>5,000+ API Lookups / day</li>
+                        <li>Batch processing endpoints</li>
+                        <li>99.5% Uptime SLA Guarantee</li>
+                        <li>Dedicated Account Manager</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary mono-font" style="width: 100%;">Contact Sales</a>
+                </div>
+
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-grid">
+                <div>
+                    <div class="logo" style="margin-bottom: 1rem;">SaralGST</div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 250px;">
+                        India's smartest, fastest API for resolving GST rate confusion. <i>Sahi rate. Seedha jawab.</i>
+                    </p>
+                </div>
+                
+                <div>
+                    <h5>Product</h5>
+                    <ul class="footer-links">
+                        <li><a href="#platform">Platform</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Security (HMAC)</a></li>
+                        <li><a href="http://localhost:8000/docs">Swagger UI</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5>Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/ravikumarve/SaralGST">GitHub Repo</a></li>
+                        <li><a href="http://localhost:8000/redoc">ReDoc</a></li>
+                        <li><a href="#">GST 2.0 Changelog</a></li>
+                        <li><a href="#">Integration Guide</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5>Legal</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Proprietary License</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 2rem; margin-top: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                <div class="mono-font" style="color: var(--text-tertiary);">© 2026 SaralGST. All rights reserved.</div>
+                <div class="mono-font" style="color: var(--accent-emerald);">● Systems Nominal</div>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
