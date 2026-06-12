@@ -6,17 +6,92 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Link from 'next/link';
 import ParticleCanvas from '@/components/ParticleCanvas';
 import TerminalSequence from '@/components/TerminalSequence';
+import TickerTape from '@/components/TickerTape';
+import PipelineStep from '@/components/PipelineStep';
+import StatBox from '@/components/StatBox';
+import GlassCard from '@/components/GlassCard';
+import BentoGrid from '@/components/BentoGrid';
+import MetricCounter from '@/components/MetricCounter';
+import CodeBlock from '@/components/CodeBlock';
 
-// Register GSAP plugins
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
+
+const STAT_ITEMS = [
+  {
+    title: 'Eliminate Tax Leakage',
+    description:
+      'Under-charging GST eats into your margins; over-charging alienates high-paying customers. Get the exact rate, every time.',
+    variant: 'cyan' as const,
+  },
+  {
+    title: 'Prevent Costly Lawsuits',
+    description:
+      'Incorrect HSN mapping is a leading cause of tax notices. We cross-reference official CBIC notifications instantly.',
+    variant: 'violet' as const,
+  },
+  {
+    title: 'Bypass Legacy Updates',
+    description:
+      'Stop forcing your clients to download bulky software patches every time the GST Council meets. Serve rates dynamically.',
+    variant: 'red' as const,
+  },
+];
+
+const PIPELINE_STEPS = [
+  {
+    step: '01',
+    title: 'The Request',
+    description:
+      'Your POS or ERP system sends a simple JSON payload containing a product description (e.g. "LED TV" or "टेलीविजन") to our /api/v1/gst/lookup endpoint.',
+    variant: 'cyan' as const,
+  },
+  {
+    step: '02',
+    title: 'NLP Context Mapping',
+    description:
+      'The Gemini Flash NLP service intercepts the query. It translates, contextualizes, and maps the colloquial product name to the official CBIC item nomenclature.',
+    variant: 'violet' as const,
+  },
+  {
+    step: '03',
+    title: 'Rate Engine Validation',
+    description:
+      'The exact HSN/SAC code is queried against our master GST 2.0 data file. The engine validates the current rate, checks for recent notification changes, and calculates historical movement.',
+    variant: 'green' as const,
+  },
+  {
+    step: '04',
+    title: 'JSON Delivery',
+    description:
+      'Within ~200ms, a strictly typed Pydantic response is returned to your system, injecting the correct tax rate directly into the final invoice logic.',
+    variant: 'cyan' as const,
+  },
+];
+
+const USE_CASES = [
+  {
+    title: 'POS System Developers',
+    description:
+      'Stop pushing manual database updates to hundreds of retail terminals. Point your POS terminals to SaralGST and fetch real-time tax brackets during checkout, even for loosely described inventory items.',
+  },
+  {
+    title: 'ERP Integrators',
+    description:
+      'Seamlessly enrich bulk inventory uploads. Ensure that when a new batch of SKUs is entered into the central ERP, the HSN codes and exact GST rates are validated instantly to prevent downstream billing errors.',
+  },
+  {
+    title: 'Chartered Accountant Firms',
+    description:
+      'Integrate our high-volume tier into your internal auditing tools. Rapidly cross-check client ledgers against official GST 2.0 notifications to catch discrepancies before they trigger government scrutiny.',
+  },
+];
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Hero text stagger reveal
     if (heroRef.current) {
       gsap.from('.hero-line', {
         y: 60,
@@ -28,7 +103,6 @@ export default function Home() {
       });
     }
 
-    // Section scroll triggers
     ScrollTrigger.batch('.reveal-card', {
       onEnter: (elements) => {
         gsap.from(elements, {
@@ -41,46 +115,45 @@ export default function Home() {
       },
     });
 
-    // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-bg relative overflow-hidden">
-      {/* Particle canvas background — L1 cinematic network */}
-      <ParticleCanvas opacity={0.45} />
+    <div className="min-h-screen flex flex-col bg-[#040814] relative overflow-hidden">
+      {/* Particle canvas — full-screen cinematic bg */}
+      <ParticleCanvas opacity={0.4} />
 
-      {/* HERO Section */}
+      {/* ===== HERO ===== */}
       <section className="min-h-screen flex flex-col items-center justify-center px-6 py-28 md:py-20 text-center relative z-10">
         <div ref={heroRef} className="max-w-4xl flex flex-col items-center">
-          {/* Status badge — L2 style */}
+          {/* Status badge */}
           <div className="hero-line inline-flex items-center gap-2 px-4 py-1.5 bg-[#00f0ff]/5 border border-[#00f0ff]/20 rounded-full text-sm font-jetbrains-mono text-[#00f0ff] mb-8">
             <span className="w-2 h-2 bg-[#00f0ff] rounded-full animate-pulse-dot shadow-lg shadow-[#00f0ff]/50" />
             v1.0.0 · GST 2.0 Ready
           </div>
 
-          {/* Syncopate H1 — L1 industrial heading */}
+          {/* Syncopate H1 */}
           <h1 className="hero-line font-syncopate text-5xl md:text-7xl lg:text-8xl font-bold uppercase leading-tight mb-6 text-[#f0f0ff]">
             Sahi Rate.
             <br />
             <span className="text-gradient">Seedha Jawab.</span>
           </h1>
 
-          {/* Subtitle — L2 muted text */}
+          {/* Subtitle */}
           <p className="hero-line text-base md:text-lg text-[#a1a1aa] max-w-xl mb-10 leading-relaxed font-inter font-light">
             Empowering Tier 2 and Tier 3 businesses to handle compliance without
             the legacy overhead. India&apos;s smartest API for resolving GST rate
             confusion, powered by Gemini Flash AI.
           </p>
 
-          {/* Terminal Sequence — L3 hero centerpiece */}
+          {/* Terminal Sequence */}
           <div className="hero-line w-full max-w-2xl mb-10">
             <TerminalSequence />
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTAs */}
           <div className="hero-line flex items-center gap-4">
             <Link
               href="/check"
@@ -115,304 +188,475 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PROBLEM STRIP */}
-      <section className="py-6 bg-bg-2 border-y border-border overflow-hidden">
-        <div className="flex whitespace-nowrap animate-marquee">
-          <span className="mx-8 text-text-secondary font-space-grotesk text-lg tracking-widest uppercase">
-            GST 2.0 · Sept 2025 · Rates Changed · 12% → 5% · 28% → 18% · Kya aapka rate sahi hai? ·
-          </span>
-          <span className="mx-8 text-text-secondary font-space-grotesk text-lg tracking-widest uppercase">
-            GST 2.0 · Sept 2025 · Rates Changed · 12% → 5% · 28% → 18% · Kya aapka rate sahi hai? ·
-          </span>
-          <span className="mx-8 text-text-secondary font-space-grotesk text-lg tracking-widest uppercase">
-            GST 2.0 · Sept 2025 · Rates Changed · 12% → 5% · 28% → 18% · Kya aapka rate sahi hai? ·
-          </span>
-        </div>
-      </section>
+      {/* ===== TICKER TAPE ===== */}
+      <TickerTape />
 
-      {/* HOW IT WORKS */}
-      <section className="py-24 px-6">
+      {/* ===== PROBLEM SECTION (Why SaralGST) ===== */}
+      <section className="py-20 md:py-28 px-6 relative z-10 bg-gradient-to-b from-transparent via-[#0d0d0d]/60 to-transparent border-y border-white/5">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold font-space-grotesk text-center mb-16 text-text-primary">
-            Kaise kaam karta hai?
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Step 1 */}
-            <div className="reveal-card relative p-8 bg-surface border border-border rounded-2xl hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
-              <div className="absolute top-4 right-4 text-8xl font-bold text-text-muted opacity-20 font-space-grotesk">
-                01
-              </div>
-              <h3 className="text-xl font-bold text-text-primary mb-3 font-space-grotesk">
-                Product likhein
-              </h3>
-              <p className="text-text-secondary">
-                Product ka naam ya HSN code likhein. Hindi ya English - dono mein kaam karega.
+          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+            {/* Left: Narrative */}
+            <div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-space-grotesk leading-tight mb-6 text-[#f0f0ff]">
+                Stop Revenue{' '}
+                <span className="text-gradient">Leakage</span>.
+                <br />
+                Ditch{' '}
+                <span className="text-gradient">Legacy</span> Systems.
+              </h2>
+              <p className="text-[#8b949e] text-base md:text-lg leading-relaxed mb-4">
+                In expanding Indian markets, complex tax codes and the transition
+                to GST 2.0 create massive friction. Relying on outdated, hard-coded
+                tax tables in legacy ERP systems leads to miscalculated invoices,
+                delayed filings, and inevitable lawsuits.
+              </p>
+              <p className="text-[#8b949e] text-base md:text-lg leading-relaxed">
+                SaralGST replaces brittle, localized logic with a centralized,
+                AI-driven backend API. We ensure your software always applies the
+                exact legal rate, eliminating compliance anxiety.
               </p>
             </div>
 
-            {/* Step 2 */}
-            <div className="reveal-card relative p-8 bg-surface border border-border rounded-2xl hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
-              <div className="absolute top-4 right-4 text-8xl font-bold text-text-muted opacity-20 font-space-grotesk">
-                02
-              </div>
-              <h3 className="text-xl font-bold text-text-primary mb-3 font-space-grotesk">
-                Rate dekhein
-              </h3>
-              <p className="text-text-secondary">
-                Pehle ka rate vs GST 2.0 ka rate - dono side by side dikhega.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="reveal-card relative p-8 bg-surface border border-border rounded-2xl hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
-              <div className="absolute top-4 right-4 text-8xl font-bold text-text-muted opacity-20 font-space-grotesk">
-                03
-              </div>
-              <h3 className="text-xl font-bold text-text-primary mb-3 font-space-grotesk">
-                Sahi rate file karein
-              </h3>
-              <p className="text-text-secondary">
-                Official notification reference ke saath sahi rate file karein.
-              </p>
-            </div>
+            {/* Right: StatBox */}
+            <StatBox items={STAT_ITEMS} />
           </div>
         </div>
       </section>
 
-      {/* WHAT CHANGED */}
-      <section className="py-24 px-6 bg-bg-2">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold font-space-grotesk text-center mb-6 text-text-primary">
-            Kya badla?
-          </h2>
-          <p className="text-lg text-text-secondary text-center mb-12">
-            GST 2.0 mein ye rates badal gaye
-          </p>
+      {/* ===== ENGINE SECTION (The Platform) ===== */}
+      <section id="engine" className="py-20 md:py-28 px-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          {/* Section header */}
+          <div className="max-w-2xl mb-14">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-space-grotesk leading-tight mb-4 text-[#f0f0ff]">
+              The Compliance{' '}
+              <span className="text-gradient">Engine</span>.
+            </h2>
+            <p className="text-[#a1a1aa] text-lg leading-relaxed">
+              We replaced brittle, hard-coded tax tables with a centralized,
+              AI-driven backend API. Designed to integrate directly into your
+              software stack.
+            </p>
+          </div>
 
-          <div className="space-y-4">
-            {/* Rate change items */}
-            {[
-              { hsn: '8528', name: 'LED Television (32" se bada)', old: 28, new: 18, movement: 'down' },
-              { hsn: '8415', name: 'Air Conditioner', old: 28, new: 18, movement: 'down' },
-              { hsn: '9004', name: 'Spectacles/Corrective goggles', old: 28, new: 5, movement: 'down' },
-              { hsn: '2106', name: 'Packaged food items', old: 12, new: 5, movement: 'down' },
-              { hsn: '3003', name: 'Homoeopathy medicines', old: 12, new: 5, movement: 'down' },
-              { hsn: '9503', name: 'Wooden/metal toys', old: 12, new: 5, movement: 'down' },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="reveal-card flex items-center justify-between p-6 bg-surface border border-border rounded-xl"
-              >
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-sm font-jetbrains-mono text-text-muted">
-                      HSN: {item.hsn}
-                    </span>
-                    <span className="text-sm text-text-secondary">{item.name}</span>
-                  </div>
+          {/* Bento Grid */}
+          <BentoGrid>
+            {/* Large card — AI NLP Search */}
+            <GlassCard
+              tag={{ label: 'NLP Resolution', variant: 'violet' }}
+              className="col-span-12 md:col-span-8 row-span-2"
+            >
+              <h3 className="text-2xl font-bold font-space-grotesk text-[#f0f0ff] mb-3">
+                AI-Powered NLP Mapping
+              </h3>
+              <p className="text-[#a1a1aa] leading-relaxed mb-6 max-w-lg">
+                Pass colloquial product names in English or Hindi. Our Gemini Flash
+                integration maps &ldquo;LED TV&rdquo; directly to the official CBIC
+                nomenclature and 4-digit HSN code instantly.
+              </p>
+              {/* Embedded search mockup */}
+              <div className="bg-[#141414] border border-[#262626] rounded-xl p-4 md:p-5">
+                <div className="flex justify-between items-center mb-3 pb-3 border-b border-[#262626] font-jetbrains-mono text-xs">
+                  <span className="text-[#71717a]">
+                    Query: &ldquo;टेलीविजन (32 इंच से बड़े)&rdquo;
+                  </span>
+                  <span className="text-[#8a2be2]">Confidence: 0.90</span>
                 </div>
-
-                <div className="flex items-center gap-6">
-                  <div className="text-center">
-                    <div className="text-sm text-text-muted mb-1">Pehle</div>
-                    <div className="text-2xl font-bold text-text-primary">{item.old}%</div>
-                  </div>
-
-                  <div className={`text-2xl rate-change-arrow ${item.movement === 'down' ? 'text-green' : 'text-red'}`}>
-                    →
-                  </div>
-
-                  <div className="text-center">
-                    <div className="text-sm text-text-muted mb-1">Ab</div>
-                    <div
-                      className={`text-2xl font-bold ${
-                        item.movement === 'down' ? 'text-green' : 'text-red'
-                      }`}
-                    >
-                      {item.new}%
+                <div className="flex justify-between items-end">
+                  <div>
+                    <div className="text-base font-medium text-[#f0f0ff] mb-1">
+                      Television sets (LCD/LED)
+                    </div>
+                    <div className="font-jetbrains-mono text-sm text-[#a1a1aa]">
+                      HSN Code: 8528
+                    </div>
+                    <div className="font-jetbrains-mono text-xs text-[#71717a] mt-2">
+                      Ref: Notif. 8/2025-CT
                     </div>
                   </div>
+                  <div className="text-4xl md:text-5xl font-bold font-space-grotesk text-[#10b981]">
+                    18%
+                  </div>
                 </div>
+              </div>
+            </GlassCard>
+
+            {/* Metric — Response Time */}
+            <GlassCard className="col-span-12 md:col-span-4">
+              <h3 className="text-xl font-bold font-space-grotesk text-[#f0f0ff] mb-2">
+                Blistering Speed
+              </h3>
+              <p className="text-[#a1a1aa] text-sm leading-relaxed mb-4">
+                Engineered for brutal efficiency in high-volume POS environments.
+              </p>
+              <MetricCounter value="<200ms" label="p95 Response Time" accent="cyan" />
+            </GlassCard>
+
+            {/* Metric — Historical Tracking */}
+            <GlassCard className="col-span-12 md:col-span-4">
+              <h3 className="text-xl font-bold font-space-grotesk text-[#f0f0ff] mb-2">
+                Historical Tracking
+              </h3>
+              <p className="text-[#a1a1aa] text-sm leading-relaxed mb-4">
+                Side-by-side old vs new rate comparisons post GST 2.0 reform.
+              </p>
+              <div className="flex items-center justify-between pt-4 border-t border-[#262626]">
+                <span className="text-2xl font-bold text-[#71717a] line-through">
+                  28%
+                </span>
+                <span className="text-[#71717a]">→</span>
+                <span className="text-3xl font-bold text-[#10b981]">18%</span>
+              </div>
+            </GlassCard>
+
+            {/* GlassCard — Real-time Updates */}
+            <GlassCard
+              tag={{ label: 'Deployment', variant: 'emerald' }}
+              className="col-span-12 md:col-span-4"
+            >
+              <h3 className="text-2xl font-bold font-space-grotesk text-[#f0f0ff] mb-3">
+                Bypass Legacy Patches
+              </h3>
+              <p className="text-[#a1a1aa] leading-relaxed">
+                Stop forcing your clients to download bulky software patches every
+                time the GST Council meets. Centralize your logic. Point your
+                systems to SaralGST and serve legally accurate rates dynamically.
+              </p>
+            </GlassCard>
+          </BentoGrid>
+        </div>
+      </section>
+
+      {/* ===== PIPELINE SECTION (How It Works) ===== */}
+      <section className="py-20 md:py-28 px-6 relative z-10 bg-[#0a0a12]/50 border-y border-white/5">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-space-grotesk leading-tight mb-4 text-[#f0f0ff]">
+              The Execution{' '}
+              <span className="text-gradient">Pipeline</span>.
+            </h2>
+            <p className="text-[#a1a1aa] text-lg max-w-xl mx-auto">
+              How a single API request resolves complex tax logic in milliseconds.
+            </p>
+          </div>
+
+          <div className="max-w-2xl mx-auto">
+            {PIPELINE_STEPS.map((step, index) => (
+              <PipelineStep
+                key={step.step}
+                step={step.step}
+                title={step.title}
+                description={step.description}
+                variant={step.variant}
+                isLast={index === PIPELINE_STEPS.length - 1}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== DEVELOPER SECTION ===== */}
+      <section id="developers" className="py-20 md:py-28 px-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+            {/* Left: Content */}
+            <div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-space-grotesk leading-tight mb-4 text-[#f0f0ff]">
+                Developer{' '}
+                <span className="text-gradient">First</span>.
+              </h2>
+              <p className="text-[#a1a1aa] text-base md:text-lg leading-relaxed mb-8">
+                A completely headless, JSON-driven API that gets out of your way.
+                Built on FastAPI for speed, utilizing standard HTTP status codes,
+                HMAC authentication, and rigorous Pydantic data validation.
+              </p>
+              <div className="flex gap-4">
+                <Link
+                  href="http://localhost:8001/docs"
+                  className="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-[#00f0ff] to-[#8a2be2] text-black font-bold text-sm rounded-full hover:shadow-lg hover:shadow-[#00f0ff]/30 transition-all"
+                >
+                  View Swagger Docs
+                </Link>
+                <Link
+                  href="https://github.com/ravikumarve/SaralGST"
+                  target="_blank"
+                  className="inline-flex items-center px-5 py-2.5 bg-transparent border border-[#262626] text-[#a1a1aa] text-sm rounded-full hover:border-[#404040] hover:text-white transition-all"
+                >
+                  GitHub Repo
+                </Link>
+              </div>
+            </div>
+
+            {/* Right: Code Block */}
+            <CodeBlock />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== USE CASES ===== */}
+      <section className="py-20 md:py-28 px-6 relative z-10 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-space-grotesk leading-tight mb-4 text-[#f0f0ff]">
+              Built for{' '}
+              <span className="text-gradient">Scale</span>.
+            </h2>
+            <p className="text-[#a1a1aa] text-lg max-w-xl mx-auto">
+              Designed specifically to plug into the backend infrastructure of
+              financial and retail software.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {USE_CASES.map((uc, index) => (
+              <div
+                key={index}
+                className="p-6 md:p-8 bg-transparent border border-white/10 rounded-xl hover:border-white/20 transition-colors"
+              >
+                <h4 className="text-lg font-bold text-[#00f0ff] mb-3 font-inter">
+                  {uc.title}
+                </h4>
+                <p className="text-[#8b949e] text-sm leading-relaxed">
+                  {uc.description}
+                </p>
               </div>
             ))}
           </div>
-
-          <div className="reveal-card text-center mt-12">
-            <Link
-              href="/check"
-              className="inline-block px-8 py-4 bg-accent hover:bg-accent-2 text-black rounded-full font-medium transition-all duration-300 hover:scale-105"
-            >
-              Apna product check karein →
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* TRUST SIGNAL */}
-      <section className="py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-lg text-text-secondary mb-8">
-            Trusted by 500+ CA firms and 10,000+ small businesses
-          </p>
-          <div className="flex items-center justify-center gap-8">
-            <div className="flex items-center gap-2 text-text-muted">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-              <span className="text-sm font-medium">A2Z Tax Solutions</span>
+      {/* ===== PRICING (L3 Inverted) ===== */}
+      <section id="pricing" className="relative z-10 mx-4 md:mx-8 my-8">
+        <div className="bg-white rounded-3xl md:rounded-[40px] px-6 md:px-16 py-16 md:py-20">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-space-grotesk text-black leading-tight">
+                Simple Pricing.
+              </h2>
+              <p className="text-[#555] text-lg mt-4 font-medium">
+                Start for free in the sandbox. Scale instantly to production.
+              </p>
             </div>
-            <div className="flex items-center gap-2 text-text-muted">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-              <span className="text-sm font-medium">Raj & Co.</span>
-            </div>
-            <div className="flex items-center gap-2 text-text-muted">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-              <span className="text-sm font-medium">GST Experts India</span>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* FOR CA FIRMS */}
-      <section className="py-24 px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="reveal-card p-8 bg-surface border-2 border-accent rounded-2xl border-glow hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
-            <h2 className="text-3xl md:text-4xl font-bold font-space-grotesk mb-4 text-text-primary">
-              CA firm hain?
-            </h2>
-            <p className="text-lg text-text-secondary mb-6">
-              Apne sabhi clients ke rates ek saath check karein. 50 GSTINs ke liye special plan.
-            </p>
-            <div className="flex items-center gap-4">
-              <div className="text-4xl font-bold text-gradient font-space-grotesk">
-                ₹1,999
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {/* Free Tier */}
+              <div className="border-3 border-black rounded-2xl p-6 md:p-8 flex flex-col">
+                <div className="font-jetbrains-mono text-sm font-bold text-[#888] mb-3">
+                  01 / SANDBOX
+                </div>
+                <h3 className="text-2xl font-bold font-space-grotesk text-black mb-2 uppercase">
+                  Development
+                </h3>
+                <div className="text-5xl font-black font-space-grotesk text-black mb-6">
+                  ₹0<span className="text-lg font-medium text-[#888]"> / forever</span>
+                </div>
+                <ul className="space-y-3 flex-grow mb-8">
+                  <li className="flex items-center gap-3 text-base font-medium text-black">
+                    <span className="font-bold">→</span> 3 API Lookups per day
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-black">
+                    <span className="font-bold">→</span> Full NLP Hindi/English Search
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-black">
+                    <span className="font-bold">→</span> Standard JSON Responses
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-black">
+                    <span className="font-bold">→</span> Community Support
+                  </li>
+                </ul>
+                <Link
+                  href="http://localhost:8001/docs"
+                  className="block w-full text-center py-4 bg-black text-white text-lg font-bold uppercase rounded-full hover:scale-[1.02] transition-transform"
+                >
+                  Test API Locally
+                </Link>
               </div>
-              <div className="text-text-secondary">
-                <div>/month</div>
-                <div className="text-sm">50 GSTINs</div>
+
+              {/* Pro Tier — Featured */}
+              <div className="border-3 border-black rounded-2xl p-6 md:p-8 flex flex-col bg-black text-white">
+                <div className="font-jetbrains-mono text-sm font-bold text-[#00FF66] mb-3">
+                  02 / PRODUCTION
+                </div>
+                <h3 className="text-2xl font-bold font-space-grotesk text-white mb-2 uppercase">
+                  Pro Integration
+                </h3>
+                <div className="text-5xl font-black font-space-grotesk text-white mb-6">
+                  ₹999<span className="text-lg font-medium text-[#888]"> / month</span>
+                </div>
+                <ul className="space-y-3 flex-grow mb-8">
+                  <li className="flex items-center gap-3 text-base font-medium text-white">
+                    <span className="font-bold text-[#00FF66]">→</span> 1,000 API Lookups / day
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-white">
+                    <span className="font-bold text-[#00FF66]">→</span> Secure HMAC Token Auth
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-white">
+                    <span className="font-bold text-[#00FF66]">→</span> &lt;200ms Response Latency
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-white">
+                    <span className="font-bold text-[#00FF66]">→</span> Priority Email Support
+                  </li>
+                </ul>
+                <a
+                  href="https://gumroad.com"
+                  target="_blank"
+                  className="block w-full text-center py-4 bg-[#00FF66] text-black text-lg font-bold uppercase rounded-full hover:scale-[1.02] transition-transform"
+                >
+                  Acquire Token
+                </a>
+              </div>
+
+              {/* Enterprise Tier */}
+              <div className="border-3 border-black rounded-2xl p-6 md:p-8 flex flex-col">
+                <div className="font-jetbrains-mono text-sm font-bold text-[#888] mb-3">
+                  03 / ENTERPRISE
+                </div>
+                <h3 className="text-2xl font-bold font-space-grotesk text-black mb-2 uppercase">
+                  CA Firm
+                </h3>
+                <div className="text-5xl font-black font-space-grotesk text-black mb-6">
+                  Custom
+                </div>
+                <ul className="space-y-3 flex-grow mb-8">
+                  <li className="flex items-center gap-3 text-base font-medium text-black">
+                    <span className="font-bold">→</span> 5,000+ API Lookups / day
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-black">
+                    <span className="font-bold">→</span> Batch Processing Endpoints
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-black">
+                    <span className="font-bold">→</span> 99.5% Uptime SLA Guarantee
+                  </li>
+                  <li className="flex items-center gap-3 text-base font-medium text-black">
+                    <span className="font-bold">→</span> Dedicated Account Manager
+                  </li>
+                </ul>
+                <a
+                  href="#"
+                  className="block w-full text-center py-4 bg-black text-white text-lg font-bold uppercase rounded-full hover:scale-[1.02] transition-transform"
+                >
+                  Contact Sales
+                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PRICING */}
-      <section className="py-24 px-6 bg-bg-2">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold font-space-grotesk text-center mb-16 text-text-primary">
-            Pricing
-          </h2>
+      {/* ===== FOOTER (L1 Deep 4-Column) ===== */}
+      <footer className="relative z-10 bg-[#151a22] border-t border-white/5 px-6 pt-16 pb-8 mt-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-12">
+            {/* Brand */}
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center gap-2 font-space-grotesk font-bold text-lg text-[#f0f0ff] mb-4">
+                <span className="w-2.5 h-2.5 bg-[#00f0ff] rounded-full shadow-lg shadow-[#00f0ff]/50" />
+                SaralGST
+              </div>
+              <p className="text-sm text-[#8b949e] leading-relaxed max-w-xs">
+                India&apos;s simplest, most accurate GST rate checker. A deep
+                vertical SaaS built to eliminate compliance leakage for growing
+                B2B enterprises.
+              </p>
+            </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Free Plan */}
-            <div className="reveal-card p-8 bg-surface border border-border rounded-2xl hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
-              <h3 className="text-2xl font-bold text-text-primary mb-2 font-space-grotesk">
-                Free
-              </h3>
-              <div className="text-4xl font-bold text-text-primary mb-6">₹0</div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-2 text-text-secondary">
-                  <svg className="w-5 h-5 text-green" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  3 lookups per day
+            {/* Product */}
+            <div>
+              <h5 className="font-syncopate text-xs font-bold text-[#f0f0ff] mb-5 tracking-wider uppercase">
+                Product
+              </h5>
+              <ul className="space-y-3">
+                <li>
+                  <a href="#engine" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    Features
+                  </a>
                 </li>
-                <li className="flex items-center gap-2 text-text-secondary">
-                  <svg className="w-5 h-5 text-green" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Basic rate lookup
+                <li>
+                  <a href="#developers" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    API Integration
+                  </a>
                 </li>
-                <li className="flex items-center gap-2 text-text-secondary">
-                  <svg className="w-5 h-5 text-green" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Notification reference
+                <li>
+                  <a href="#pricing" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    Pricing Tiers
+                  </a>
+                </li>
+                <li>
+                  <a href="http://localhost:8001/docs" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    Swagger UI
+                  </a>
                 </li>
               </ul>
-              <Link
-                href="/check"
-                className="block w-full py-3 text-center border border-border rounded-full text-text-primary hover:bg-surface transition-colors"
-              >
-                Start Free
-              </Link>
             </div>
 
-            {/* Pro Plan */}
-            <div className="reveal-card p-8 bg-surface border-2 border-accent rounded-2xl border-glow relative hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-accent text-black text-sm rounded-full font-medium">
-                Popular
-              </div>
-              <h3 className="text-2xl font-bold text-text-primary mb-2 font-space-grotesk">
-                Pro
-              </h3>
-              <div className="text-4xl font-bold text-gradient mb-6">₹499</div>
-              <div className="text-sm text-text-secondary mb-6">/month · Unlimited</div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-2 text-text-secondary">
-                  <svg className="w-5 h-5 text-green" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Unlimited lookups
+            {/* Resources */}
+            <div>
+              <h5 className="font-syncopate text-xs font-bold text-[#f0f0ff] mb-5 tracking-wider uppercase">
+                Resources
+              </h5>
+              <ul className="space-y-3">
+                <li>
+                  <a href="https://github.com/ravikumarve/SaralGST" target="_blank" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    GitHub Repo
+                  </a>
                 </li>
-                <li className="flex items-center gap-2 text-text-secondary">
-                  <svg className="w-5 h-5 text-green" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Priority support
+                <li>
+                  <a href="http://localhost:8001/redoc" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    ReDoc Format
+                  </a>
                 </li>
-                <li className="flex items-center gap-2 text-text-secondary">
-                  <svg className="w-5 h-5 text-green" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Cancel anytime
+                <li>
+                  <a href="#" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    Implementation Guide
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    GST 2.0 Changelog
+                  </a>
                 </li>
               </ul>
-              <button className="block w-full py-3 text-center bg-accent hover:bg-accent-2 text-black rounded-full transition-colors font-medium">
-                Upgrade Now
-              </button>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h5 className="font-syncopate text-xs font-bold text-[#f0f0ff] mb-5 tracking-wider uppercase">
+                Legal
+              </h5>
+              <ul className="space-y-3">
+                <li>
+                  <a href="#" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    Proprietary License
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-sm text-[#8b949e] hover:text-[#00f0ff] transition-colors">
+                    Contact Us
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* FOOTER */}
-      <footer className="py-12 px-6 border-t border-border">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="text-2xl font-bold text-gradient font-space-grotesk mb-4">
-            SaralGST
+          {/* Bottom bar */}
+          <div className="border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="font-jetbrains-mono text-xs text-[#00f0ff]">
+              System Status: All Systems Nominal
+            </div>
+            <div className="text-xs text-[#8b949e]">
+              © 2026 SaralGST. <span className="italic">Sahi rate. Seedha jawab.</span> All rights reserved.
+            </div>
           </div>
-          <p className="text-text-secondary mb-4">sahigst.in</p>
-          <p className="text-sm text-text-muted mb-2">v1.0.0 — Updated Sept 2025</p>
-          <a href="/changelog" className="text-xs text-text-muted hover:text-accent transition-colors block mb-2">
-            What&apos;s new
-          </a>
-          <p className="text-sm text-text-muted">
-            GST 2.0 data updated Sept 22, 2025
-          </p>
         </div>
       </footer>
     </div>
