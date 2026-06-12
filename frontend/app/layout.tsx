@@ -3,6 +3,7 @@ import {
   Space_Grotesk,
   Inter,
   JetBrains_Mono,
+  Syncopate,
 } from "next/font/google";
 import FloatingNav from "@/components/FloatingNav";
 import "./globals.css";
@@ -22,6 +23,13 @@ const inter = Inter({
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const syncopate = Syncopate({
+  variable: "--font-syncopate",
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -48,7 +56,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} ${syncopate.variable} antialiased`}
     >
       <body>
         <FloatingNav />

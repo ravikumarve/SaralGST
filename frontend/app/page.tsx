@@ -25,14 +25,25 @@ const USE_CASES = [
 
 export default function Home() {
   return (
-    <div className="max-w-[1280px] mx-auto px-8">
+    <div className="max-w-7xl mx-auto px-6">
       {/* ===== Hero ===== */}
-      <section className="pt-32 pb-16 text-center flex flex-col items-center">
+      <section className="relative pt-32 pb-24 text-center flex flex-col items-center overflow-hidden">
+        {/* Dark overlay behind grid */}
+        <div className="absolute inset-0 bg-[#050508] -z-10" />
+
+        {/* Radial glow behind heading */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] -z-10 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(0,240,255,0.08) 0%, transparent 70%)',
+          }}
+        />
+
         <div className="status-badge mb-10">
           v1.0.0 &middot; GST 2.0 Ready
         </div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] leading-none font-bold max-w-[1000px] mb-8">
+        <h1 className="text-7xl md:text-8xl font-syncopate font-bold leading-none max-w-[1000px] mb-6">
           Sahi rate.
           <br />
           <span className="text-gradient">Seedha jawab.</span>
@@ -70,75 +81,77 @@ export default function Home() {
           </p>
         </div>
 
-        <BentoGrid>
-          {/* NLP Mapping — Large */}
-          <div className="bento-box col-span-12 md:col-span-8 row-span-2">
-            <h3 className="bento-title">AI-Powered NLP Mapping</h3>
-            <p className="bento-desc">
-              Pass colloquial product names in English or Hindi. Our Gemini
-              Flash integration maps &ldquo;LED TV&rdquo; directly to the
-              official CBIC nomenclature and 4-digit HSN code instantly.
-            </p>
+        <div className="px-0 md:px-0">
+          <BentoGrid>
+            {/* NLP Mapping — Large */}
+            <div className="bento-box col-span-12 md:col-span-8 row-span-2">
+              <h3 className="bento-title">AI-Powered NLP Mapping</h3>
+              <p className="bento-desc">
+                Pass colloquial product names in English or Hindi. Our Gemini
+                Flash integration maps &ldquo;LED TV&rdquo; directly to the
+                official CBIC nomenclature and 4-digit HSN code instantly.
+              </p>
 
-            <div className="search-ui">
-              <div className="search-ui-header mono">
-                <span className="text-[#71717a]">
-                  Query: &ldquo;टेलीविजन (32 इंच से बड़े)&rdquo;
-                </span>
-                <span className="text-[#8a2be2]">Confidence: 0.90</span>
-              </div>
-              <div className="live-result">
-                <div>
-                  <div className="text-[#ededed] font-medium text-lg mb-1">
-                    Television sets (LCD/LED)
-                  </div>
-                  <div className="mono text-[#a1a1aa]">HSN Code: 8528</div>
-                  <div className="mono text-[#71717a] mt-2">
-                    Ref: Notif. 8/2025-CT
-                  </div>
+              <div className="search-ui">
+                <div className="search-ui-header mono">
+                  <span className="text-[#71717a]">
+                    Query: &ldquo;टेलीविजन (32 इंच से बड़े)&rdquo;
+                  </span>
+                  <span className="text-[#8a2be2]">Confidence: 0.90</span>
                 </div>
-                <div className="rate-large">18%</div>
+                <div className="live-result">
+                  <div>
+                    <div className="text-[#ededed] font-medium text-lg mb-1">
+                      Television sets (LCD/LED)
+                    </div>
+                    <div className="mono text-[#a1a1aa]">HSN Code: 8528</div>
+                    <div className="mono text-[#71717a] mt-2">
+                      Ref: Notif. 8/2025-CT
+                    </div>
+                  </div>
+                  <div className="rate-large">18%</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* FastAPI Backend — Medium */}
-          <div className="bento-box col-span-12 md:col-span-4 row-span-2">
-            <h3 className="bento-title">FastAPI Backend</h3>
-            <p className="bento-desc">
-              Engineered for brutal efficiency in high-volume POS environments.
-            </p>
-            <div className="metric-value text-accent">
-              &lt;200
-              <span className="text-base text-[#a1a1aa]">ms</span>
+            {/* FastAPI Backend — Medium */}
+            <div className="bento-box col-span-12 md:col-span-4 row-span-2">
+              <h3 className="bento-title">FastAPI Backend</h3>
+              <p className="bento-desc">
+                Engineered for brutal efficiency in high-volume POS environments.
+              </p>
+              <div className="metric-value text-accent">
+                &lt;200
+                <span className="text-base text-[#a1a1aa]">ms</span>
+              </div>
+              <div className="mono text-[#71717a] mt-1">p95 Response Time</div>
             </div>
-            <div className="mono text-[#71717a] mt-1">p95 Response Time</div>
-          </div>
 
-          {/* Historical Tracking — Medium */}
-          <div className="bento-box col-span-12 md:col-span-4 row-span-2">
-            <h3 className="bento-title">Historical Tracking</h3>
-            <p className="bento-desc">
-              Side-by-side old vs new rate comparisons post GST 2.0 reform.
-            </p>
-            <div className="mt-auto pt-4 border-t border-[#262626] flex justify-between items-center">
-              <span className="text-[#71717a] line-through text-2xl">
-                28%
-              </span>
-              <span className="text-[#71717a]">→</span>
-              <span className="text-[#10b981] text-3xl font-bold">18%</span>
+            {/* Historical Tracking — Medium */}
+            <div className="bento-box col-span-12 md:col-span-4 row-span-2">
+              <h3 className="bento-title">Historical Tracking</h3>
+              <p className="bento-desc">
+                Side-by-side old vs new rate comparisons post GST 2.0 reform.
+              </p>
+              <div className="mt-auto pt-4 border-t border-[#262626] flex justify-between items-center">
+                <span className="text-[#71717a] line-through text-2xl">
+                  28%
+                </span>
+                <span className="text-[#71717a]">→</span>
+                <span className="text-[#10b981] text-3xl font-bold">18%</span>
+              </div>
             </div>
-          </div>
 
-          {/* Developer First — Wide */}
-          <div className="bento-box col-span-12 md:col-span-8" id="developers">
-            <h3 className="bento-title">Developer First</h3>
-            <p className="bento-desc">
-              A completely headless, JSON-driven API that gets out of your way.
-            </p>
-            <CodeBlock />
-          </div>
-        </BentoGrid>
+            {/* Developer First — Wide */}
+            <div className="bento-box col-span-12 md:col-span-8" id="developers">
+              <h3 className="bento-title">Developer First</h3>
+              <p className="bento-desc">
+                A completely headless, JSON-driven API that gets out of your way.
+              </p>
+              <CodeBlock />
+            </div>
+          </BentoGrid>
+        </div>
       </section>
 
       {/* ===== Use Cases ===== */}
@@ -166,81 +179,83 @@ export default function Home() {
       </section>
 
       {/* ===== Pricing ===== */}
-      <section id="pricing" className="py-24">
-        <div className="section-header" style={{ margin: '0 auto', textAlign: 'center' }}>
-          <h2>
-            Transparent <span className="text-accent">Access</span>.
-          </h2>
-          <p>Secure your HMAC token and start querying immediately.</p>
-        </div>
-
-        <div className="pricing-cards">
-          {/* Sandbox */}
-          <div className="price-tier">
-            <div className="tier-name">Sandbox</div>
-            <div className="tier-price">
-              ₹0<span>/forever</span>
-            </div>
-            <ul className="tier-features">
-              <li>3 API Lookups / day</li>
-              <li>Plain language NLP search</li>
-              <li>Standard JSON responses</li>
-              <li>Community Support</li>
-            </ul>
-            <Link
-              href="http://localhost:8001/docs"
-              className="btn btn-secondary mono"
-              style={{ width: '100%' }}
-            >
-              Test API Locally
-            </Link>
+      <div className="bg-[#0a0a0a] border-t border-[#262626] -mx-6 px-6">
+        <section id="pricing" className="py-24">
+          <div className="section-header" style={{ margin: '0 auto', textAlign: 'center' }}>
+            <h2>
+              Transparent <span className="text-accent">Access</span>.
+            </h2>
+            <p>Secure your HMAC token and start querying immediately.</p>
           </div>
 
-          {/* Pro — Popular */}
-          <div className="price-tier popular">
-            <div className="mono text-[#8a2be2] text-xs uppercase tracking-wider font-bold mb-4">
-              Production Ready
+          <div className="pricing-cards">
+            {/* Sandbox */}
+            <div className="price-tier">
+              <div className="tier-name">Sandbox</div>
+              <div className="tier-price">
+                ₹0<span>/forever</span>
+              </div>
+              <ul className="tier-features">
+                <li>3 API Lookups / day</li>
+                <li>Plain language NLP search</li>
+                <li>Standard JSON responses</li>
+                <li>Community Support</li>
+              </ul>
+              <Link
+                href="http://localhost:8001/docs"
+                className="btn btn-secondary mono"
+                style={{ width: '100%' }}
+              >
+                Test API Locally
+              </Link>
             </div>
-            <div className="tier-name">Pro Integration</div>
-            <div className="tier-price">
-              ₹999<span>/month</span>
-            </div>
-            <ul className="tier-features">
-              <li>1,000 API Lookups / day</li>
-              <li>Secure HMAC Token Auth</li>
-              <li>&lt; 200ms Response Time</li>
-              <li>Priority Email Support</li>
-            </ul>
-            <a
-              href="https://gumroad.com"
-              target="_blank"
-              className="btn btn-primary mono"
-              style={{ width: '100%' }}
-            >
-              Acquire Token
-            </a>
-          </div>
 
-          {/* Enterprise */}
-          <div className="price-tier">
-            <div className="tier-name">CA / Enterprise</div>
-            <div className="tier-price">Custom</div>
-            <ul className="tier-features">
-              <li>5,000+ API Lookups / day</li>
-              <li>Batch processing endpoints</li>
-              <li>99.5% Uptime SLA Guarantee</li>
-              <li>Dedicated Account Manager</li>
-            </ul>
-            <a
-              href="#"
-              className="btn btn-secondary mono"
-              style={{ width: '100%' }}
-            >
-              Contact Sales
-            </a>
+            {/* Pro — Popular */}
+            <div className="price-tier popular">
+              <div className="mono text-[#8a2be2] text-xs uppercase tracking-wider font-bold mb-4">
+                Production Ready
+              </div>
+              <div className="tier-name">Pro Integration</div>
+              <div className="tier-price">
+                ₹999<span>/month</span>
+              </div>
+              <ul className="tier-features">
+                <li>1,000 API Lookups / day</li>
+                <li>Secure HMAC Token Auth</li>
+                <li>&lt; 200ms Response Time</li>
+                <li>Priority Email Support</li>
+              </ul>
+              <a
+                href="https://gumroad.com"
+                target="_blank"
+                className="btn btn-primary mono"
+                style={{ width: '100%' }}
+              >
+                Acquire Token
+              </a>
+            </div>
+
+            {/* Enterprise */}
+            <div className="price-tier">
+              <div className="tier-name">CA / Enterprise</div>
+              <div className="tier-price">Custom</div>
+              <ul className="tier-features">
+                <li>5,000+ API Lookups / day</li>
+                <li>Batch processing endpoints</li>
+                <li>99.5% Uptime SLA Guarantee</li>
+                <li>Dedicated Account Manager</li>
+              </ul>
+              <a
+                href="#"
+                className="btn btn-secondary mono"
+                style={{ width: '100%' }}
+              >
+                Contact Sales
+              </a>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* ===== Footer ===== */}
       <footer className="border-t border-[#262626] py-16 mt-16">
