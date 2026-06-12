@@ -51,7 +51,7 @@ export default function CheckPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#040814] relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-[#040814] relative">
       {/* L2 precision grid background */}
       <div className="fixed inset-0 -z-20 bg-grid opacity-40" />
 

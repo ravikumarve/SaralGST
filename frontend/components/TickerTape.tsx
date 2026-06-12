@@ -22,7 +22,7 @@ export default function TickerTape({
 
   return (
     <div
-      className={`relative overflow-hidden bg-[#00FF66] py-3 -rotate-[2deg] scale-[1.02] my-8 ${className}`}
+      className={`relative overflow-hidden bg-[#00FF66] py-3 md:-rotate-[1.5deg] my-10 md:my-14 ${className}`}
     >
       <div
         className="flex whitespace-nowrap animate-ticker"

@@ -121,7 +121,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#040814] relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-[#040814] relative">
       {/* Particle canvas — full-screen cinematic bg */}
       <ParticleCanvas opacity={0.4} />
 
