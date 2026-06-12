@@ -26,14 +26,14 @@ const USE_CASES = [
 export default function Home() {
   return (
     <>
-      <section className="hero pt-32 pb-16 md:pt-40 md:pb-20 text-center flex flex-col items-center">
+      <section className="pt-32 pb-16 text-center flex flex-col items-center max-w-[1280px] mx-auto px-8">
         {/* Status badge */}
         <div className="status-badge mb-8">
           v1.0.0 &middot; GST 2.0 Ready
         </div>
 
         {/* Heading */}
-        <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.1] font-bold max-w-[1000px] mb-6">
+        <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] leading-none font-bold max-w-[1000px] mb-6">
           Sahi rate.
           <br />
           <span className="text-gradient">Seedha jawab.</span>

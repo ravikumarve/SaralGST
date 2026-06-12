@@ -13,11 +13,11 @@ export default function FloatingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="sticky top-8 z-100 mx-auto max-w-[1280px] w-[90%] md:w-auto bg-[#0d0d0d]/70 backdrop-blur-xl border border-[#262626] rounded-full px-6 py-3 md:py-3.5 flex items-center justify-between shadow-2xl shadow-black/40">
+    <nav className="sticky top-8 z-100 mx-auto max-w-[1280px] w-[90%] md:w-full bg-[#0d0d0d]/70 backdrop-blur-xl border border-[#262626] rounded-full px-6 md:px-8 py-3 md:py-6 flex items-center justify-between shadow-2xl shadow-black/40">
       {/* Logo */}
       <Link
         href="/"
-        className="flex items-center gap-3 font-space-grotesk font-bold text-lg text-[#ededed] hover:text-white transition-colors shrink-0"
+        className="flex items-center gap-3 font-space-grotesk font-bold text-xl text-[#ededed] hover:text-white transition-colors shrink-0"
       >
         <span className="w-[10px] h-[10px] bg-[#00f0ff] rounded-[2px]" />
         SaralGST

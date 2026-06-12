@@ -56,7 +56,7 @@ export default function CheckPage() {
       <UsageCounter onLimitReached={handleLimitReached} />
 
       {/* Main content */}
-      <main className="min-h-screen flex flex-col items-center justify-center px-6 py-28 md:py-20 w-full max-w-4xl mx-auto">
+      <main className="min-h-screen flex flex-col items-center justify-center w-full max-w-[1280px] mx-auto px-8 py-28 md:py-20">
         {/* Status badge */}
         <div className="status-badge mb-6">
           GST Rate Checker
