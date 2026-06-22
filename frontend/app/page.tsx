@@ -216,62 +216,44 @@ export default function Home() {
         </section>
 
       {/* ===== Footer ===== */}
-      <footer className="border-t border-[#262626] py-16 mt-16">
-        <div className="footer-grid">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-3 font-space-grotesk font-bold text-lg text-[#ededed] mb-4">
-              <span className="w-[10px] h-[10px] bg-[#00f0ff] rounded-[2px]" />
-              SaralGST
-            </div>
-            <p className="text-[#a1a1aa] text-sm max-w-[250px] leading-relaxed">
-              India&apos;s smartest, fastest API for resolving GST rate
-              confusion. <i>Sahi rate. Seedha jawab.</i>
-            </p>
-          </div>
-
-          {/* Product */}
-          <div className="footer-col">
-            <h5>Product</h5>
-            <ul className="footer-links">
-              <li><a href="#platform">Platform</a></li>
-              <li><a href="#pricing">Pricing</a></li>
-              <li><a href="#">Security (HMAC)</a></li>
-              <li><a href="http://localhost:8001/docs">Swagger UI</a></li>
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div className="footer-col">
-            <h5>Resources</h5>
-            <ul className="footer-links">
-              <li><a href="https://github.com/ravikumarve/SaralGST">GitHub Repo</a></li>
-              <li><a href="http://localhost:8001/redoc">ReDoc</a></li>
-              <li><a href="#">GST 2.0 Changelog</a></li>
-              <li><a href="#">Integration Guide</a></li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div className="footer-col">
-            <h5>Legal</h5>
-            <ul className="footer-links">
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Proprietary License</a></li>
-              <li><a href="#">Contact Support</a></li>
-            </ul>
-          </div>
+      <footer>
+        <div className="footer-brand">
+          <a href="/" className="logo">
+            <span className="logo-mark" />
+            SaralGST
+          </a>
+          <p>Proprietary SaaS built for Indian MSMEs. Next.js 16 and FastAPI powered architecture providing absolute clarity on GST 2.0 reforms.</p>
         </div>
-
-        {/* Bottom bar */}
-        <div className="border-t border-[#262626] pt-6 mt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-[#71717a]">
-            © 2026 SaralGST. All rights reserved.
-          </div>
-          <div className="mono text-[#10b981]">● Systems Nominal</div>
+        <div className="footer-col">
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="#features">NLP Engine</a></li>
+            <li><a href="#features">Tax Calculator</a></li>
+            <li><a href="#api">API Specifications</a></li>
+          </ul>
+        </div>
+        <div className="footer-col">
+          <h5>Developers</h5>
+          <ul>
+            <li><a href="https://github.com/ravikumarve/SaralGST">GitHub Repository</a></li>
+            <li><a href="http://localhost:8000">Localhost Endpoint</a></li>
+            <li><a href="#">Architecture Docs</a></li>
+          </ul>
+        </div>
+        <div className="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="LICENSE">Proprietary License</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
         </div>
       </footer>
+
+      <div className="footer-bottom">
+        <div>© 2025 SARALGST. PROPRIETARY — ALL RIGHTS RESERVED.</div>
+        <div><span style={{ color: 'var(--gold)' }}>●</span> SYSTEM NOMINAL</div>
+      </div>
     </div>
   );
 }
