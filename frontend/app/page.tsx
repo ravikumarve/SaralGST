@@ -1,28 +1,5 @@
 import Link from 'next/link';
-import BentoGrid from '@/components/BentoGrid';
-import CodeBlock from '@/components/CodeBlock';
 import SearchSimulation from '@/components/SearchSimulation';
-
-const USE_CASES = [
-  {
-    title: 'POS Systems',
-    description:
-      'Stop pushing manual database updates to remote retail terminals. Fetch real-time tax brackets dynamically during checkout, even for loosely described inventory items.',
-    accent: false,
-  },
-  {
-    title: 'ERP Integrators',
-    description:
-      'Validate batch SKU uploads. Ensure HSN codes and exact GST rates are verified instantly to prevent downstream billing errors across your entire product catalog.',
-    accent: true,
-  },
-  {
-    title: 'CA Firms',
-    description:
-      'Cross-check client ledgers against official GST 2.0 notifications via our high-volume auditing endpoints. Catch discrepancies before they trigger government scrutiny.',
-    accent: false,
-  },
-];
 
 export default function Home() {
   return (
@@ -61,113 +38,45 @@ export default function Home() {
         <SearchSimulation />
       </section>
 
-      {/* ===== Platform / Bento Grid ===== */}
-      <section id="platform" className="py-24">
-        <div className="section-header">
-          <h2>
-            The Compliance <span className="text-accent">Engine</span>.
-          </h2>
-          <p>
-            We replaced brittle, localized tax tables with a centralized,
-            AI-driven backend API. Designed to integrate directly into your
-            software stack.
-          </p>
+      {/* ===== Features / Bento Matrix ===== */}
+      <section id="features">
+        <div className="matrix-header">
+          <h2>Intelligence in <span className="text-gold">Compliance.</span></h2>
+          <p>We abandoned chaotic spreadsheets for a high-performance Next.js 16 and FastAPI architecture. SaralGST delivers absolute mathematical certainty for Indian trading operations.</p>
         </div>
 
-        <div className="px-0 md:px-0">
-          <BentoGrid>
-            {/* NLP Mapping — Large */}
-            <div className="bento-box col-span-12 md:col-span-8 row-span-2">
-              <h3 className="bento-title">AI-Powered NLP Mapping</h3>
-              <p className="bento-desc">
-                Pass colloquial product names in English or Hindi. Our Gemini
-                Flash integration maps &ldquo;LED TV&rdquo; directly to the
-                official CBIC nomenclature and 4-digit HSN code instantly.
-              </p>
-
-              <div className="search-ui">
-                <div className="search-ui-header mono">
-                  <span className="text-[#71717a]">
-                    Query: &ldquo;टेलीविजन (32 इंच से बड़े)&rdquo;
-                  </span>
-                  <span className="text-[#8a2be2]">Confidence: 0.90</span>
-                </div>
-                <div className="live-result">
-                  <div>
-                    <div className="text-[#ededed] font-medium text-lg mb-1">
-                      Television sets (LCD/LED)
-                    </div>
-                    <div className="mono text-[#a1a1aa]">HSN Code: 8528</div>
-                    <div className="mono text-[#71717a] mt-2">
-                      Ref: Notif. 8/2025-CT
-                    </div>
-                  </div>
-                  <div className="rate-large">18%</div>
-                </div>
-              </div>
+        <div className="bento-matrix">
+          {/* LOG_01 — NLP */}
+          <div className="bento-node span-8">
+            <span className="node-idx">LOG_01 // NLP INTERPRETATION</span>
+            <h3>Bilingual Natural Language Parsing</h3>
+            <p>Powered by Google Gemini Flash fallback logic. You don&apos;t need to memorize exact 4-digit HSN codes. Search naturally for &ldquo;<span lang="hi">चावल</span>&rdquo;, &ldquo;Steel Pipes&rdquo;, or &ldquo;Laptops&rdquo; in Hindi or English, and our interpreter maps it to the precise legal tax bracket instantly.</p>
+            <div className="feature-tags">
+              <span className="f-tag">Gemini 0.3.2</span>
+              <span className="f-tag">Hindi / English Support</span>
             </div>
+          </div>
 
-            {/* FastAPI Backend — Medium */}
-            <div className="bento-box col-span-12 md:col-span-4 row-span-2">
-              <h3 className="bento-title">FastAPI Backend</h3>
-              <p className="bento-desc">
-                Engineered for brutal efficiency in high-volume POS environments.
-              </p>
-              <div className="metric-value text-accent">
-                &lt;200
-                <span className="text-base text-[#a1a1aa]">ms</span>
-              </div>
-              <div className="mono text-[#71717a] mt-1">p95 Response Time</div>
-            </div>
+          {/* LOG_02 — Memory Cache */}
+          <div className="bento-node span-4">
+            <span className="node-idx">LOG_02 // MEMORY CACHE</span>
+            <h3>Zero Latency Database</h3>
+            <p>Built for absolute speed. The engine relies on a rigorously verified JSON data store containing 551 GST items across 9 categories. No external DB hops.</p>
+          </div>
 
-            {/* Historical Tracking — Medium */}
-            <div className="bento-box col-span-12 md:col-span-4 row-span-2">
-              <h3 className="bento-title">Historical Tracking</h3>
-              <p className="bento-desc">
-                Side-by-side old vs new rate comparisons post GST 2.0 reform.
-              </p>
-              <div className="mt-auto pt-4 border-t border-[#262626] flex justify-between items-center">
-                <span className="text-[#71717a] line-through text-2xl">
-                  28%
-                </span>
-                <span className="text-[#71717a]">→</span>
-                <span className="text-[#10b981] text-3xl font-bold">18%</span>
-              </div>
-            </div>
+          {/* LOG_03 — Reform Tracking */}
+          <div className="bento-node span-6">
+            <span className="node-idx">LOG_03 // REFORM TRACKING</span>
+            <h3>GST 2.0 Transitions</h3>
+            <p>Navigate the September 2025 GST 2.0 reforms safely. Every query calculates the mathematical difference, returning both the old rate and the new rate side-by-side.</p>
+          </div>
 
-            {/* Developer First — Wide */}
-            <div className="bento-box col-span-12 md:col-span-8" id="developers">
-              <h3 className="bento-title">Developer First</h3>
-              <p className="bento-desc">
-                A completely headless, JSON-driven API that gets out of your way.
-              </p>
-              <CodeBlock />
-            </div>
-          </BentoGrid>
-        </div>
-      </section>
-
-      {/* ===== Use Cases ===== */}
-      <section className="py-24 border-t border-[#262626]">
-        <div className="section-header">
-          <h2>
-            Built for <span className="text-accent">Scale</span>.
-          </h2>
-          <p>
-            Targeting the specific operational bottlenecks of Indian commerce.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {USE_CASES.map((uc, index) => (
-            <div
-              key={index}
-              className={`use-case-card ${uc.accent ? 'accent' : ''}`}
-            >
-              <h4>{uc.title}</h4>
-              <p>{uc.description}</p>
-            </div>
-          ))}
+          {/* LOG_04 — Maths */}
+          <div className="bento-node span-6">
+            <span className="node-idx">LOG_04 // MATHEMATICS</span>
+            <h3>Tax Split Calculator</h3>
+            <p>Send a base price and item name. Receive the exact mathematical split for CGST, SGST, IGST, and the final net total with GST applied, ready for invoice generation.</p>
+          </div>
         </div>
       </section>
 
