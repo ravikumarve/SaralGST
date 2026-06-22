@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaralGST | GST 2.0 Intelligence Engine</title>
+    <meta name="description" content="India's simplest, most powerful GST rate checker. Type any product in Hindi or English — get the correct GST 2.0 rate instantly. Built for MSMEs and CA firms.">
+    <meta property="og:title" content="SaralGST — Sahi rate. Seedha jawab.">
+    <meta property="og:description" content="India's simplest GST rate checker. 551 official tax brackets. NLP-powered. Free tier available.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saralgst.in">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SaralGST — GST 2.0 Intelligence Engine">
+    <meta name="twitter:description" content="India's simplest GST rate checker. Type any product in Hindi or English. Free tier available.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23F59E0B'/><rect x='6' y='6' width='20' height='20' rx='3' fill='%23020202'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Obsidian & Liquid Gold Palette */
+            --bg-void: #020202;
+            --bg-surface: #0a0a0a;
+            --bg-glass: rgba(15, 15, 15, 0.55);
+            
+            --border-dim: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(245, 158, 11, 0.3);
+            
+            /* Accents */
+            --gold: #F59E0B;
+            --gold-light: #FBBF24;
+            --gold-dim: rgba(245, 158, 11, 0.15);
+            --emerald: #10B981;
+            
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --text-faint: #52525b;
+            
+            /* Typography */
+            --font-display: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        /* Skip-to-content for keyboard users */
+.skip-link { position: absolute; top: -100%; left: 0; z-index: 999; padding: 1rem 2rem; background: var(--gold); color: #000; font-family: var(--font-mono); font-size: 0.85rem; text-decoration: none; font-weight: 700; border-radius: 0 0 8px 0; transition: top 0.2s; }
+.skip-link:focus { top: 0; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-main);
+            font-family: var(--font-display);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 1. LUSION-STYLE FLUID FLOW FIELD CANVAS */
+        #flow-canvas {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none; opacity: 0.8;
+            mix-blend-mode: screen;
+        }
+
+        /* 2. PRECISION DOT MATRIX MASK */
+        .dot-matrix {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 1; pointer-events: none;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            mask-image: radial-gradient(ellipse at 50% 50%, black 10%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 10%, transparent 80%);
+        }
+
+        /* Ambient Core Illumination */
+        .ambient-glow {
+            position: absolute; top: -20vh; left: 50%; transform: translateX(-50%);
+            width: 80vw; height: 70vh;
+            background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.08), transparent 60%);
+            z-index: 0; pointer-events: none; filter: blur(100px);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+        .mono { font-family: var(--font-mono); }
+        
+        .text-gold { 
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+        }
+
+        /* Layout */
+        .container { max-width: 1240px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 10; }
+        section { padding: 8rem 0; border-bottom: 1px solid var(--border-dim); }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 2rem; margin-top: 2rem; border-radius: 100px;
+            background: var(--bg-glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-dim); position: relative; z-index: 100;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-size: 1.4rem; font-weight: 800; color: var(--text-main); 
+            text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px;
+        }
+        .logo-mark {
+            width: 20px; height: 20px; background: var(--gold);
+            border-radius: 4px; position: relative; box-shadow: 0 0 15px var(--gold-dim);
+        }
+        .logo-mark::after { content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; background: var(--bg-void); border-radius: 2px; }
+
+        .nav-links { display: flex; gap: 3rem; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: color 0.3s; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.5px;}
+        .nav-links a:hover { color: var(--text-main); }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 0.8rem 2rem; font-family: var(--font-display); font-size: 0.9rem;
+            font-weight: 600; border-radius: 100px; text-decoration: none; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer;
+        }
+        .btn-primary { 
+            background: linear-gradient(90deg, var(--gold-light), var(--gold)); 
+            color: #000; border: none; box-shadow: 0 10px 30px rgba(245, 158, 11, 0.25);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4); filter: brightness(1.1); }
+        
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-dim); }
+        .btn-outline:hover { border-color: var(--gold); background: rgba(245, 158, 11, 0.05); }
+
+        /* --- HERO SECTION --- */
+        .hero { min-height: 85vh; display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: center; padding-top: 0; border: none; }
+        
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 0.5rem 1.25rem; background: var(--gold-dim);
+            border: 1px solid rgba(245, 158, 11, 0.2); color: var(--gold-light);
+            font-size: 0.75rem; font-family: var(--font-mono); margin-bottom: 2rem; border-radius: 100px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .hero h1 { font-size: clamp(3.5rem, 5.5vw, 5rem); margin-bottom: 1.5rem; line-height: 1.05; }
+        .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 500px; line-height: 1.7; margin-bottom: 3.5rem; font-weight: 300; }
+
+        /* 3D Interactive Search Interface */
+        .search-viewport { perspective: 1200px; position: relative; z-index: 2; }
+        
+        .glass-panel {
+            background: var(--bg-glass); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--border-dim); border-radius: 24px;
+            padding: 2.5rem; box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+            transform: rotateY(-8deg) rotateX(4deg); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s;
+        }
+        
+        @media (hover: hover) {
+            .glass-panel:hover { transform: rotateY(0deg) rotateX(0deg) translateY(-10px); box-shadow: 0 50px 100px rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); }
+        }
+
+        .search-bar {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 15px; margin-bottom: 2rem;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .search-icon { color: var(--gold); }
+        .search-text { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-main); flex: 1; }
+        .search-cursor { display: inline-block; width: 2px; height: 1.2rem; background: var(--gold); animation: blink 1s infinite; vertical-align: middle; margin-left: 2px;}
+
+        @keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0;} }
+
+        .result-data { display: flex; flex-direction: column; gap: 1.5rem; }
+        .rd-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-dim); }
+        .rd-row:last-child { border-bottom: none; padding-bottom: 0; }
+        
+        .rd-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;}
+        .rd-val { font-size: 1.2rem; font-weight: 600; color: var(--text-main); }
+        .rd-val.highlight { font-family: var(--font-mono); font-size: 2.5rem; color: var(--emerald); font-weight: 700; text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); line-height: 1;}
+        
+        .split-pills { display: flex; gap: 10px; margin-top: 10px; }
+        .split-pill { font-family: var(--font-mono); font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 100px; color: var(--text-muted); border: 1px solid var(--border-dim); }
+
+        /* --- BENTO MATRIX (FEATURES) --- */
+        .matrix-header { margin-bottom: 6rem; text-align: center; }
+        .matrix-header h2 { font-size: 3.5rem; margin-bottom: 1.5rem; }
+        .matrix-header p { color: var(--text-muted); font-size: 1.15rem; max-width: 700px; margin: 0 auto; font-weight: 300; line-height: 1.7;}
+
+        .bento-matrix { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; }
+        .bento-node { 
+            background: var(--bg-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-dim); border-radius: 24px; padding: 4rem; 
+            position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        
+        .bento-node::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.1), transparent 60%);
+            opacity: 0; transition: opacity 0.4s; pointer-events: none;
+        }
+
+        .bento-node:hover { border-color: rgba(245, 158, 11, 0.3); transform: translateY(-5px); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        .bento-node:hover::after { opacity: 1; }
+
+        .span-8 { grid-column: span 8; }
+        .span-4 { grid-column: span 4; }
+        .span-6 { grid-column: span 6; }
+        .span-12 { grid-column: span 12; }
+
+        .node-idx { font-family: var(--font-mono); font-size: 0.75rem; color: var(--gold); margin-bottom: 2rem; display: block; letter-spacing: 1px; text-transform: uppercase;}
+        .bento-node h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--text-main); }
+        .bento-node p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; font-weight: 300; }
+
+        /* Tag Marquee */
+        .feature-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2rem; }
+        .f-tag { font-family: var(--font-mono); font-size: 0.75rem; padding: 6px 12px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-dim); border-radius: 100px; color: var(--text-muted); }
+
+        /* --- API ARCHITECTURE --- */
+        .arch-columns { display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: center; }
+        .arch-info h2 { font-size: 3.5rem; margin-bottom: 1.5rem; }
+        .arch-info p { color: var(--text-muted); font-size: 1.15rem; line-height: 1.7; margin-bottom: 3rem; font-weight: 300; }
+
+        .stack-card { background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border-glow); border-radius: 20px; padding: 3rem; box-shadow: inset 0 0 50px rgba(245, 158, 11, 0.03); }
+        .stack-card h3 { font-size: 1.2rem; font-family: var(--font-mono); font-weight: 600; text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 0.5px; color: var(--gold); }
+        
+        .stack-list { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; }
+        .stack-list li { display: flex; justify-content: space-between; font-size: 0.95rem; color: var(--text-muted); align-items: center; border-bottom: 1px dashed var(--border-dim); padding-bottom: 1.25rem;}
+        .stack-list li:last-child { border-bottom: none; padding-bottom: 0;}
+        .stack-list li span:last-child { color: var(--text-main); font-family: var(--font-mono); font-size: 0.8rem; background: var(--bg-surface); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-dim);}
+
+        /* Code Block */
+        .code-window {
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(20px);
+            border: 1px solid var(--border-dim); border-radius: 20px;
+            padding: 2.5rem; font-family: var(--font-mono); font-size: 0.85rem; line-height: 2; color: var(--text-muted);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+        .cw-header { border-bottom: 1px solid var(--border-dim); padding-bottom: 1rem; margin-bottom: 1.5rem; display: flex; gap: 8px; color: var(--text-faint);}
+.cw-dot { width: 12px; height: 12px; border-radius: 50%; }
+.cw-dot:nth-child(1) { background: #ff5f57; }
+.cw-dot:nth-child(2) { background: #febc2e; }
+.cw-dot:nth-child(3) { background: #28c840; }
+
+.c-comment { color: #71717a; }
+        .c-method { color: var(--gold); font-weight: 700; }
+        .c-route { color: var(--text-main); }
+        .c-key { color: var(--emerald); }
+        .c-str { color: var(--text-muted); }
+
+        /* --- CTA BAND --- */
+        .cta-band { background: linear-gradient(135deg, rgba(20,20,20,0.8) 0%, var(--bg-void) 100%); border: 1px solid var(--border-dim); border-radius: 24px; padding: 6rem 4rem; text-align: center; position: relative; overflow: hidden; margin: 4rem 0; box-shadow: 0 40px 80px rgba(0,0,0,0.5); backdrop-filter: blur(20px);}
+        .cta-band::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at center, rgba(245, 158, 11, 0.05) 0%, transparent 60%); pointer-events: none; }
+        .cta-band h2 { font-size: 3rem; margin-bottom: 1rem; }
+        .cta-band p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 3rem; font-weight: 300; line-height: 1.7;}
+
+        /* --- FOOTER --- */
+        footer { padding: 6rem 0 3rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; border-top: 1px solid var(--border-dim); position: relative; z-index: 10; }
+        .footer-brand p { color: var(--text-muted); font-size: 0.95rem; margin-top: 1.5rem; max-width: 320px; line-height: 1.7; font-weight: 300; }
+        
+        .footer-col h5 { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-faint); margin-bottom: 2rem; letter-spacing: 1px; text-transform: uppercase; }
+        .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .footer-col a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; font-weight: 400; }
+        .footer-col a:hover { color: var(--gold); }
+        
+        .footer-bottom { margin-top: 6rem; padding-top: 2rem; border-top: 1px solid var(--border-dim); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-faint); }
+
+/* Mobile Hamburger */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text-muted); border-radius: 2px; transition: all 0.3s; }
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+.mobile-menu { display: none; position: absolute; top: calc(100% + 10px); left: 0; right: 0; background: rgba(15,15,15,0.95); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid var(--border-dim); border-radius: 20px; padding: 1.5rem; flex-direction: column; gap: 1rem; box-shadow: 0 20px 60px rgba(0,0,0,0.8); z-index: 200; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { color: var(--text-muted); text-decoration: none; font-family: var(--font-mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s; }
+.mobile-menu a:hover { color: var(--text-main); background: rgba(255,255,255,0.03); }
+.mobile-menu .btn { width: 100%; text-align: center; margin-top: 0.5rem; }
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+    .hero, .arch-columns { grid-template-columns: 1fr; gap: 4rem; }
+    .search-viewport { perspective: none; }
+    .glass-panel { transform: none; max-width: 600px; margin: 0 auto;}
+    .bento-matrix { display: flex; flex-direction: column; }
+    footer { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero h1 { font-size: 2.8rem; }
+    .glass-panel { padding: 1.5rem; }
+    .rd-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .bento-node, .api-block, .stack-card, .code-window { padding: 2rem 1.5rem; }
+    .cta-band { padding: 4rem 2rem; }
+    footer { grid-template-columns: 1fr; gap: 3rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+
+@media (max-width: 480px) {
+    .hero h1 { font-size: 2.2rem; }
+    .hero p { font-size: 1rem; }
+    .hero-badge { font-size: 0.65rem; }
+    .hero .btn { font-size: 0.8rem; padding: 0.6rem 1.25rem; }
+    .matrix-header h2 { font-size: 2.2rem; }
+    .arch-info h2 { font-size: 2.2rem; }
+    .cta-band h2 { font-size: 2rem; }
+    .container { padding: 0 1.25rem; }
+    section { padding: 5rem 0; }
+    .bento-node { padding: 1.5rem; }
+    .bento-node h3 { font-size: 1.3rem; }
+    .rd-val.highlight { font-size: 2rem; }
+}
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to content</a>
+
+    <div class="dot-matrix" aria-hidden="true"></div>
+    
+    <canvas id="flow-canvas" aria-hidden="true" role="presentation"></canvas>
+    
+    <div class="ambient-glow" aria-hidden="true"></div>
+
+    <div class="container" id="main-content">
+        <nav>
+            <a href="/" class="logo" aria-label="SaralGST home">
+                <div class="logo-mark"></div>
+                SaralGST
+            </a>
+            <div class="nav-links">
+                <a href="#features">Engine</a>
+                <a href="#api">API Spec</a>
+                <a href="https://github.com/ravikumarve/SaralGST">GitHub</a>
+            </div>
+            <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <a href="/check" class="btn btn-primary">Check Rate</a>
+            <div class="mobile-menu" role="navigation" aria-label="Mobile navigation">
+                <a href="#features" class="mobile-nav-link">Engine</a>
+                <a href="#api" class="mobile-nav-link">API Spec</a>
+                <a href="https://github.com/ravikumarve/SaralGST" class="mobile-nav-link">GitHub</a>
+                <a href="/check" class="btn btn-primary" style="width:100%;text-align:center;margin-top:0.5rem;">Check Rate</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div>
+                <div class="hero-badge mono">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: var(--gold); border-radius: 50%;"></span>
+                    GST 2.0 Compliant
+                </div>
+                <h1>Sahi rate. <br><span class="text-gold">Seedha jawab.</span></h1>
+                <p>India's simplest, most powerful GST rate checker. Built for MSMEs and CA firms. Type any product in Hindi or English, and our NLP engine maps it to 551 official tax brackets instantly.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="/check" class="btn btn-primary" style="flex-shrink:0;">Check Rate</a>
+                    <a href="#features" class="btn btn-outline" style="flex-shrink:0;">Explore Engine</a>
+                </div>
+            </div>
+
+            <div class="search-viewport">
+                <div class="glass-panel">
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <div class="search-text">LED TV<span class="search-cursor"></span></div>
+                        <span class="mono" style="color: var(--text-faint); font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px;">ENTER ↵</span>
+                    </div>
+                    
+                    <div class="result-data">
+                        <div class="rd-row">
+                            <div>
+                                <div class="rd-label">Matched Classification</div>
+                                <div class="rd-val">Television Set (<span lang="hi">टेलीविजन</span>)</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="rd-label">HSN / SAC Code</div>
+                                <div class="rd-val mono">8528</div>
+                            </div>
+                        </div>
+                        
+                        <div class="rd-row" style="align-items: flex-end;">
+                            <div>
+                                <div class="rd-label">GST 2.0 Rate</div>
+                                <div class="rd-val highlight">18.0%</div>
+                                <div class="split-pills">
+                                    <span class="split-pill">CGST: 9%</span>
+                                    <span class="split-pill">SGST: 9%</span>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="rd-label">Reference ID</div>
+                                <div class="rd-val mono" style="font-size: 0.85rem; color: var(--text-muted);">Notif. No. 1/2025-CT(Rate)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <div class="matrix-header">
+                <h2>Intelligence in <span class="text-gold">Compliance.</span></h2>
+                <p>We abandoned chaotic spreadsheets for a high-performance Next.js 16 and FastAPI architecture. SaralGST delivers absolute mathematical certainty for Indian trading operations.</p>
+            </div>
+
+            <div class="bento-matrix">
+                <div class="bento-node span-8">
+                    <span class="node-idx">LOG_01 // NLP INTERPRETATION</span>
+                    <h3>Bilingual Natural Language Parsing</h3>
+                    <p>Powered by Google Gemini Flash fallback logic. You don't need to memorize exact 4-digit HSN codes. Search naturally for "चावल", "Steel Pipes", or "Laptops" in Hindi or English, and our interpreter maps it to the precise legal tax bracket instantly.</p>
+                    <div class="feature-tags">
+                        <span class="f-tag">Gemini 0.3.2</span>
+                        <span class="f-tag">Hindi / English Support</span>
+                    </div>
+                </div>
+                <div class="bento-node span-4">
+                    <span class="node-idx">LOG_02 // MEMORY CACHE</span>
+                    <h3>Zero Latency Database</h3>
+                    <p>Built for absolute speed. The engine relies on a rigorously verified JSON data store containing 551 GST items across 9 categories. No external DB hops.</p>
+                </div>
+                <div class="bento-node span-6">
+                    <span class="node-idx">LOG_03 // REFORM TRACKING</span>
+                    <h3>GST 2.0 Transitions</h3>
+                    <p>Navigate the September 2025 GST 2.0 reforms safely. Every query calculates the mathematical difference, returning both the old rate and the new rate side-by-side.</p>
+                </div>
+                <div class="bento-node span-6">
+                    <span class="node-idx">LOG_04 // MATHEMATICS</span>
+                    <h3>Tax Split Calculator</h3>
+                    <p>Send a base price and item name. Receive the exact mathematical split for CGST, SGST, IGST, and the final net total with GST applied, ready for invoice generation.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="api" class="arch-columns" style="border-bottom: none;">
+            <div class="arch-info">
+                <h2>Developer-First <br><span class="text-gold">Endpoints.</span></h2>
+                <p>Integrate SaralGST directly into your POS, ERP, or billing software. Our V1 API is secured by SlowAPI rate limiting and HMAC token validation to ensure production-grade reliability.</p>
+                
+                <div class="tech-stack-card" style="margin-top: 3rem;">
+                    <h3>Infrastructure Blueprint</h3>
+                    <ul class="stack-list">
+                        <li>Frontend Application <span>Next.js 16.2.4 (App Router)</span></li>
+                        <li>Backend API Engine <span>FastAPI 0.109.0 (Python 3.12+)</span></li>
+                        <li>UI Primitives <span>Tailwind CSS 4 + Radix UI</span></li>
+                        <li>Rate Limiting <span>SlowAPI 0.1.9</span></li>
+                        <li>NLP Fallback <span>Google Gemini 0.3.2</span></li>
+                        <li>Testing Protocol <span>Pytest (100% Coverage)</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="code-window">
+                <div class="cw-header">
+                    <div class="cw-dot"></div><div class="cw-dot"></div><div class="cw-dot"></div>
+                </div>
+                
+                <div class="c-comment"># V1 Data Retrieval</div>
+                <div><span class="c-method">GET</span> <span class="c-route">/api/v1/gst/lookup?query=rice</span></div>
+                <div style="margin-bottom: 1.5rem;"><span class="c-method">GET</span> <span class="c-route">/api/v1/gst/explain?item_name=rice</span></div>
+                
+                <div class="c-comment"># Tax Calculation</div>
+                <div><span class="c-method" style="color: var(--emerald);">POST</span> <span class="c-route">/api/v1/gst/calculate</span></div>
+                <div style="margin-left: 1rem;">
+                    {<br>
+                    &nbsp;&nbsp;<span class="c-key">"item_name"</span>: <span class="c-str">"LED TV"</span>,<br>
+                    &nbsp;&nbsp;<span class="c-key">"price"</span>: <span class="c-str">50000</span><br>
+                    }
+                </div>
+                <div class="c-comment" style="margin-top: 1rem;">// Response</div>
+                <div style="margin-left: 1rem;">
+                    {<br>
+                    &nbsp;&nbsp;<span class="c-key">"hsn_code"</span>: <span class="c-str">"8528"</span>,<br>
+                    &nbsp;&nbsp;<span class="c-key">"gst_rate"</span>: <span class="c-str">18</span>,<br>
+                    &nbsp;&nbsp;<span class="c-key">"cgst"</span>: <span class="c-str">4500</span>,<br>
+                    &nbsp;&nbsp;<span class="c-key">"total_with_gst"</span>: <span class="c-str">59000</span><br>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-wrapper" style="padding: 2rem 0; border: none;">
+            <div class="cta-band">
+                <h2>Deploy the SaralGST engine.</h2>
+                <p>Run the backend locally, configure your Gemini API keys, and launch the compliance engine in under 5 minutes.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://github.com/ravikumarve/SaralGST" class="btn btn-primary">Clone Repository</a>
+                    <a href="/check" class="btn btn-outline" style="flex-shrink:0;">Try Live Demo</a>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-brand">
+                <a href="#" class="logo"><div class="logo-mark"></div>SaralGST</a>
+                <p>Proprietary SaaS built for Indian MSMEs 🇮🇳. Next.js 16 and FastAPI powered architecture providing absolute clarity on GST 2.0 reforms.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Platform</h5>
+                <ul>
+                    <li><a href="#features">NLP Engine</a></li>
+                    <li><a href="#features">Tax Calculator</a></li>
+                    <li><a href="#api">API Specifications</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Developers</h5>
+                <ul>
+                    <li><a href="https://github.com/ravikumarve/SaralGST">GitHub Repository</a></li>
+                    <li><a href="http://localhost:8000">Localhost Endpoint</a></li>
+                    <li><a href="#">Architecture Docs</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Company</h5>
+                <ul>
+                    <li><a href="LICENSE">Proprietary License</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </footer>
+
+        <div class="footer-bottom">
+            <div>© 2025 SARALGST. PROPRIETARY — ALL RIGHTS RESERVED.</div>
+            <div><span style="color: var(--gold);">●</span> SYSTEM NOMINAL</div>
+        </div>
+    </div>
+
+    <script>
+        // ===== Canvas Flow Field =====
+        (function() {
+            const canvas = document.getElementById('flow-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width, height, time = 0;
+            let mouseX = -1000, mouseY = -1000;
+            let frameCount = 0;
+            const particles = [];
+            const noiseScale = 0.005;
+
+            // Performance detection: scale particles by CPU cores
+            const cpuCores = navigator.hardwareConcurrency || 4;
+            let targetParticles = 800;
+            if (cpuCores <= 2) targetParticles = 200;
+            else if (cpuCores <= 4) targetParticles = 400;
+            else if (cpuCores <= 6) targetParticles = 600;
+
+            function init() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+
+                // Mobile: halve particles
+                let count = width < 768 ? Math.floor(targetParticles / 2) : targetParticles;
+
+                particles.length = 0;
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        vx: 0, vy: 0,
+                        baseSpeed: 0.5 + Math.random() * 1.5,
+                        size: Math.random() * 1.5 + 0.3,
+                    });
+                }
+            }
+
+            // Noise function for flow field
+            function getNoiseAngle(x, y, t) {
+                return Math.sin(x * noiseScale + t) * Math.cos(y * noiseScale + t) * Math.PI * 2;
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+                frameCount++;
+
+                // Full clear every 120 frames to prevent trail saturation
+                if (frameCount % 120 === 0) {
+                    ctx.clearRect(0, 0, width, height);
+                }
+                // Trail effect
+                ctx.fillStyle = 'rgba(2, 2, 2, 0.15)';
+                ctx.fillRect(0, 0, width, height);
+
+                time += 0.003;
+                ctx.fillStyle = 'rgba(245, 158, 11, 0.6)';
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    const angle = getNoiseAngle(p.x, p.y, time);
+
+                    p.vx += Math.cos(angle) * 0.1;
+                    p.vy += Math.sin(angle) * 0.1;
+
+                    // Mouse / Touch repulsion
+                    const dx = p.x - mouseX;
+                    const dy = p.y - mouseY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150 && dist > 0) {
+                        const force = (150 - dist) / 150;
+                        p.vx += (dx / dist) * force * 2;
+                        p.vy += (dy / dist) * force * 2;
+                    }
+
+                    p.vx *= 0.9;
+                    p.vy *= 0.9;
+                    p.x += p.vx * p.baseSpeed;
+                    p.y += p.vy * p.baseSpeed;
+
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // Mouse events
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Touch events for mobile
+            window.addEventListener('touchmove', (e) => {
+                const touch = e.touches[0];
+                if (touch) {
+                    mouseX = touch.clientX;
+                    mouseY = touch.clientY;
+                }
+            }, { passive: true });
+
+            window.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                if (touch) {
+                    mouseX = touch.clientX;
+                    mouseY = touch.clientY;
+                }
+            }, { passive: true });
+
+            // Debounced resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(init, 300);
+            });
+
+            init();
+            animate();
+        })();
+
+        // ===== Mobile Hamburger Toggle =====
+        (function() {
+            const hamburger = document.querySelector('.hamburger');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            if (!hamburger || !mobileMenu) return;
+
+            hamburger.addEventListener('click', () => {
+                const isOpen = mobileMenu.classList.toggle('open');
+                hamburger.classList.toggle('active');
+                hamburger.setAttribute('aria-expanded', isOpen);
+            });
+
+            // Close menu on link click
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('open');
+                    hamburger.classList.remove('active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Close on Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+                    mobileMenu.classList.remove('open');
+                    hamburger.classList.remove('active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    hamburger.focus();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

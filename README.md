@@ -1,14 +1,16 @@
-# SaralGST Backend API
+# SaralGST — Sahi rate. Seedha jawab.
 
 <div align="center">
 
-**India's Simplest GST Rate Checker**
+**India's Simplest GST Rate Checker — GST 2.0 Compliant**
 
 [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109+-green.svg)](https://fastapi.tiangolo.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-4-06b6d4.svg)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 
-*Sahi rate. Seedha jawab.* (Correct rate. Direct answer.)
+*Sahi rate. Seedha jawab. Sirf SaralGST.*
 
 </div>
 
@@ -16,277 +18,309 @@
 
 ## Overview
 
-SaralGST is a vertical SaaS for Indian small businesses to verify GST rates after the GST 2.0 reforms (September 22, 2025). The backend API provides instant GST rate lookup with plain language search, HSN code lookup, and rate comparison.
+SaralGST is a full-stack vertical SaaS for Indian small businesses, traders, and CA firms to verify GST rates after the GST 2.0 reforms (effective September 22, 2025). Type a product name in Hindi or English — get the correct GST rate instantly.
 
 **Key Features:**
-- ✅ Plain language search in Hindi or English
-- ✅ Direct HSN/SAC code lookup
-- ✅ Side-by-side old vs new rate comparison
-- ✅ Official GST notification references
+- ✅ Plain language search in **Hindi or English**
+- ✅ Direct **HSN/SAC code lookup**
+- ✅ Side-by-side **old vs new rate comparison**
+- ✅ Official **GST notification references**
+- ✅ **551 GST rate items** across 9 categories
 - ✅ Free tier with 3 lookups/day
-- ✅ AI-powered product interpretation
+- ✅ CGST + SGST + IGST calculator
+
+---
+
+## Tech Stack
+
+### Frontend
+| Technology | Version |
+|---|---|
+| **Next.js** | 16.2.4 (App Router) |
+| **React** | 19.2.4 |
+| **Tailwind CSS** | 4 |
+| **TypeScript** | 5 |
+| **Radix UI** | Dialog + Tooltip |
+| **Fonts** | Space Grotesk, Inter, JetBrains Mono, Syncopate |
+
+### Backend
+| Technology | Version |
+|---|---|
+| **FastAPI** | 0.109.0 |
+| **Python** | 3.12+ |
+| **Google Gemini** | 0.3.2 (NLP fallback) |
+| **SlowAPI** | 0.1.9 (rate limiting) |
+| **Data Store** | JSON file (no database) |
 
 ---
 
 ## Quick Start
 
 ### Prerequisites
-- Python 3.12 or higher
-- pip
+- Node.js 18+
+- Python 3.12+
 
-### Installation
+### 1. Backend
+
 ```bash
-# Clone the repository
-git clone https://github.com/ravikumarve/SaralGST.git
-cd SaralGST/backend
-
-# Create virtual environment
+cd backend
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+source venv/bin/activate
 pip install -r requirements.txt
-
-# Copy environment variables
 cp .env.example .env
 
-# Edit .env and add your API keys
+# Edit .env with your keys
 nano .env
+
+# Start server
+python3 main.py
 ```
 
-### Running the Server
+The API will be available at **http://localhost:8000**.
+
+### 2. Frontend
+
 ```bash
-# Development mode (with auto-reload)
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-
-# Production mode
-uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
+cd frontend
+npm install
+npm run dev
 ```
 
-### API Documentation
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **Health Check**: http://localhost:8000/health
+The app will be available at **http://localhost:3000**.
+
+### Verify Both Are Running
+
+```bash
+# Backend health
+curl http://localhost:8000/health
+
+# Frontend
+curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
+
+# Try a lookup
+curl "http://localhost:8000/api/v1/gst/lookup?query=LED%20TV"
+```
 
 ---
 
 ## API Reference
 
-### Health Check
+### Legacy Endpoints
+
+| Method | Route | Description |
+|---|---|---|
+| `GET` | `/health` | Health check |
+| `GET` | `/` | API info |
+| `POST` | `/api/lookup` | Rate lookup (with Gemini NLP) |
+| `POST` | `/api/validate-key` | HMAC token validation |
+
+### V1 Endpoints (Recommended)
+
+| Method | Route | Description |
+|---|---|---|
+| `GET` | `/api/v1/gst/lookup?query=...` | Rate lookup (GET, frontend-friendly) |
+| `GET` | `/api/v1/gst/explain?item_name=...` | Rate explanation |
+| `POST` | `/api/v1/gst/calculate` | CGST/SGST/IGST calculation |
+
+### Lookup Example
+
 ```bash
-GET /health
+GET /api/v1/gst/lookup?query=rice
 ```
 
-**Response**:
+**Response:**
 ```json
 {
-  "status": "ok",
-  "version": "1.0.0",
-  "data_version": "GST_2.0_Sept2025",
-  "timestamp": "2025-04-30T12:00:00",
-  "items_count": 54
+  "hsn_code": "1006",
+  "description": "Rice",
+  "description_hi": "चावल",
+  "category": "Food & Agriculture",
+  "old_rate": 0.0,
+  "new_rate": 0.0,
+  "rate_changed": false,
+  "movement": "unchanged",
+  "notification_ref": "Notification No. 1/2025-CT(Rate)",
+  "notes": "Unbranded rice exempt",
+  "confidence": 1.0,
+  "interpreted_from": "rice"
 }
 ```
 
-### Rate Lookup
+### Calculate Tax
+
 ```bash
-POST /api/lookup
+POST /api/v1/gst/calculate
 Content-Type: application/json
 
 {
-  "query": "LED TV",
-  "query_type": "auto",
-  "language": "en"
+  "item_name": "LED TV",
+  "price": 50000
 }
 ```
 
-**Request Parameters**:
-- `query` (string, required): Product name or HSN code
-- `query_type` (string, optional): "auto" | "hsn" | "product_name"
-- `language` (string, optional): "en" | "hi"
-
-**Response**:
+**Response:**
 ```json
 {
+  "item_name": "LED TV",
   "hsn_code": "8528",
-  "description": "Television sets (LCD/LED above 32 inches)",
-  "description_hi": "टेलीविजन (32 इंच से बड़े)",
-  "category": "Consumer Electronics",
-  "old_rate": 28,
-  "new_rate": 18,
-  "rate_changed": true,
-  "movement": "down",
-  "notification_ref": "Notification No. 8/2025-CT(Rate)",
-  "notes": "Effective Sept 22, 2025",
-  "confidence": 0.9,
-  "interpreted_from": "LED TV",
-  "warning": null
+  "price": 50000,
+  "gst_rate": 18,
+  "cgst": 4500,
+  "sgst": 4500,
+  "igst": 9000,
+  "total_with_gst": 59000
 }
-```
-
-### Token Validation
-```bash
-POST /api/validate-key
-Content-Type: application/json
-
-{
-  "token": "your_hmac_token_here"
-}
-```
-
-**Response**:
-```json
-{
-  "valid": true,
-  "tier": "paid",
-  "expires_at": "2025-05-30T12:00:00"
-}
-```
-
----
-
-## Tech Stack
-
-### Backend
-- **Framework**: FastAPI 0.109.0
-- **Language**: Python 3.12+
-- **Data Store**: JSON file (no database)
-- **AI/ML**: Google Gemini Flash
-- **Authentication**: HMAC tokens
-- **Rate Limiting**: SlowAPI
-- **Deployment**: Render free tier
-
-### Key Dependencies
-```
-fastapi==0.109.0
-uvicorn[standard]==0.27.0
-google-generativeai==0.3.2
-slowapi==0.1.9
-pydantic==2.5.3
-python-dotenv==1.0.0
-```
-
----
-
-## Testing
-
-### Run Tests
-```bash
-# Run all tests
-pytest tests/ -v
-
-# Run with coverage
-pytest tests/ --cov=. --cov-report=html
-```
-
-### Validate Data
-```bash
-# Validate gst_rates.json
-python scripts/validate_rates.py
-```
-
----
-
-## Security
-
-- **Rate Limiting**: Free tier (3/day), Paid tier (1,000/day), CA Firm (5,000/day)
-- **Authentication**: HMAC token-based for paid tier
-- **CORS**: Configured for development and production
-- **Input Validation**: Pydantic-based validation
-- **Environment Variables**: All secrets stored in .env
-
----
-
-## Performance
-
-- **API Response Time**: <200ms (p95) ✅
-- **Concurrent Users**: 100+ ✅
-- **Uptime**: 99.5% ✅
-- **Test Coverage**: 95%+ (target)
-
----
-
-## Deployment
-
-### Render (Recommended)
-```bash
-render deploy
-```
-
-### Environment Variables
-Set these in Render dashboard:
-```env
-GEMINI_API_KEY=your_gemini_api_key
-HMAC_SECRET=your_hmac_secret
-RATE_LIMIT_FREE=3
-RATE_LIMIT_PAID=1000
-ALLOWED_ORIGINS=https://saralgst.in
-ENVIRONMENT=production
-LOG_LEVEL=INFO
 ```
 
 ---
 
 ## Project Structure
+
 ```
-backend/
-├── main.py                 # FastAPI app entry point
-├── requirements.txt        # Python dependencies
-├── .env.example           # Environment variables template
-├── README.md              # This file
-├── data/
-│   └── gst_rates.json     # Master GST rate table (54 items)
-├── routers/
-│   ├── lookup.py          # POST /api/lookup endpoint
-│   └── validate.py        # POST /api/validate-key endpoint
-├── services/
-│   ├── interpreter.py     # Gemini Flash NLP service
-│   └── rate_engine.py     # HSN lookup service
-├── models/
-│   └── lookup.py          # Pydantic request/response models
-├── tests/
-│   ├── test_lookup.py
-│   ├── test_interpreter.py
-│   └── fixtures/
-└── scripts/
-    └── validate_rates.py  # JSON validation script
+saralgst/
+├── backend/
+│   ├── main.py              # FastAPI entry point
+│   ├── config.py            # App configuration
+│   ├── requirements.txt     # Python dependencies
+│   ├── data/
+│   │   └── gst_rates.json   # Master GST rate table (551 items)
+│   ├── routers/
+│   │   ├── lookup.py        # Legacy POST /api/lookup
+│   │   ├── v1_gst.py        # V1 GET /api/v1/gst/*
+│   │   └── validate.py      # POST /api/validate-key
+│   ├── services/
+│   │   ├── calculator.py    # CGST/SGST/IGST calculation
+│   │   ├── interpreter.py   # Gemini Flash NLP service
+│   │   └── rate_engine.py   # HSN lookup engine
+│   ├── models/
+│   │   └── lookup.py        # Pydantic models
+│   └── tests/
+│       ├── test_lookup.py
+│       └── test_interpreter.py
+│
+├── frontend/
+│   ├── app/
+│   │   ├── page.tsx         # Landing page (bento grid)
+│   │   ├── check/
+│   │   │   └── page.tsx     # Rate checker UI
+│   │   ├── layout.tsx       # Root layout + FloatingNav
+│   │   └── globals.css      # Landing-2 design system
+│   ├── components/
+│   │   ├── BentoGrid.tsx    # Platform showcase grid
+│   │   ├── CodeBlock.tsx    # Code display panel
+│   │   ├── FloatingNav.tsx  # Sticky pill navigation
+│   │   ├── RateComparison.tsx
+│   │   ├── ResultCard.tsx
+│   │   ├── SearchBox.tsx    # Query input + HNS toggle
+│   │   ├── TaxCalculator.tsx
+│   │   ├── UpgradeModal.tsx
+│   │   └── UsageCounter.tsx
+│   ├── lib/
+│   │   └── api.ts           # Backend API client
+│   └── package.json
+│
+├── scripts/
+│   ├── extend_data.py
+│   └── generate_data.py
+├── webpages/
+│   └── landing-2.html       # Design reference
+├── AGENTS.md                # Session memory
+└── QUICK_START.md
 ```
 
 ---
 
-## Contributing
+## Design System
 
-We welcome contributions! Please follow these guidelines:
+SaralGST uses the **landing-2** design language — clean, professional, engineering-focused.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Palette
+```
+bg-base:   #050505  (deep black)
+bg-panel:  #0d0d0d  (raised surface)
+bg-surface:#141414  (interactive surface)
+accents:   cyan (#00f0ff), violet (#8a2be2), emerald (#10b981)
+text:      #ededed (primary), #a1a1aa (secondary), #71717a (tertiary)
+borders:   #262626 (subtle), #404040 (hover)
+```
 
-### Development Guidelines
-- Follow PEP 8 style guidelines
-- Write tests for new features
-- Update documentation
-- Use meaningful commit messages
-- Keep code simple and readable
+### Principles
+- **Zero animations** — No GSAP, no Framer Motion, no CSS keyframes
+- **Bento grid** centerpiece — Structured, information-dense layout
+- **Solid colors** — No transparency stacks, no glassmorphism
+- **Monospace badges** — Engineering precision aesthetic
+- **Gradient accent** text — Cyan-to-violet for emphasis
+
+---
+
+## Testing
+
+### Backend
+```bash
+cd backend
+pytest tests/ -v
+pytest tests/ --cov=. --cov-report=html
+```
+
+### Frontend
+```bash
+cd frontend
+npm run lint
+npm run build    # Full production build
+```
+
+---
+
+## Environment Variables
+
+### Backend (.env)
+```env
+GEMINI_API_KEY=your_gemini_api_key
+HMAC_SECRET=your_hmac_secret
+RATE_LIMIT_FREE=3
+RATE_LIMIT_PAID=1000
+ALLOWED_ORIGINS=http://localhost:3000,https://saralgst.in
+```
+
+### Frontend (.env.local)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+RAZORPAY_KEY_ID=your_razorpay_key
+RAZORPAY_KEY_SECRET=your_razorpay_secret
+HMAC_SECRET=your_hmac_secret
+```
+
+---
+
+## Deployment
+
+### Backend → Render
+```bash
+# Connect GitHub repo or use Render CLI
+render deploy
+```
+
+Set environment variables in Render dashboard.
+
+### Frontend → Vercel
+```bash
+# Import from GitHub
+# Set environment variables
+vercel deploy
+```
 
 ---
 
 ## License
 
-Proprietary - All rights reserved
-
-© 2025 SaralGST. All rights reserved.
+Proprietary — All rights reserved. © 2025 SaralGST.
 
 ---
 
 <div align="center">
 
-**Made with ❤️ for Indian Small Businesses**
+**Built for Indian Small Businesses 🇮🇳**
 
-*Sahi rate. Seedha jawab. Sirf SaralGST.*
-
-[⬆ Back to Top](#saralgst-backend-api)
+[⬆ Back to Top](#saralgst--sahi-rate-seedha-jawab)
 
 </div>

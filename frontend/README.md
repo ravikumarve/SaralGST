@@ -1,197 +1,141 @@
 # SaralGST Frontend
 
-India's simplest GST rate checker frontend. Built with Next.js 14, TypeScript, Tailwind CSS, and GSAP.
+India's simplest GST rate checker — frontend. Built with Next.js 16, TypeScript, and Tailwind CSS v4.
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **Animations**: GSAP + Framer Motion
-- **UI Components**: Radix UI
-- **Fonts**: Space Grotesk, Inter, JetBrains Mono
+| Tech | Version |
+|---|---|
+| **Framework** | Next.js 16.2.4 (App Router) |
+| **Language** | TypeScript 5 |
+| **Styling** | Tailwind CSS v4 |
+| **UI** | Radix UI Dialog + Tooltip |
+| **Fonts** | Space Grotesk, Inter, JetBrains Mono, Syncopate |
+| **Payments** | Razorpay SDK |
 
-## Design System
+## Design System — Landing-2
 
-The frontend uses a Lusion-inspired dark design system with:
+Clean panels, solid colors, zero animations, bento grid centerpiece.
 
-### Color Palette
+### Palette
+```
+bg-base:   #050505    →  --color-bg
+bg-panel:  #0d0d0d    →  --color-bg-panel
+bg-surface:#141414    →  --color-bg-surface
+accent-cyan:   #00f0ff
+accent-violet: #8a2be2
+accent-emerald:#10b981
+text-primary:#ededed
+text-secondary:#a1a1aa
+text-tertiary:#71717a
+borders: #262626 / #404040
+```
 
-- **Background**: Deep space black (#050508)
-- **Surface**: Elevated surfaces (#111120)
-- **Accent**: Indigo (#6366f1) and Violet (#8b5cf6)
-- **Text**: Primary (#f0f0ff), Secondary (rgba(240,240,255,0.5))
+### Principles
+- **Zero animations** — No GSAP, no Framer Motion, no CSS keyframes
+- **Solid backgrounds** — No transparency stacks, no glassmorphism
+- **Bento grid** — Structured information layout
+- **Gradient text** — Cyan-to-violet accent on key elements
 
-### Typography
+## Pages
 
-- **Headings**: Space Grotesk (geometric, modern)
-- **Body**: Inter (readable on mobile)
-- **Monospace**: JetBrains Mono (HSN codes, rates)
+| Route | Page | Description |
+|---|---|---|
+| `/` | Landing | Hero → Platform Bento → Use Cases → Pricing → Footer |
+| `/check` | Rate Checker | SearchBox + ResultCard + RateComparison + TaxCalculator + UpgradeModal + UsageCounter |
+| `/_not-found` | 404 | Brutalist heading, ambient grid |
 
-### Effects
-
-- Noise grain texture overlay
-- Ambient glow orbs
-- Smooth GSAP animations
-- Custom scrollbar
-
-## Project Structure
+## Components
 
 ```
-frontend/
-├── app/
-│   ├── page.tsx              # Landing page
-│   ├── check/
-│   │   └── page.tsx          # Rate checker UI
-│   ├── layout.tsx            # Root layout
-│   └── globals.css           # Global styles + design system
-├── components/
-│   ├── SearchBox.tsx         # Main query input
-│   ├── ResultCard.tsx        # Rate result display
-│   ├── RateComparison.tsx    # Old vs New rate visual
-│   ├── NotificationBadge.tsx # GST notification reference
-│   ├── UsageCounter.tsx      # Free tier usage counter
-│   └── UpgradeModal.tsx      # Razorpay payment modal
-├── lib/
-│   ├── api.ts                # Backend API client
-│   └── storage.ts            # LocalStorage management
-├── public/
-│   └── fonts/                # Self-hosted fonts
-├── .env.example              # Environment variables template
-├── next.config.ts            # Next.js configuration
-├── package.json              # Dependencies
-└── tsconfig.json             # TypeScript configuration
+components/
+├── BentoGrid.tsx       # 12-col responsive platform grid
+├── CodeBlock.tsx       # Bare code block with token highlighting
+├── FloatingNav.tsx     # Sticky pill nav (cyan dot + mono links)
+├── RateComparison.tsx  # Old vs new rate metric bars
+├── ResultCard.tsx      # Rate result panel
+├── SearchBox.tsx       # Dual-mode query input (product/HSN) + language toggle
+├── TaxCalculator.tsx   # CGST/SGST/IGST breakdown
+├── UpgradeModal.tsx    # Paid tier upgrade prompt
+└── UsageCounter.tsx    # Free tier daily usage tracker
 ```
 
 ## Getting Started
 
 ### Prerequisites
-
-- Node.js 18+ installed
-- Backend API running on http://localhost:8001
+- Node.js 18+
+- Backend API running on http://localhost:8000
 
 ### Installation
 
-1. Install dependencies:
 ```bash
+cd frontend
 npm install
-```
-
-2. Copy environment variables:
-```bash
 cp .env.example .env.local
 ```
 
-3. Update `.env.local` with your values:
+Edit `.env.local`:
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8001
+NEXT_PUBLIC_API_URL=http://localhost:8000
 RAZORPAY_KEY_ID=your_key_id
 RAZORPAY_KEY_SECRET=your_key_secret
 HMAC_SECRET=your_hmac_secret
 ```
 
-4. Run development server:
+### Development
+
 ```bash
-npm run dev
+npm run dev      # Start dev server on http://localhost:3000
 ```
 
-5. Open http://localhost:3000
+### Production
+
+```bash
+npm run build    # TypeScript check + Next.js build
+npm start        # Start production server
+```
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server (Turbopack) |
+| `npm run build` | Production build |
+| `npm start` | Production server |
+| `npm run lint` | Run ESLint |
 
-## API Integration
+## Backend Integration
 
-The frontend communicates with the backend API through the `apiClient` in `lib/api.ts`:
+The frontend communicates with the FastAPI backend through `lib/api.ts`:
 
 ```typescript
 import { apiClient } from '@/lib/api';
 
-// Lookup GST rate
-const result = await apiClient.lookup({
-  query: 'LED TV',
-  query_type: 'auto',
-  language: 'en'
-});
+// Lookup GST rate (GET /api/v1/gst/lookup)
+const result = await apiClient.lookup({ query: 'LED TV' });
+
+// Calculate tax (POST /api/v1/gst/calculate)
+const calc = await apiClient.calculate({ item_name: 'LED TV', price: 50000 });
+
+// Explain rate (GET /api/v1/gst/explain)
+const explain = await apiClient.explain({ item_name: 'LED TV' });
 
 // Validate session token
 const validation = await apiClient.validateKey(token);
 ```
 
-## LocalStorage Management
+## Build Output
 
-The `storageManager` in `lib/storage.ts` handles:
-
-- Daily lookup counter (free tier: 3/day)
-- Session token storage
-- Tier management (free/paid/ca_firm)
-- Language preference
-- Token expiry checking
-
-```typescript
-import { storageManager } from '@/lib/storage';
-
-// Get remaining lookups
-const remaining = storageManager.getRemainingLookups();
-
-// Check if limit reached
-if (storageManager.hasReachedDailyLimit()) {
-  // Show upgrade modal
-}
-
-// Set token after payment
-storageManager.setToken(token);
-storageManager.setTier('paid');
-storageManager.setExpiresAt(expiresAt);
 ```
-
-## Design System Usage
-
-### Colors
-
-Use Tailwind classes with custom colors:
-
-```tsx
-<div className="bg-bg text-text-primary border-border">
-  <h1 className="text-accent">Accent text</h1>
-  <p className="text-text-secondary">Secondary text</p>
-</div>
+✓ Compiled in 12s
+✓ 0 TypeScript errors
+✓ Static pages (7/7)
+  ○  /            (static)
+  ○  /_not-found  (static)
+  ƒ  /api/create-order
+  ƒ  /api/verify-payment
+  ○  /check       (static)
 ```
-
-### Typography
-
-```tsx
-<h1 className="font-space-grotesk text-6xl">Heading</h1>
-<p className="font-inter text-lg">Body text</p>
-<code className="font-jetbrains-mono">HSN: 8528</code>
-```
-
-### Effects
-
-```tsx
-<div className="glow-orb glow-orb-1 animate-float" />
-<div className="border-glow">Glowing border</div>
-<div className="animate-shimmer">Shimmer effect</div>
-```
-
-## Performance Targets
-
-- Page load < 3s on 3G mobile
-- Lighthouse score ≥ 85
-- First Contentful Paint < 1.5s
-- Time to Interactive < 3.5s
-
-## Accessibility
-
-- WCAG 2.1 AA compliant
-- Screen reader support
-- Keyboard navigation
-- Color contrast ≥ 4.5:1
-- Hindi language support
 
 ## Deployment
 
@@ -199,7 +143,7 @@ Use Tailwind classes with custom colors:
 
 1. Push code to GitHub
 2. Import project in Vercel
-3. Add environment variables
+3. Set environment variables
 4. Deploy
 
 ### Environment Variables for Production
@@ -213,8 +157,4 @@ HMAC_SECRET=production_hmac_secret
 
 ## License
 
-Proprietary - All rights reserved
-
-## Support
-
-For issues or questions, contact support@saralgst.in
+Proprietary — All rights reserved. © 2025 SaralGST.

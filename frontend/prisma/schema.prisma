@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/prisma-gen"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String?
+  tier      String   @default("free")    // free | paid | ca_firm
+  role      String   @default("user")    // user | admin
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  apiKeys   ApiKey[]
+  usageLogs UsageLog[]
+  favorites Favorite[]
+  invoices  Invoice[]
+}
+
+model ApiKey {
+  id        String     @id @default(cuid())
+  key       String     @unique
+  label     String?
+  tier      String                // paid | ca_firm
+  active    Boolean    @default(true)
+  lastUsed  DateTime?
+  expiresAt DateTime?
+  createdAt DateTime   @default(now())
+
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  usageLogs UsageLog[]
+}
+
+model UsageLog {
+  id        String    @id @default(cuid())
+  query     String
+  hsnCode   String?
+  resultRate Float?
+  source    String    @default("web")    // api | web
+  ip        String?
+  success   Boolean   @default(true)
+  createdAt DateTime  @default(now())
+
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id])
+  apiKeyId  String?
+  apiKey    ApiKey?   @relation(fields: [apiKeyId], references: [id])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  hsnCode   String
+  label     String?
+  notes     String?
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Invoice {
+  id         String    @id @default(cuid())
+  amount     Float
+  currency   String    @default("INR")
+  status     String              // paid | pending | failed
+  plan       String              // individual | ca_firm
+  razorpayId String?   @unique
+  invoiceUrl String?
+  createdAt  DateTime  @default(now())
+  paidAt     DateTime?
+
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+}
