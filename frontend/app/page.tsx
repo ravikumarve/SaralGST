@@ -80,15 +80,73 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== Pricing ===== */}
-      <div className="bg-[#0a0a0a] border-t border-[#262626] -mx-6 px-6">
-        <section id="pricing" className="py-24">
-          <div className="section-header" style={{ margin: '0 auto', textAlign: 'center' }}>
-            <h2>
-              Transparent <span className="text-accent">Access</span>.
-            </h2>
-            <p>Secure your HMAC token and start querying immediately.</p>
+      {/* ===== API Architecture ===== */}
+      <section id="api" className="arch-columns" style={{ borderBottom: 'none' }}>
+        <div className="arch-info">
+          <h2>Developer-First <br /><span className="text-gold">Endpoints.</span></h2>
+          <p>Integrate SaralGST directly into your POS, ERP, or billing software. Our V1 API is secured by SlowAPI rate limiting and HMAC token validation to ensure production-grade reliability.</p>
+
+          <div className="stack-card" style={{ marginTop: '3rem' }}>
+            <h3>Infrastructure Blueprint</h3>
+            <ul className="stack-list">
+              <li>Frontend Application <span>Next.js 16.2.4 (App Router)</span></li>
+              <li>Backend API Engine <span>FastAPI 0.109.0 (Python 3.12+)</span></li>
+              <li>UI Primitives <span>Tailwind CSS 4 + Radix UI</span></li>
+              <li>Rate Limiting <span>SlowAPI 0.1.9</span></li>
+              <li>NLP Fallback <span>Google Gemini 0.3.2</span></li>
+              <li>Testing Protocol <span>Pytest (100% Coverage)</span></li>
+            </ul>
           </div>
+        </div>
+
+        {/* Code Window */}
+        <div className="code-window">
+          <div className="cw-header">
+            <div className="cw-dot" /><div className="cw-dot" /><div className="cw-dot" />
+          </div>
+
+          <div className="c-comment"># V1 Data Retrieval</div>
+          <div><span className="c-method">GET</span> <span className="c-route">/api/v1/gst/lookup?query=rice</span></div>
+          <div style={{ marginBottom: '1.5rem' }}><span className="c-method">GET</span> <span className="c-route">/api/v1/gst/explain?item_name=rice</span></div>
+
+          <div className="c-comment"># Tax Calculation</div>
+          <div><span className="c-method" style={{ color: 'var(--emerald)' }}>POST</span> <span className="c-route">/api/v1/gst/calculate</span></div>
+          <div style={{ marginLeft: '1rem' }}>
+            {'{'}<br />
+            &nbsp;&nbsp;<span className="c-key">&quot;item_name&quot;</span>: <span className="c-str">&quot;LED TV&quot;</span>,<br />
+            &nbsp;&nbsp;<span className="c-key">&quot;price&quot;</span>: <span className="c-str">50000</span><br />
+            {'}'}
+          </div>
+          <div className="c-comment" style={{ marginTop: '1rem' }}>// Response</div>
+          <div style={{ marginLeft: '1rem' }}>
+            {'{'}<br />
+            &nbsp;&nbsp;<span className="c-key">&quot;hsn_code&quot;</span>: <span className="c-str">&quot;8528&quot;</span>,<br />
+            &nbsp;&nbsp;<span className="c-key">&quot;gst_rate&quot;</span>: <span className="c-str">18</span>,<br />
+            &nbsp;&nbsp;<span className="c-key">&quot;cgst&quot;</span>: <span className="c-str">4500</span>,<br />
+            &nbsp;&nbsp;<span className="c-key">&quot;total_with_gst&quot;</span>: <span className="c-str">59000</span><br />
+            {'}'}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== CTA Band ===== */}
+      <section className="cta-wrapper" style={{ padding: '2rem 0', border: 'none' }}>
+        <div className="cta-band">
+          <h2>Deploy the SaralGST engine.</h2>
+          <p>Run the backend locally, configure your Gemini API keys, and launch the compliance engine in under 5 minutes.</p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a href="https://github.com/ravikumarve/SaralGST" className="btn btn-primary" target="_blank" rel="noopener noreferrer">Clone Repository</a>
+            <Link href="/check" className="btn btn-outline" style={{ flexShrink: 0 }}>Try Live Demo</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Pricing ===== */}
+      <section id="pricing">
+        <div className="matrix-header">
+          <h2>Transparent <span className="text-gold">Access.</span></h2>
+          <p>Secure your HMAC token and start querying immediately.</p>
+        </div>
 
           <div className="pricing-cards">
             {/* Sandbox */}
@@ -104,8 +162,8 @@ export default function Home() {
                 <li>Community Support</li>
               </ul>
               <Link
-                href="http://localhost:8001/docs"
-                className="btn btn-secondary mono"
+                href="http://localhost:8000/docs"
+                className="btn btn-outline mono"
                 style={{ width: '100%' }}
               >
                 Test API Locally
@@ -114,9 +172,7 @@ export default function Home() {
 
             {/* Pro — Popular */}
             <div className="price-tier popular">
-              <div className="mono text-[#8a2be2] text-xs uppercase tracking-wider font-bold mb-4">
-                Production Ready
-              </div>
+              <div className="tier-badge">Production Ready</div>
               <div className="tier-name">Pro Integration</div>
               <div className="tier-price">
                 ₹999<span>/month</span>
@@ -130,6 +186,7 @@ export default function Home() {
               <a
                 href="https://gumroad.com"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary mono"
                 style={{ width: '100%' }}
               >
@@ -149,7 +206,7 @@ export default function Home() {
               </ul>
               <a
                 href="#"
-                className="btn btn-secondary mono"
+                className="btn btn-outline mono"
                 style={{ width: '100%' }}
               >
                 Contact Sales
@@ -157,7 +214,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </div>
 
       {/* ===== Footer ===== */}
       <footer className="border-t border-[#262626] py-16 mt-16">
