@@ -391,7 +391,7 @@ export default function PlaygroundPage() {
 
 function ResultRow({ label, value, mono, gold }: { label: string; value: string; mono?: boolean; gold?: boolean }) {
   return (
-    <div className="flex items-center justify-between py-1.5 px-3 bg-[#141414]/50 rounded-xl">
+    <div className="flex items-center justify-between py-1.5 px-3 bg-[#141414] rounded-xl">
       <span className="text-[11px] text-[#71717a]">{label}</span>
       <span className={`text-sm ${gold ? 'text-[#F59E0B] font-semibold' : 'text-[#ededed]'} ${mono ? 'mono' : ''}`}>
         {value}

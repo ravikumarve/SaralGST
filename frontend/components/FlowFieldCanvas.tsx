@@ -1,13 +1,18 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function FlowFieldCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isHQ, setIsHQ] = useState(false);
+
+  useEffect(() => {
+    setIsHQ(window.location.pathname.startsWith('/hq'));
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || isHQ) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -157,7 +162,7 @@ export default function FlowFieldCanvas() {
       aria-hidden="true"
       role="presentation"
       className="fixed top-0 left-0 w-screen h-screen pointer-events-none opacity-80"
-      style={{ zIndex: 0, mixBlendMode: 'screen' }}
+      style={{ zIndex: 0, mixBlendMode: 'screen', display: isHQ ? 'none' : 'block' }}
     />
   );
 }

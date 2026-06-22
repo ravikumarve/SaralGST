@@ -22,17 +22,17 @@ function Sidebar({ pathname }: { pathname: string }) {
   const isAdmin = user?.role === 'admin';
 
   return (
-    <aside className="w-64 bg-[#0a0a0a] border-r border-[#262626] min-h-screen flex flex-col shrink-0">
+    <aside className="w-64 bg-[#0a0a0a] border-r border-[#262626] h-screen flex flex-col shrink-0 sticky top-0 left-0 overflow-y-auto">
       {/* Logo */}
-      <div className="p-6 border-b border-[#262626]">
+      <div className="p-6 border-b border-[#262626] shrink-0">
         <Link href="/hq/overview" className="logo">
           <span className="logo-mark" />
-          SaralGST
+          <span className="text-[#ededed]">SaralGST</span>
         </Link>
       </div>
 
       {/* User Info */}
-      <div className="px-6 py-4 border-b border-[#262626]">
+      <div className="px-6 py-4 border-b border-[#262626] shrink-0">
         <div className="text-sm text-[#ededed] font-medium truncate">{user?.name || user?.email}</div>
         <div className="flex items-center gap-2 mt-1">
           <span className="mono text-[10px] uppercase tracking-wider text-[#F59E0B]">{user?.tier}</span>
@@ -41,9 +41,9 @@ function Sidebar({ pathname }: { pathname: string }) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
         {NAV_ITEMS.map((item) => {
-          const isActive = pathname.startsWith(item.href);
+          const isActive = pathname === item.href || (item.href !== '/hq/overview' && pathname.startsWith(item.href));
           return (
             <Link
               key={item.href}
@@ -54,15 +54,15 @@ function Sidebar({ pathname }: { pathname: string }) {
                   : 'text-[#a1a1aa] hover:text-[#ededed] hover:bg-[#141414]'
               }`}
             >
-              <span className="w-5 text-center">{item.href === '/hq/overview' ? '◆' : '○'}</span>
-              {item.label}
+              <span className="w-5 text-center shrink-0">{item.icon}</span>
+              <span>{item.label}</span>
             </Link>
           );
         })}
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-[#262626]">
+      <div className="p-4 border-t border-[#262626] shrink-0">
         <button
           onClick={() => signOut({ callbackUrl: '/hq/login' })}
           className="w-full px-4 py-2 text-sm text-[#a1a1aa] hover:text-[#ededed] hover:bg-[#141414] rounded-xl transition-colors text-left"
@@ -85,13 +85,13 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Always render login page without guard
-  if (pathname === '/hq/login') {
+  if (pathname === '/hq/login' || pathname === '/hq/register') {
     return <>{children}</>;
   }
 
   if (!mounted || status === 'loading') {
     return (
-      <div className="min-h-screen bg-[#020202] flex items-center justify-center">
+      <div className="h-screen bg-[#020202] flex items-center justify-center">
         <div className="text-[#71717a] text-sm">Loading Saral HQ...</div>
       </div>
     );
@@ -103,9 +103,13 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#020202]">
+    <div className="flex h-screen bg-[#020202] overflow-hidden">
       <Sidebar pathname={pathname} />
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-y-auto bg-[#020202]">
+        <div className="min-h-full">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

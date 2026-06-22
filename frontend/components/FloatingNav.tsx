@@ -11,6 +11,11 @@ const NAV_ITEMS = [
 
 export default function FloatingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isHQ, setIsHQ] = useState(false);
+
+  useEffect(() => {
+    setIsHQ(window.location.pathname.startsWith('/hq'));
+  }, []);
 
   // Close mobile menu on Escape
   useEffect(() => {
@@ -24,6 +29,7 @@ export default function FloatingNav() {
   }, [mobileOpen]);
 
   const closeMenu = () => setMobileOpen(false);
+  if (isHQ) return null;
 
   return (
     <nav className="sticky top-8 z-100 mx-auto max-w-[1240px] w-[90%] md:w-full">
