@@ -242,6 +242,7 @@ nav {
 }
 .search-icon { color: var(--gold); }
 .search-text { font-family: var(--font-display); font-size: 1.2rem; color: var(--text-main); flex: 1; }
+.search-enter-hint { color: var(--text-faint); font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; }
 .search-cursor {
   display: inline-block; width: 2px; height: 1.2rem;
   background: var(--gold); animation: blink 1s infinite;

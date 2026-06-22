@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import BentoGrid from '@/components/BentoGrid';
 import CodeBlock from '@/components/CodeBlock';
+import SearchSimulation from '@/components/SearchSimulation';
 
 const USE_CASES = [
   {
@@ -25,47 +26,39 @@ const USE_CASES = [
 
 export default function Home() {
   return (
-    <div className="max-w-7xl mx-auto px-6">
+    <div className="max-w-[1240px] mx-auto px-8 relative z-10">
+      {/* Ambient glow behind hero */}
+      <div className="ambient-glow" aria-hidden="true" />
+
       {/* ===== Hero ===== */}
-      <section className="relative pt-32 pb-24 text-center flex flex-col items-center overflow-hidden">
-        {/* Dark overlay behind grid */}
-        <div className="absolute inset-0 bg-[#050508] -z-10" />
-
-        {/* Radial glow behind heading */}
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] -z-10 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at center, rgba(0,240,255,0.08) 0%, transparent 70%)',
-          }}
-        />
-
-        <div className="status-badge mb-10">
-          v1.0.0 &middot; GST 2.0 Ready
+      <section className="hero">
+        {/* Left: Text */}
+        <div>
+          <div className="hero-badge mono">
+            <span className="inline-block w-[6px] h-[6px] bg-gold rounded-full" />
+            GST 2.0 Compliant
+          </div>
+          <h1>
+            Sahi rate. <br />
+            <span className="text-gold">Seedha jawab.</span>
+          </h1>
+          <p>
+            India&apos;s simplest, most powerful GST rate checker.
+            Built for MSMEs and CA firms. Type any product in Hindi or English,
+            and our NLP engine maps it to 551 official tax brackets instantly.
+          </p>
+          <div className="flex gap-4 flex-wrap">
+            <Link href="/check" className="btn btn-primary flex-shrink-0">
+              Check Rate
+            </Link>
+            <Link href="#features" className="btn btn-outline flex-shrink-0">
+              Explore Engine
+            </Link>
+          </div>
         </div>
 
-        <h1 className="text-7xl md:text-8xl font-syncopate font-bold leading-none max-w-[1000px] mb-6">
-          Sahi rate.
-          <br />
-          <span className="text-gradient">Seedha jawab.</span>
-        </h1>
-
-        <p className="text-lg md:text-xl text-[#a1a1aa] max-w-[600px] mb-16 leading-relaxed">
-          Eliminate revenue leakage and bypass legacy ERP updates.
-          India&apos;s smartest, fastest API for resolving GST rate confusion,
-          engineered for Tier 2 &amp; Tier 3 scale.
-        </p>
-
-        <div className="flex items-center gap-4">
-          <Link href="/check" className="btn btn-primary">
-            Check Rate
-          </Link>
-          <Link
-            href="http://localhost:8001/docs"
-            className="btn btn-secondary"
-          >
-            View Documentation
-          </Link>
-        </div>
+        {/* Right: Search Simulation */}
+        <SearchSimulation />
       </section>
 
       {/* ===== Platform / Bento Grid ===== */}
