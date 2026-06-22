@@ -40,6 +40,29 @@ export const metadata: Metadata = {
     "GST calculator",
     "GST rate checker",
   ],
+  metadataBase: new URL("https://saralgst.in"),
+  openGraph: {
+    title: "SaralGST — Sahi rate. Seedha jawab.",
+    description:
+      "India's simplest GST rate checker. 551 official tax brackets. NLP-powered. Free tier available.",
+    type: "website",
+    url: "https://saralgst.in",
+    siteName: "SaralGST",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SaralGST — GST 2.0 Intelligence Engine",
+    description:
+      "India's simplest GST rate checker. Type any product in Hindi or English. Free tier available.",
+  },
+  icons: {
+    icon: [
+      {
+        url: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%23F59E0B"/><rect x="6" y="6" width="20" height="20" rx="3" fill="%23020202"/></svg>',
+        type: "image/svg+xml",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
