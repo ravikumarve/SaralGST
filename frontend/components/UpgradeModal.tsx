@@ -83,7 +83,7 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
           <div className="w-full max-w-md bg-[#0d0d0d] border border-[#262626] rounded-2xl p-8 shadow-2xl">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-[#ededed] font-space-grotesk mb-2">
+                <h2 className="text-2xl font-bold text-[#ededed] mb-2">
                   Aaj ki limit ho gayi
                 </h2>
                 <p className="text-sm text-[#71717a]">

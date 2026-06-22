@@ -51,7 +51,7 @@ export default function TaxCalculator({ gstRate, itemName }: TaxCalculatorProps)
       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#F59E0B] to-[#FBBF24]" />
 
       <div className="pl-4">
-        <h3 className="text-xl font-bold text-[#ededed] mb-6 font-space-grotesk">
+        <h3 className="text-xl font-bold text-[#ededed] mb-6">
           Tax Calculator
           <span className="block text-sm font-normal text-[#71717a] font-inter mt-1">
             for {itemName}
@@ -105,7 +105,7 @@ export default function TaxCalculator({ gstRate, itemName }: TaxCalculatorProps)
                 {/* Total */}
                 <div className="flex justify-between items-center pt-4">
                   <span className="text-base font-bold text-[#ededed]">Total Amount</span>
-                  <span className="text-3xl font-bold text-accent font-space-grotesk">
+                  <span className="text-3xl font-bold text-accent">
                     ₹{calculation.total.toFixed(2)}
                   </span>
                 </div>

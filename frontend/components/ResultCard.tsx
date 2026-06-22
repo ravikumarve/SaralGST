@@ -80,7 +80,7 @@ export default function ResultCard({ result }: ResultCardProps) {
           <div className="mono text-xs text-[#71717a] mb-2 uppercase tracking-wider">
             Ab
           </div>
-          <div className={`text-4xl md:text-5xl font-bold font-space-grotesk ${
+          <div className={`text-4xl md:text-5xl font-bold ${
             isDown ? 'text-[#10b981]' : isUp ? 'text-[#FBBF24]' : 'text-[#ededed]'
           }`}>
             {result.new_rate}%

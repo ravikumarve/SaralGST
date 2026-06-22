@@ -63,7 +63,7 @@ export default function CheckPage() {
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-space-grotesk text-center mb-4 text-[#ededed] leading-tight">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-4 text-[#ededed] leading-tight">
           GST Rate<br />
           <span className="text-accent">Checker</span>
         </h1>
