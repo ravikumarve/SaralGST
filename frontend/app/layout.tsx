@@ -5,6 +5,7 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 import FloatingNav from "@/components/FloatingNav";
+import FlowFieldCanvas from "@/components/FlowFieldCanvas";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -76,6 +77,8 @@ export default function RootLayout({
       className={`${plusJakartaSans.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <body>
+        <FlowFieldCanvas />
+        <div className="dot-matrix" aria-hidden="true" />
         <FloatingNav />
         {children}
       </body>
