@@ -81,7 +81,21 @@ export class ApiClient {
       throw new Error(error.message || 'Lookup failed');
     }
 
-    return response.json();
+    const data: LookupResponse = await response.json();
+
+    // Fire-and-forget usage logging to SQLite
+    fetch('/api/hq/log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query,
+        hsnCode: data.hsn_code,
+        resultRate: data.new_rate,
+        success: true,
+      }),
+    }).catch(() => {});
+
+    return data;
   }
 
   async explain(itemName: string): Promise<ExplanationResponse> {
