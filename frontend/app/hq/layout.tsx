@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 const NAV_ITEMS = [
   { href: '/hq/overview', label: 'Overview', icon: '◆' },
+  { href: '/hq/playground', label: 'Playground', icon: '〉' },
   { href: '/hq/api-keys', label: 'API Keys', icon: '🔑' },
   { href: '/hq/usage', label: 'Usage', icon: '📊' },
   { href: '/hq/history', label: 'History', icon: '📋' },

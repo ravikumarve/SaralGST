@@ -1,6 +1,6 @@
 // Backend API client for SaralGST
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 // Matches backend models/lookup.py LookupResponse
 export interface LookupResponse {
