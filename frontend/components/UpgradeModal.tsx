@@ -62,7 +62,7 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
           }
         },
         prefill: { name: '', email: '', contact: '' },
-        theme: { color: '#00f0ff' },
+        theme: { color: '#F59E0B' },
       };
 
       const rzp = new Razorpay(options);
@@ -105,13 +105,13 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                 onClick={() => setSelectedPlan('individual')}
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   selectedPlan === 'individual'
-                    ? 'border-[#00f0ff] bg-[rgba(0,240,255,0.05)]'
+                    ? 'border-[#F59E0B] bg-[rgba(245,158,11,0.05)]'
                     : 'border-[#262626] bg-[#141414] hover:border-[#404040]'
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
                   <span className="font-medium text-[#ededed]">Individual</span>
-                  <span className="text-xl font-bold text-[#00f0ff]">₹499</span>
+                  <span className="text-xl font-bold text-[#F59E0B]">₹499</span>
                 </div>
                 <div className="text-sm text-[#71717a]">Unlimited lookups per month</div>
               </button>
@@ -120,13 +120,13 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                 onClick={() => setSelectedPlan('ca_firm')}
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   selectedPlan === 'ca_firm'
-                    ? 'border-[#00f0ff] bg-[rgba(0,240,255,0.05)]'
+                    ? 'border-[#F59E0B] bg-[rgba(245,158,11,0.05)]'
                     : 'border-[#262626] bg-[#141414] hover:border-[#404040]'
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
                   <span className="font-medium text-[#ededed]">CA Firm</span>
-                  <span className="text-xl font-bold text-[#00f0ff]">₹1,999</span>
+                  <span className="text-xl font-bold text-[#F59E0B]">₹1,999</span>
                 </div>
                 <div className="text-sm text-[#71717a]">50 GSTINs per month</div>
               </button>

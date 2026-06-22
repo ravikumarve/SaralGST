@@ -43,7 +43,7 @@ export default function RateComparison({ result }: RateComparisonProps) {
           <span className={`mono text-xs px-3 py-1 rounded-full border ${
             isDown
               ? 'text-[#10b981] bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.3)]'
-              : 'text-[#8a2be2] bg-[rgba(138,43,226,0.1)] border-[rgba(138,43,226,0.3)]'
+              : 'text-[#FBBF24] bg-[rgba(251,191,36,0.1)] border-[rgba(251,191,36,0.3)]'
           }`}>
             {isDown ? '↓' : '↑'} {getMovementLabel()} {getRateChange()}
           </span>
@@ -63,7 +63,7 @@ export default function RateComparison({ result }: RateComparisonProps) {
         {/* New rate bar */}
         <div
           className={`absolute left-0 top-0 h-full flex items-center justify-end pr-3 transition-all duration-700 ease-out ${
-            isDown ? 'bg-[rgba(16,185,129,0.2)]' : isUp ? 'bg-[rgba(138,43,226,0.2)]' : 'bg-[rgba(0,240,255,0.1)]'
+            isDown ? 'bg-[rgba(16,185,129,0.2)]' : isUp ? 'bg-[rgba(251,191,36,0.2)]' : 'bg-[rgba(245,158,11,0.1)]'
           }`}
           style={{
             width: animated ? `${Math.max(result.new_rate, 5)}%` : '0%',
@@ -71,7 +71,7 @@ export default function RateComparison({ result }: RateComparisonProps) {
           }}
         >
           <span className={`mono text-sm font-bold ${
-            isDown ? 'text-[#10b981]' : isUp ? 'text-[#8a2be2]' : 'text-[#00f0ff]'
+            isDown ? 'text-[#10b981]' : isUp ? 'text-[#FBBF24]' : 'text-[#F59E0B]'
           }`}>
             {result.new_rate}%
           </span>
@@ -90,7 +90,7 @@ export default function RateComparison({ result }: RateComparisonProps) {
             <span className="font-bold text-[#ededed]">{result.old_rate}%</span>
             {' '}to{' '}
             <span className={`font-bold ${
-              isDown ? 'text-[#10b981]' : isUp ? 'text-[#8a2be2]' : 'text-[#ededed]'
+              isDown ? 'text-[#10b981]' : isUp ? 'text-[#FBBF24]' : 'text-[#ededed]'
             }`}>
               {result.new_rate}%
             </span>

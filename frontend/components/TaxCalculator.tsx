@@ -48,7 +48,7 @@ export default function TaxCalculator({ gstRate, itemName }: TaxCalculatorProps)
   return (
     <div className="bg-[#0d0d0d] border border-[#262626] rounded-xl p-6 md:p-8 relative overflow-hidden">
       {/* Left accent bar */}
-      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#00f0ff] to-[#8a2be2]" />
+      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#F59E0B] to-[#FBBF24]" />
 
       <div className="pl-4">
         <h3 className="text-xl font-bold text-[#ededed] mb-6 font-space-grotesk">
@@ -80,7 +80,7 @@ export default function TaxCalculator({ gstRate, itemName }: TaxCalculatorProps)
             <div className="p-4 bg-[#141414] rounded-xl border border-[#262626]">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-[#71717a]">Applicable GST Rate:</span>
-                <span className="text-lg font-bold text-[#00f0ff] mono">{gstRate}%</span>
+                <span className="text-lg font-bold text-[#F59E0B] mono">{gstRate}%</span>
               </div>
             </div>
           </div>

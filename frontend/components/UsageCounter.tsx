@@ -39,14 +39,14 @@ export default function UsageCounter({ onLimitReached }: UsageCounterProps) {
         <div className="flex items-center gap-3 mb-2.5">
           <span
             className={`w-2 h-2 rounded-full ${
-              isLimitReached ? 'bg-[#8a2be2]' : 'bg-[#10b981]'
+              isLimitReached ? 'bg-[#FBBF24]' : 'bg-[#10b981]'
             }`}
           />
           <div className="mono text-sm text-[#71717a]">
             {used}/{total} lookups
           </div>
           {isLimitReached && (
-            <span className="mono text-[10px] text-[#8a2be2] bg-[rgba(138,43,226,0.1)] px-2 py-0.5 rounded-full border border-[rgba(138,43,226,0.3)]">
+            <span className="mono text-[10px] text-[#FBBF24] bg-[rgba(251,191,36,0.1)] px-2 py-0.5 rounded-full border border-[rgba(251,191,36,0.3)]">
               Limit Reached
             </span>
           )}
@@ -56,7 +56,7 @@ export default function UsageCounter({ onLimitReached }: UsageCounterProps) {
         <div className="w-full h-1.5 bg-[#141414] rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ease-out ${
-              isLimitReached ? 'bg-[#8a2be2]' : 'bg-[#00f0ff]'
+              isLimitReached ? 'bg-[#FBBF24]' : 'bg-[#F59E0B]'
             }`}
             style={{ width: `${Math.min(percentage, 100)}%` }}
           />
