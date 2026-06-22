@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import {
-  Space_Grotesk,
+  Plus_Jakarta_Sans,
   Inter,
   JetBrains_Mono,
-  Syncopate,
 } from "next/font/google";
 import FloatingNav from "@/components/FloatingNav";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -21,22 +21,15 @@ const inter = Inter({
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+  variable: "--font-mono",
   subsets: ["latin"],
-  display: "swap",
-});
-
-const syncopate = Syncopate({
-  variable: "--font-syncopate",
-  subsets: ["latin"],
-  weight: ["400", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "SaralGST - Sahi GST rate. Seedha jawab.",
+  title: "SaralGST | GST 2.0 Intelligence Engine",
   description:
-    "India's simplest GST rate checker. Type a product, get the correct rate under GST 2.0. Built for small business owners, traders, and CA firms.",
+    "India's simplest, most powerful GST rate checker. Type any product in Hindi or English, and our NLP engine maps it to 551 official tax brackets instantly. Built for MSMEs and CA firms.",
   keywords: [
     "GST",
     "GST 2.0",
@@ -45,6 +38,7 @@ export const metadata: Metadata = {
     "SAC code",
     "India GST",
     "GST calculator",
+    "GST rate checker",
   ],
 };
 
@@ -56,7 +50,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} ${syncopate.variable} antialiased`}
+      className={`${plusJakartaSans.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <body>
         <FloatingNav />
