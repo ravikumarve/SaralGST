@@ -3,8 +3,8 @@ import SearchSimulation from '@/components/SearchSimulation';
 
 export default function Home() {
   return (
-    <div className="max-w-[1240px] mx-auto px-8 relative z-10">
-      {/* Ambient glow behind hero */}
+    <div className="container">
+      {/* Indigo ambient flare behind hero */}
       <div className="ambient-glow" aria-hidden="true" />
 
       {/* ===== Hero ===== */}
@@ -12,21 +12,23 @@ export default function Home() {
         {/* Left: Text */}
         <div>
           <div className="hero-badge mono">
-            <span className="inline-block w-[6px] h-[6px] bg-gold rounded-full" />
-            GST 2.0 Compliant
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" style={{ fill: 'var(--indigo-light)', stroke: 'var(--indigo-light)' }} />
+            </svg>
+            GST 2.0 Intelligence Engine
           </div>
           <h1>
-            Sahi rate. <br />
-            <span className="text-gold">Seedha jawab.</span>
+            The quiet authority of <br />
+            <span className="italic" style={{ color: 'var(--mercury)' }}>precise compliance.</span>
           </h1>
           <p>
-            India&apos;s simplest, most powerful GST rate checker.
-            Built for MSMEs and CA firms. Type any product in Hindi or English,
-            and our NLP engine maps it to 551 official tax brackets instantly.
+            Stop managing GST rates through chaotic spreadsheets and PDF notifications.
+            SaralGST gives you a pristine, branded space for instant rate verification,
+            tax calculation, and regulatory confidence.
           </p>
           <div className="flex gap-4 flex-wrap">
             <Link href="/check" className="btn btn-primary flex-shrink-0">
-              Check Rate
+              Check GST Rate
             </Link>
             <Link href="#features" className="btn btn-outline flex-shrink-0">
               Explore Engine
@@ -34,14 +36,14 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right: Search Simulation */}
+        {/* Right: 3D Glass Mockup */}
         <SearchSimulation />
       </section>
 
       {/* ===== Features / Bento Matrix ===== */}
       <section id="features">
         <div className="matrix-header">
-          <h2>Intelligence in <span className="text-gold">Compliance.</span></h2>
+          <h2>Designed for <br /><span className="italic" style={{ color: 'var(--mercury)' }}>professionals.</span></h2>
           <p>We abandoned chaotic spreadsheets for a high-performance Next.js 16 and FastAPI architecture. SaralGST delivers absolute mathematical certainty for Indian trading operations.</p>
         </div>
 
@@ -83,8 +85,8 @@ export default function Home() {
       {/* ===== API Architecture ===== */}
       <section id="api" className="arch-columns" style={{ borderBottom: 'none' }}>
         <div className="arch-info">
-          <h2>Developer-First <br /><span className="text-gold">Endpoints.</span></h2>
-          <p>Integrate SaralGST directly into your POS, ERP, or billing software. Our V1 API is secured by SlowAPI rate limiting and HMAC token validation to ensure production-grade reliability.</p>
+          <h2>Developer-First <br /><span className="italic" style={{ color: 'var(--mercury)' }}>Endpoints.</span></h2>
+          <p>Integrate SaralGST directly into your POS, ERP, or billing software. Our V1 API is secured by rate limiting and HMAC token validation to ensure production-grade reliability.</p>
 
           <div className="stack-card" style={{ marginTop: '3rem' }}>
             <h3>Infrastructure Blueprint</h3>
@@ -144,76 +146,58 @@ export default function Home() {
       {/* ===== Pricing ===== */}
       <section id="pricing">
         <div className="matrix-header">
-          <h2>Transparent <span className="text-gold">Access.</span></h2>
+          <h2>Transparent <br /><span className="italic" style={{ color: 'var(--mercury)' }}>Access.</span></h2>
           <p>Secure your HMAC token and start querying immediately.</p>
         </div>
 
-          <div className="pricing-cards">
-            {/* Sandbox */}
-            <div className="price-tier">
-              <div className="tier-name">Sandbox</div>
-              <div className="tier-price">
-                ₹0<span>/forever</span>
-              </div>
-              <ul className="tier-features">
-                <li>3 API Lookups / day</li>
-                <li>Plain language NLP search</li>
-                <li>Standard JSON responses</li>
-                <li>Community Support</li>
-              </ul>
-              <Link
-                href="http://localhost:8000/docs"
-                className="btn btn-outline mono"
-                style={{ width: '100%' }}
-              >
-                Test API Locally
-              </Link>
-            </div>
-
-            {/* Pro — Popular */}
-            <div className="price-tier popular">
-              <div className="tier-badge">Production Ready</div>
-              <div className="tier-name">Pro Integration</div>
-              <div className="tier-price">
-                ₹999<span>/month</span>
-              </div>
-              <ul className="tier-features">
-                <li>1,000 API Lookups / day</li>
-                <li>Secure HMAC Token Auth</li>
-                <li>&lt; 200ms Response Time</li>
-                <li>Priority Email Support</li>
-              </ul>
-              <a
-                href="https://gumroad.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary mono"
-                style={{ width: '100%' }}
-              >
-                Acquire Token
-              </a>
-            </div>
-
-            {/* Enterprise */}
-            <div className="price-tier">
-              <div className="tier-name">CA / Enterprise</div>
-              <div className="tier-price">Custom</div>
-              <ul className="tier-features">
-                <li>5,000+ API Lookups / day</li>
-                <li>Batch processing endpoints</li>
-                <li>99.5% Uptime SLA Guarantee</li>
-                <li>Dedicated Account Manager</li>
-              </ul>
-              <a
-                href="#"
-                className="btn btn-outline mono"
-                style={{ width: '100%' }}
-              >
-                Contact Sales
-              </a>
-            </div>
+        <div className="pricing-cards">
+          {/* Sandbox */}
+          <div className="price-tier">
+            <div className="tier-name">Sandbox</div>
+            <div className="tier-price">₹0<span>/forever</span></div>
+            <ul className="tier-features">
+              <li>3 API Lookups / day</li>
+              <li>Plain language NLP search</li>
+              <li>Standard JSON responses</li>
+              <li>Community Support</li>
+            </ul>
+            <Link href="http://localhost:8000/docs" className="btn btn-outline mono" style={{ width: '100%' }}>
+              Test API Locally
+            </Link>
           </div>
-        </section>
+
+          {/* Pro — Popular */}
+          <div className="price-tier popular">
+            <div className="tier-badge">Production Ready</div>
+            <div className="tier-name">Pro Integration</div>
+            <div className="tier-price">₹999<span>/month</span></div>
+            <ul className="tier-features">
+              <li>1,000 API Lookups / day</li>
+              <li>Secure HMAC Token Auth</li>
+              <li>&lt; 200ms Response Time</li>
+              <li>Priority Email Support</li>
+            </ul>
+            <a href="https://gumroad.com" target="_blank" rel="noopener noreferrer" className="btn btn-primary mono" style={{ width: '100%' }}>
+              Acquire Token
+            </a>
+          </div>
+
+          {/* Enterprise */}
+          <div className="price-tier">
+            <div className="tier-name">CA / Enterprise</div>
+            <div className="tier-price">Custom</div>
+            <ul className="tier-features">
+              <li>5,000+ API Lookups / day</li>
+              <li>Batch processing endpoints</li>
+              <li>99.5% Uptime SLA Guarantee</li>
+              <li>Dedicated Account Manager</li>
+            </ul>
+            <a href="#" className="btn btn-outline mono" style={{ width: '100%' }}>
+              Contact Sales
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* ===== Footer ===== */}
       <footer>
@@ -252,7 +236,7 @@ export default function Home() {
 
       <div className="footer-bottom">
         <div>© 2025 SARALGST. PROPRIETARY — ALL RIGHTS RESERVED.</div>
-        <div><span style={{ color: 'var(--gold)' }}>●</span> SYSTEM NOMINAL</div>
+        <div className="mono" style={{ color: 'var(--charcoal)' }}>SYSTEM NOMINAL</div>
       </div>
     </div>
   );
