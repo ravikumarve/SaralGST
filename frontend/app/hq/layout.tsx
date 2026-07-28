@@ -16,7 +16,19 @@ const NAV_ITEMS = [
   { href: '/hq/settings', label: 'Settings', icon: '⚙' },
 ];
 
-function Sidebar({ pathname, isOpen, onClose }: { pathname: string; isOpen: boolean; onClose: () => void }) {
+function Sidebar({
+  pathname,
+  isOpen,
+  collapsed,
+  onClose,
+  onToggleCollapse,
+}: {
+  pathname: string;
+  isOpen: boolean;
+  collapsed: boolean;
+  onClose: () => void;
+  onToggleCollapse: () => void;
+}) {
   const { data: session } = useSession();
   const user = session?.user;
   const isAdmin = user?.role === 'admin';
@@ -35,39 +47,60 @@ function Sidebar({ pathname, isOpen, onClose }: { pathname: string; isOpen: bool
 
       <aside
         id="hq-sidebar"
-        className={`w-64 bg-[#0a0a0a]/95 backdrop-blur-xl border-r border-[#262626] h-screen flex flex-col shrink-0 fixed lg:sticky top-0 left-0 overflow-y-auto transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`}
+        className={`bg-[#0a0a0a]/95 backdrop-blur-xl border-r border-[#262626] h-screen flex flex-col shrink-0 fixed lg:sticky top-0 left-0 overflow-y-auto transition-all duration-300 ease-in-out ${
+          collapsed ? 'w-20' : 'w-64'
+        } ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
         style={{ zIndex: 'var(--z-sidebar)' }}
       >
-        {/* Logo + Close button row */}
-        <div className="p-6 border-b border-[#262626] shrink-0 flex items-center justify-between">
-          <Link href="/hq/overview" className="logo" onClick={onClose}>
-            <span className="logo-mark" />
-            <span className="text-[#ededed]">SaralGST</span>
+        {/* Logo + Close + Collapse row */}
+        <div className={`shrink-0 flex items-center border-b border-[#262626] transition-all duration-300 ${
+          collapsed ? 'p-4 justify-center' : 'p-6 justify-between'
+        }`}>
+          <Link href="/hq/overview" className="flex items-center gap-3 no-underline" onClick={onClose}>
+            <span className="logo-mark shrink-0" />
+            {!collapsed && <span className="text-[#ededed] font-[var(--font-serif)] text-[1.1rem]">SaralGST</span>}
           </Link>
-          <button
-            onClick={onClose}
-            className="lg:hidden text-[#71717a] hover:text-[#ededed] transition-colors"
-            aria-label="Close sidebar"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
 
-        {/* User Info */}
-        <div className="px-6 py-4 border-b border-[#262626] shrink-0">
-          <div className="text-sm text-[#ededed] font-medium truncate">{user?.name || user?.email}</div>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="mono text-[10px] uppercase tracking-wider text-[#6366F1]">{user?.tier}</span>
-            {isAdmin && <span className="mono text-[10px] text-[#71717a]">· Admin</span>}
+          <div className="flex items-center gap-1">
+            {/* Collapse toggle (desktop) */}
+            <button
+              onClick={onToggleCollapse}
+              className="hidden lg:flex text-[#52525b] hover:text-[#ededed] transition-colors p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.04)]"
+              aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              title={collapsed ? 'Expand' : 'Collapse'}
+            >
+              <svg className="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                style={{ transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              </svg>
+            </button>
+
+            {/* Close (mobile) */}
+            <button
+              onClick={onClose}
+              className="lg:hidden text-[#71717a] hover:text-[#ededed] transition-colors p-1"
+              aria-label="Close sidebar"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
 
+        {/* User Info — hidden when collapsed */}
+        {!collapsed && (
+          <div className="px-6 py-4 border-b border-[#262626] shrink-0">
+            <div className="text-sm text-[#ededed] font-medium truncate">{user?.name || user?.email}</div>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="mono text-[10px] uppercase tracking-wider text-[#6366F1]">{user?.tier}</span>
+              {isAdmin && <span className="mono text-[10px] text-[#71717a]">· Admin</span>}
+            </div>
+          </div>
+        )}
+
         {/* Navigation */}
-        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        <nav className={`flex-1 overflow-y-auto transition-all duration-300 ${collapsed ? 'p-2 space-y-1' : 'p-3 space-y-0.5'}`}>
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href || (item.href !== '/hq/overview' && pathname.startsWith(item.href));
             return (
@@ -76,27 +109,52 @@ function Sidebar({ pathname, isOpen, onClose }: { pathname: string; isOpen: bool
                 href={item.href}
                 onClick={onClose}
                 aria-current={isActive ? 'page' : undefined}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all ${
+                title={collapsed ? item.label : undefined}
+                className={`flex items-center rounded-xl transition-all duration-200 ${
+                  collapsed
+                    ? 'justify-center p-3'
+                    : 'gap-3 px-4 py-2.5 text-sm'
+                } ${
                   isActive
-                    ? 'bg-[rgba(#6366F1,0.15)] text-[#6366F1] border border-[rgba(#6366F1,0.4)] shadow-[inset_0_1px_0_rgba(#6366F1,0.1)] font-medium'
+                    ? 'bg-[rgba(99,102,241,0.12)] text-[#6366F1] border border-[rgba(99,102,241,0.3)]'
                     : 'text-[#a1a1aa] hover:text-[#ededed] hover:bg-[rgba(255,255,255,0.04)]'
                 }`}
               >
-                <span className="w-5 text-center shrink-0 font-mono text-xs">{item.icon}</span>
-                <span>{item.label}</span>
+                <span className={`text-center shrink-0 ${
+                  collapsed ? 'text-base' : 'w-5 font-mono text-xs'
+                }`}>{item.icon}</span>
+                {!collapsed && <span className="truncate">{item.label}</span>}
               </Link>
             );
           })}
         </nav>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-[#262626] shrink-0">
-          <button
-            onClick={() => signOut({ callbackUrl: '/hq/login' })}
-            className="w-full px-4 py-2 text-sm text-[#a1a1aa] hover:text-[#ededed] hover:bg-[rgba(255,255,255,0.04)] rounded-xl transition-colors text-left"
-          >
-            Sign Out
-          </button>
+        {/* Footer — Sign Out + Collapse toggle for collapsed mode */}
+        <div className={`shrink-0 border-t border-[#262626] transition-all duration-300 ${
+          collapsed ? 'p-2' : 'p-4'
+        }`}>
+          {!collapsed && (
+            <button
+              onClick={() => signOut({ callbackUrl: '/hq/login' })}
+              className="w-full px-4 py-2 text-sm text-[#a1a1aa] hover:text-[#ededed] hover:bg-[rgba(255,255,255,0.04)] rounded-xl transition-colors text-left"
+            >
+              Sign Out
+            </button>
+          )}
+
+          {/* Collapse toggle in footer for collapsed mode (desktop) */}
+          {collapsed && (
+            <button
+              onClick={onToggleCollapse}
+              className="hidden lg:flex w-full justify-center p-3 text-[#52525b] hover:text-[#ededed] hover:bg-[rgba(255,255,255,0.04)] rounded-xl transition-colors"
+              aria-label="Expand sidebar"
+              title="Expand"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
         </div>
       </aside>
     </>
@@ -109,6 +167,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Dynamic page titles for HQ
   useEffect(() => {
@@ -127,10 +186,10 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   useEffect(() => {
-    setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
+    setMounted(true);
   }, []);
 
-  // Always render login page without guard
+  // Always render login/register without guard
   if (pathname === '/hq/login' || pathname === '/hq/register') {
     return <>{children}</>;
   }
@@ -150,9 +209,16 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen bg-[#000000] overflow-hidden">
-      <Sidebar pathname={pathname} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        pathname={pathname}
+        isOpen={sidebarOpen}
+        collapsed={sidebarCollapsed}
+        onClose={() => setSidebarOpen(false)}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+      />
 
-      {/* Mobile hamburger */}
+      {/* Mobile hamburger — only show when sidebar is closed */}
+      {!sidebarOpen && (
         <button
           onClick={() => setSidebarOpen(true)}
           className="fixed top-4 left-4 lg:hidden bg-[#0a0a0a]/90 backdrop-blur-md border border-[#262626] rounded-xl p-2.5 text-[#a1a1aa] hover:text-[#ededed] transition-colors"
@@ -160,10 +226,11 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
           aria-label="Open sidebar menu"
           aria-controls="hq-sidebar"
         >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      )}
 
       <main className="flex-1 overflow-y-auto bg-[#000000]">
         <div className="min-h-full">
