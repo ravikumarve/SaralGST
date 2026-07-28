@@ -3,7 +3,8 @@
 import { SessionProvider, useSession, signOut } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import CommandPalette from '@/components/CommandPalette';
 
 const NAV_ITEMS = [
   { href: '/hq/overview', label: 'Overview', icon: '◆' },
@@ -168,6 +169,22 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  // CMD+K / Ctrl+K keyboard shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setPaletteOpen((prev) => !prev);
+      }
+      if (e.key === 'Escape' && paletteOpen) {
+        setPaletteOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [paletteOpen]);
 
   // Dynamic page titles for HQ
   useEffect(() => {
@@ -251,14 +268,17 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* CMD+K style search hint */}
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-[#0a0a0a] border border-[#262626] rounded-lg text-xs text-[#52525b]">
+            {/* CMD+K style search hint — clickable */}
+            <button
+              onClick={() => setPaletteOpen(true)}
+              className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-[#0a0a0a] border border-[#262626] rounded-lg text-xs text-[#52525b] hover:text-[#a1a1aa] hover:border-[#36363a] transition-colors"
+            >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
               <span>CMD+K</span>
-            </div>
+            </button>
 
             {/* Create button */}
             <Link
@@ -280,6 +300,9 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
+
+      {/* Command Palette */}
+      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </div>
   );
 }

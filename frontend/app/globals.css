@@ -514,37 +514,30 @@ input, textarea { font-family: inherit; border: none; background: none; outline:
 .code-kw { color: var(--indigo); }
 .code-str { color: var(--emerald); }
 
-/* ===== Glass cards (HQ / dashboard) ===== */
-.glass-card { background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-faint); border-radius: 20px; overflow: hidden; }
+/* ===== HQ cards (solid border cards — Portley design) ===== */
+.glass-card { background: #0a0a0a; border: 1px solid #262626; border-radius: 16px; overflow: hidden; }
 
-/* HQ card — subtle glass with indigo glow on hover */
+/* HQ card — solid bg with subtle border, hover raises border */
 .hq-card {
-  background: var(--bg-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-faint);
+  background: #0a0a0a;
+  border: 1px solid #262626;
   border-radius: 16px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .hq-card:hover {
-  border-color: rgba(99, 102, 241, 0.15);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border-color: rgba(99, 102, 241, 0.2);
 }
 
 /* Stat card — for metric displays */
 .hq-stat {
-  background: var(--bg-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-faint);
+  background: #0a0a0a;
+  border: 1px solid #262626;
   border-radius: 16px;
   padding: 1.5rem;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .hq-stat:hover {
-  border-color: rgba(99, 102, 241, 0.15);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  border-color: rgba(99, 102, 241, 0.2);
 }
 
 /* Glass card for login/register auth pages */

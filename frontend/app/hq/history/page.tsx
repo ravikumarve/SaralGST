@@ -46,15 +46,16 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-8 md:p-10 lg:p-12 max-w-6xl">
+      <div className="flex items-center justify-between mb-10">
         <div>
-          <h1 className="text-2xl font-bold text-[#ededed]">History</h1>
-          <p className="text-[#71717a] text-sm mt-1">All your GST rate lookups</p>
+          <p className="mono text-[10px] tracking-[2px] text-[#6366F1] mb-2">HISTORY</p>
+          <h1 className="font-[var(--font-serif)] text-3xl md:text-4xl text-[#ededed] tracking-tight">Lookup History</h1>
+          <p className="text-[#71717a] text-sm mt-2">All your GST rate lookups</p>
         </div>
         <button
           onClick={exportCSV}
-          className="px-4 py-2 bg-[#141414] border border-[#262626] rounded-xl text-sm text-[#a1a1aa] hover:text-[#ededed] transition-colors"
+          className="px-4 py-2 bg-[#141414] border border-[#262626] rounded-xl text-sm text-[#a1a1aa] hover:text-[#ededed] transition-colors shrink-0"
         >
           Export CSV
         </button>

@@ -35,9 +35,12 @@ export default function BillingPage() {
   ];
 
   return (
-    <div className="p-8 max-w-6xl">
-      <h1 className="text-2xl font-bold text-[#ededed] mb-1">Billing</h1>
-      <p className="text-[#71717a] text-sm mb-8">Your subscription and payment history</p>
+    <div className="p-8 md:p-10 lg:p-12 max-w-6xl">
+      <div className="mb-10">
+        <p className="mono text-[10px] tracking-[2px] text-[#6366F1] mb-2">BILLING</p>
+        <h1 className="font-[var(--font-serif)] text-3xl md:text-4xl text-[#ededed] tracking-tight">Plans & Payments</h1>
+        <p className="text-[#71717a] text-sm mt-2">Your subscription and payment history</p>
+      </div>
 
       {/* Plans */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">

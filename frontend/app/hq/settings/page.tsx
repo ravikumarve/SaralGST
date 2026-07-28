@@ -14,9 +14,12 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="p-8 max-w-4xl">
-      <h1 className="text-2xl font-bold text-[#ededed] mb-1">Settings</h1>
-      <p className="text-[#71717a] text-sm mb-8">Manage your account preferences</p>
+    <div className="p-8 md:p-10 lg:p-12 max-w-4xl">
+      <div className="mb-10">
+        <p className="mono text-[10px] tracking-[2px] text-[#6366F1] mb-2">SETTINGS</p>
+        <h1 className="font-[var(--font-serif)] text-3xl md:text-4xl text-[#ededed] tracking-tight">Account</h1>
+        <p className="text-[#71717a] text-sm mt-2">Manage your preferences</p>
+      </div>
 
       {/* Profile */}
       <div className="hq-card p-6 mb-6">

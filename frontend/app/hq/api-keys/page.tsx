@@ -56,15 +56,16 @@ export default function ApiKeysPage() {
   };
 
   return (
-    <div className="p-8 max-w-4xl">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-8 md:p-10 lg:p-12 max-w-4xl">
+      <div className="flex items-center justify-between mb-10">
         <div>
-          <h1 className="text-2xl font-bold text-[#ededed]">API Keys</h1>
-          <p className="text-[#71717a] text-sm mt-1">Manage your HMAC tokens for API access</p>
+          <p className="mono text-[10px] tracking-[2px] text-[#6366F1] mb-2">API KEYS</p>
+          <h1 className="font-[var(--font-serif)] text-3xl md:text-4xl text-[#ededed] tracking-tight">Manage Keys</h1>
+          <p className="text-[#71717a] text-sm mt-2">Your HMAC tokens for API access</p>
         </div>
         <button
           onClick={() => setShowNew(true)}
-          className="px-5 py-2.5 bg-[#6366F1] text-[#000000] font-bold rounded-xl hover:bg-[#a5b4fc] transition-colors text-sm"
+          className="px-5 py-2.5 bg-[#6366F1] text-[#000000] font-bold rounded-xl hover:bg-[#a5b4fc] transition-colors text-sm shrink-0"
         >
           + New Key
         </button>
