@@ -10,54 +10,70 @@ India's simplest GST rate checker — frontend. Built with Next.js 16, TypeScrip
 | **Language** | TypeScript 5 |
 | **Styling** | Tailwind CSS v4 |
 | **UI** | Radix UI Dialog + Tooltip |
-| **Fonts** | Space Grotesk, Inter, JetBrains Mono, Syncopate |
+| **Fonts** | Plus Jakarta Sans, Inter, JetBrains Mono |
 | **Payments** | Razorpay SDK |
 
-## Design System — Landing-2
+## Design System — Obsidian & Gold
 
-Clean panels, solid colors, zero animations, bento grid centerpiece.
+Professional glassmorphism bento-grid with gold accents. Inspired by Lusion.co aesthetic.
 
 ### Palette
 ```
-bg-base:   #050505    →  --color-bg
-bg-panel:  #0d0d0d    →  --color-bg-panel
-bg-surface:#141414    →  --color-bg-surface
-accent-cyan:   #00f0ff
-accent-violet: #8a2be2
-accent-emerald:#10b981
-text-primary:#ededed
-text-secondary:#a1a1aa
-text-tertiary:#71717a
-borders: #262626 / #404040
+bg-void:     #020202    →  Base background
+bg-surface:  #0a0a0a    →  Card/panel background
+bg-glass:    rgba(15,15,15,0.55)  →  Glass surfaces
+accent-gold:      #F59E0B  →  Primary accent
+accent-gold-lt:   #FBBF24  →  Gold hover/light
+accent-emerald:   #10B981  →  Success/active states
+text-primary:   #ededed  →  Headings
+text-secondary: #a1a1aa  →  Body text
+text-tertiary:  #71717a  →  Labels/metadata
+text-faint:     #52525b  →  Placeholders/subtitles
+borders: #262626 / rgba(255,255,255,0.08)
 ```
 
 ### Principles
-- **Zero animations** — No GSAP, no Framer Motion, no CSS keyframes
-- **Solid backgrounds** — No transparency stacks, no glassmorphism
-- **Bento grid** — Structured information layout
-- **Gradient text** — Cyan-to-violet accent on key elements
+- **Gold accent** (#F59E0B) — single accent color, no gradients
+- **Glassmorphism** — rgba glass panels with backdrop blur on landing
+- **Void background** (#020202) — deep obsidian, never pure black
+- **Dot-matrix overlay** — subtle grid texture on landing
+- **CPU-aware canvas** — FlowFieldCanvas particle system (disabled on HQ)
+- **Reduced motion** — `prefers-reduced-motion` respected everywhere
+- **Solid surfaces** on dashboard (HQ) — no glass/transparency for readability
 
-## Pages
+## Architecture
 
-| Route | Page | Description |
-|---|---|---|
-| `/` | Landing | Hero → Platform Bento → Use Cases → Pricing → Footer |
-| `/check` | Rate Checker | SearchBox + ResultCard + RateComparison + TaxCalculator + UpgradeModal + UsageCounter |
-| `/_not-found` | 404 | Brutalist heading, ambient grid |
+### Routes
 
-## Components
+| Route | Page | Auth | Description |
+|---|---|---|---|
+| `/` | Landing | No | Hero → Bento Grid → API Section → Footer |
+| `/check` | Rate Checker | No | SearchBox + ResultCard + RateComparison + TaxCalculator |
+| `/hq/login` | Login | No | Email/password sign in |
+| `/hq/register` | Sign Up | No | Name/email/password registration |
+| `/hq/overview` | Dashboard | Yes | Stats, quick actions, system status |
+| `/hq/api-keys` | API Keys | Yes | List/generate/revoke HMAC tokens |
+| `/hq/usage` | Usage | Yes | Daily lookup chart (Recharts) |
+| `/hq/history` | History | Yes | Searchable lookup history + CSV export |
+| `/hq/favorites` | Favorites | Yes | Saved HSN codes with quick lookup |
+| `/hq/billing` | Billing | Yes | Plan comparison, payment history |
+| `/hq/settings` | Settings | Yes | Profile, notifications, danger zone |
+| `/hq/playground` | Playground | Yes | Interactive API testing (Lookup/Explain/Calculate) |
+| `/_not-found` | 404 | No | Gold-void aesthetic |
+
+### Components
 
 ```
 components/
-├── BentoGrid.tsx       # 12-col responsive platform grid
-├── CodeBlock.tsx       # Bare code block with token highlighting
-├── FloatingNav.tsx     # Sticky pill nav (cyan dot + mono links)
-├── RateComparison.tsx  # Old vs new rate metric bars
-├── ResultCard.tsx      # Rate result panel
-├── SearchBox.tsx       # Dual-mode query input (product/HSN) + language toggle
-├── TaxCalculator.tsx   # CGST/SGST/IGST breakdown
-├── UpgradeModal.tsx    # Paid tier upgrade prompt
-└── UsageCounter.tsx    # Free tier daily usage tracker
+├── FlowFieldCanvas.tsx   # CPU-aware gold particle system (landing only)
+├── FloatingNav.tsx       # Fixed top nav with hamburger (landing only)
+├── SearchSimulation.tsx  # 3D glass panel with live cursor blink
+├── SearchBox.tsx         # Dual-mode query input (product/HSN) + language toggle
+├── ResultCard.tsx        # Rate result panel
+├── RateComparison.tsx    # Old vs new rate metric bars
+├── TaxCalculator.tsx     # CGST/SGST/IGST breakdown
+├── UpgradeModal.tsx      # Paid tier upgrade prompt
+└── UsageCounter.tsx      # Free tier daily usage tracker
 ```
 
 ## Getting Started
@@ -71,15 +87,6 @@ components/
 ```bash
 cd frontend
 npm install
-cp .env.example .env.local
-```
-
-Edit `.env.local`:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000
-RAZORPAY_KEY_ID=your_key_id
-RAZORPAY_KEY_SECRET=your_key_secret
-HMAC_SECRET=your_hmac_secret
 ```
 
 ### Development
@@ -115,10 +122,10 @@ import { apiClient } from '@/lib/api';
 const result = await apiClient.lookup({ query: 'LED TV' });
 
 // Calculate tax (POST /api/v1/gst/calculate)
-const calc = await apiClient.calculate({ item_name: 'LED TV', price: 50000 });
+const calc = await apiClient.calculate({ base_price: 1000, gst_rate: 18 });
 
 // Explain rate (GET /api/v1/gst/explain)
-const explain = await apiClient.explain({ item_name: 'LED TV' });
+const explain = await apiClient.explain({ item_name: 'Rice' });
 
 // Validate session token
 const validation = await apiClient.validateKey(token);
@@ -127,15 +134,20 @@ const validation = await apiClient.validateKey(token);
 ## Build Output
 
 ```
-✓ Compiled in 12s
+✓ Compiled in 16s
 ✓ 0 TypeScript errors
-✓ Static pages (7/7)
-  ○  /            (static)
-  ○  /_not-found  (static)
-  ƒ  /api/create-order
-  ƒ  /api/verify-payment
-  ○  /check       (static)
+✓ 25 routes
+  ○  11 static pages
+  ƒ  13 dynamic routes (API)
 ```
+
+## HQ Dashboard
+
+Saral HQ (`/hq`) is the authenticated command center. Built with:
+- **Prisma v7 + SQLite** — file-based, zero server processes
+- **NextAuth v5** — Credentials provider, JWT sessions, bcrypt hashing
+- **Rate limit tiers** — Free (3/day), Pro (1,000/day), CA Firm (5,000/day)
+- **Usage logging** — Fire-and-forget from every lookup
 
 ## Deployment
 
@@ -152,7 +164,8 @@ const validation = await apiClient.validateKey(token);
 NEXT_PUBLIC_API_URL=https://saralgst-api.onrender.com
 RAZORPAY_KEY_ID=production_key_id
 RAZORPAY_KEY_SECRET=production_key_secret
-HMAC_SECRET=production_hmac_secret
+AUTH_SECRET=nextauth_secret
+AUTH_TRUST_HOST=true
 ```
 
 ## License
