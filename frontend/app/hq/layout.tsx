@@ -217,26 +217,69 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
-      {/* Mobile hamburger — only show when sidebar is closed */}
-      {!sidebarOpen && (
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 left-4 lg:hidden bg-[#0a0a0a]/90 backdrop-blur-md border border-[#262626] rounded-xl p-2.5 text-[#a1a1aa] hover:text-[#ededed] transition-colors"
-          style={{ zIndex: 'var(--z-sticky)' }}
-          aria-label="Open sidebar menu"
-          aria-controls="hq-sidebar"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      )}
+      {/* Main workspace: Topbar + Content */}
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* ===== Topbar ===== */}
+        <header className="h-16 flex items-center justify-between px-6 border-b border-[#262626] bg-[#000000] shrink-0">
+          <div className="flex items-center gap-4">
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden text-[#a1a1aa] hover:text-[#ededed] transition-colors p-1 -ml-1"
+              aria-label="Open sidebar menu"
+              aria-controls="hq-sidebar"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
 
-      <main className="flex-1 overflow-y-auto bg-[#000000]">
-        <div className="min-h-full">
-          {children}
-        </div>
-      </main>
+            <div className="hidden sm:flex items-center gap-3">
+              <span className="mono text-[10px] uppercase tracking-[2px] text-[#52525b]">Workspace</span>
+              <span className="text-sm text-[#a1a1aa]">/</span>
+              <span className="text-sm text-[#ededed] font-medium" id="hq-page-title">
+                {pathname === '/hq/overview' ? 'Dashboard' :
+                 pathname === '/hq/playground' ? 'Playground' :
+                 pathname === '/hq/api-keys' ? 'API Keys' :
+                 pathname === '/hq/usage' ? 'Usage' :
+                 pathname === '/hq/history' ? 'History' :
+                 pathname === '/hq/favorites' ? 'Favorites' :
+                 pathname === '/hq/billing' ? 'Billing' :
+                 pathname === '/hq/settings' ? 'Settings' : 'Dashboard'}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* CMD+K style search hint */}
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-[#0a0a0a] border border-[#262626] rounded-lg text-xs text-[#52525b]">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span>CMD+K</span>
+            </div>
+
+            {/* Create button */}
+            <Link
+              href="/hq/playground"
+              className="flex items-center gap-1.5 px-4 py-1.5 bg-[#6366F1] text-white text-xs font-medium rounded-lg hover:bg-[#a5b4fc] hover:text-[#000000] transition-colors"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14m7-7H5" />
+              </svg>
+              <span className="hidden sm:inline">Create</span>
+            </Link>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto bg-[#000000]">
+          <div className="min-h-full">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
