@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -107,12 +107,6 @@ export default function PlaygroundPage() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    setResult(null);
-    setError(null);
-    setRawJson('');
-  }, [tab]);
-
   return (
     <div className="p-8 max-w-5xl">
       {/* Header */}
@@ -120,19 +114,19 @@ export default function PlaygroundPage() {
         <h1 className="text-2xl font-bold text-[#ededed]">API Playground</h1>
         <p className="text-[#71717a] text-sm mt-1">
           Test the SaralGST API in real-time ·{' '}
-          <code className="mono text-[#F59E0B] text-[11px]">{API_BASE}</code>
+          <code className="mono text-[#6366F1] text-[11px]">{API_BASE}</code>
         </p>
       </div>
 
       {/* Tab Bar */}
-      <div className="flex gap-1 mb-6 bg-[#0a0a0a] border border-[#262626] rounded-2xl p-1">
+      <div className="flex gap-1 mb-6 hq-card p-1">
         {TABS.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
             className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
               tab === t.id
-                ? 'bg-[rgba(245,158,11,0.12)] text-[#F59E0B] border border-[rgba(245,158,11,0.2)]'
+                ? 'bg-[rgba(99,102,241,0.12)] text-[#6366F1] border border-[rgba(99,102,241,0.2)]'
                 : 'text-[#71717a] hover:text-[#ededed]'
             }`}
           >
@@ -143,22 +137,22 @@ export default function PlaygroundPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div key={tab} className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Input Panel */}
-        <div className="lg:col-span-2 bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6">
+        <div className="lg:col-span-2 hq-card p-6">
           <h2 className="text-sm font-semibold text-[#ededed] mb-4">Request</h2>
 
           {/* Lookup inputs */}
           {tab === 'lookup' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs text-[#71717a] mb-1.5">Query <span className="text-[#F59E0B]">*</span></label>
+                <label className="block text-xs text-[#71717a] mb-1.5">Query <span className="text-[#6366F1]">*</span></label>
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="e.g., Rice, LED TV, 1006, 8528"
-                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#F59E0B]/40 transition-colors text-sm"
+                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#6366F1]/40 transition-colors text-sm"
                   onKeyDown={(e) => e.key === 'Enter' && sendRequest()}
                 />
               </div>
@@ -172,13 +166,13 @@ export default function PlaygroundPage() {
           {tab === 'explain' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs text-[#71717a] mb-1.5">Item Name <span className="text-[#F59E0B]">*</span></label>
+                <label className="block text-xs text-[#71717a] mb-1.5">Item Name <span className="text-[#6366F1]">*</span></label>
                 <input
                   type="text"
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
                   placeholder="e.g., Rice, Mobile Phone, Cement"
-                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#F59E0B]/40 transition-colors text-sm"
+                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#6366F1]/40 transition-colors text-sm"
                   onKeyDown={(e) => e.key === 'Enter' && sendRequest()}
                 />
               </div>
@@ -192,18 +186,18 @@ export default function PlaygroundPage() {
           {tab === 'calculate' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs text-[#71717a] mb-1.5">Base Price (₹) <span className="text-[#F59E0B]">*</span></label>
+                <label className="block text-xs text-[#71717a] mb-1.5">Base Price (₹) <span className="text-[#6366F1]">*</span></label>
                 <input
                   type="number"
                   value={basePrice}
                   onChange={(e) => setBasePrice(e.target.value)}
                   placeholder="1000"
                   min="0"
-                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#F59E0B]/40 transition-colors text-sm"
+                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#6366F1]/40 transition-colors text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs text-[#71717a] mb-1.5">GST Rate (%) <span className="text-[#F59E0B]">*</span></label>
+                <label className="block text-xs text-[#71717a] mb-1.5">GST Rate (%) <span className="text-[#6366F1]">*</span></label>
                 <div className="relative">
                   <input
                     type="number"
@@ -212,7 +206,7 @@ export default function PlaygroundPage() {
                     placeholder="18"
                     min="0"
                     max="100"
-                    className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#F59E0B]/40 transition-colors text-sm"
+                    className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#6366F1]/40 transition-colors text-sm"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
                     {[0, 5, 12, 18, 28].map((r) => (
@@ -221,7 +215,7 @@ export default function PlaygroundPage() {
                         onClick={() => setGstRate(String(r))}
                         className={`px-1.5 py-0.5 text-[10px] rounded ${
                           gstRate === String(r)
-                            ? 'bg-[#F59E0B]/20 text-[#F59E0B]'
+                            ? 'bg-[#6366F1]/20 text-[#6366F1]'
                             : 'text-[#52525b] hover:text-[#71717a]'
                         }`}
                       >
@@ -241,7 +235,7 @@ export default function PlaygroundPage() {
           <button
             onClick={sendRequest}
             disabled={loading}
-            className="w-full mt-6 px-5 py-3 bg-[#F59E0B] text-[#020202] font-bold rounded-xl hover:bg-[#FBBF24] disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm flex items-center justify-center gap-2"
+            className="w-full mt-6 px-5 py-3 bg-[#6366F1] text-[#000000] font-bold rounded-xl hover:bg-[#a5b4fc] disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -250,7 +244,7 @@ export default function PlaygroundPage() {
               </>
             ) : (
               <>
-                <span className="mono text-[10px] bg-[#020202]/20 px-1.5 py-0.5 rounded">
+                <span className="mono text-[10px] bg-[#000000]/20 px-1.5 py-0.5 rounded">
                   {TABS.find((t) => t.id === tab)?.method}
                 </span>
                 Send Request
@@ -266,7 +260,7 @@ export default function PlaygroundPage() {
                 <button
                   key={ex}
                   onClick={() => { setQuery(ex); setTimeout(sendRequest, 100); }}
-                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#F59E0B]/30 transition-colors mono"
+                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#6366F1]/30 transition-colors mono"
                 >
                   {ex}
                 </button>
@@ -275,7 +269,7 @@ export default function PlaygroundPage() {
                 <button
                   key={ex}
                   onClick={() => { setItemName(ex); setTimeout(sendRequest, 100); }}
-                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#F59E0B]/30 transition-colors mono"
+                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#6366F1]/30 transition-colors mono"
                 >
                   {ex}
                 </button>
@@ -288,7 +282,7 @@ export default function PlaygroundPage() {
                 <button
                   key={ex.label}
                   onClick={() => { setBasePrice(ex.bp); setGstRate(ex.gr); setTimeout(sendRequest, 100); }}
-                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#F59E0B]/30 transition-colors"
+                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#6366F1]/30 transition-colors"
                 >
                   {ex.label}
                 </button>
@@ -298,7 +292,7 @@ export default function PlaygroundPage() {
         </div>
 
         {/* Response Panel */}
-        <div className="lg:col-span-3 bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6">
+        <div className="lg:col-span-3 hq-card p-6">
           <h2 className="text-sm font-semibold text-[#ededed] mb-4">Response</h2>
 
           {error && (
@@ -373,12 +367,12 @@ export default function PlaygroundPage() {
                 <span className="text-[10px] text-[#52525b] uppercase tracking-wider">Raw JSON</span>
                 <button
                   onClick={() => navigator.clipboard.writeText(rawJson)}
-                  className="text-[10px] text-[#71717a] hover:text-[#F59E0B] transition-colors"
+                  className="text-[10px] text-[#71717a] hover:text-[#6366F1] transition-colors"
                 >
                   Copy
                 </button>
               </div>
-              <pre className="p-4 bg-[#020202] border border-[#262626] rounded-xl text-[11px] text-[#a1a1aa] mono leading-relaxed max-h-80 overflow-auto whitespace-pre-wrap">
+              <pre className="p-4 bg-[#000000] border border-[#262626] rounded-xl text-[11px] text-[#a1a1aa] mono leading-relaxed max-h-80 overflow-auto whitespace-pre-wrap">
                 {rawJson || (error ? JSON.stringify({ error }, null, 2) : '')}
               </pre>
             </div>
@@ -393,7 +387,7 @@ function ResultRow({ label, value, mono, gold }: { label: string; value: string;
   return (
     <div className="flex items-center justify-between py-1.5 px-3 bg-[#141414] rounded-xl">
       <span className="text-[11px] text-[#71717a]">{label}</span>
-      <span className={`text-sm ${gold ? 'text-[#F59E0B] font-semibold' : 'text-[#ededed]'} ${mono ? 'mono' : ''}`}>
+      <span className={`text-sm ${gold ? 'text-[#6366F1] font-semibold' : 'text-[#ededed]'} ${mono ? 'mono' : ''}`}>
         {value}
       </span>
     </div>

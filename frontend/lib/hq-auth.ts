@@ -8,8 +8,8 @@ export async function getAuthUser() {
   }
   return {
     id: session.user.id,
-    tier: (session.user as any).tier || "free",
-    role: (session.user as any).role || "user",
+    tier: session.user.tier || "free",
+    role: session.user.role || "user",
   };
 }
 

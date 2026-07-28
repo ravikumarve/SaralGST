@@ -8,9 +8,9 @@ interface CodeLine {
 }
 
 const STYLES: Record<string, string> = {
-  kw: 'text-[#F59E0B]',
+  kw: 'text-[#6366F1]',
   str: 'text-[#10b981]',
-  num: 'text-[#FBBF24]',
+  num: 'text-[#a5b4fc]',
 };
 
 const DEFAULT_LINES: CodeLine[] = [

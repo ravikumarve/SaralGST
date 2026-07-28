@@ -64,7 +64,7 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
             maxLength={200}
             disabled={loading}
             className={`flex-1 px-3 py-2 bg-transparent text-[#ededed] placeholder-[#71717a] focus:outline-none text-base ${
-              mode === 'hsn' ? 'mono font-normal' : 'font-inter'
+              mode === 'hsn' ? 'mono font-normal' : 'font-sans'
             }`}
           />
 

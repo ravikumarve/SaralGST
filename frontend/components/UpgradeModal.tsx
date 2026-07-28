@@ -2,6 +2,23 @@
 
 import { useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
+import { storageManager } from '@/lib/storage';
+
+interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  handler: (response: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) => void;
+  prefill: { name: string; email: string; contact: string };
+  theme: { color: string };
+}
+
+interface RazorpayInstance {
+  open: () => void;
+}
 
 interface UpgradeModalProps {
   open: boolean;
@@ -28,16 +45,16 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
         throw new Error(orderData.error || 'Failed to create order');
       }
 
-      const Razorpay = (await import('razorpay')).default;
+      const Razorpay = (await import('razorpay')).default as unknown as { new(options: RazorpayOptions): RazorpayInstance };
 
-      const options: any = {
+      const options: RazorpayOptions = {
         key: orderData.key_id,
         amount: orderData.amount,
         currency: orderData.currency,
         name: 'SaralGST',
         description: selectedPlan === 'individual' ? 'Individual Plan' : 'CA Firm Plan',
         order_id: orderData.order_id,
-        handler: async (response: any) => {
+        handler: async (response) => {
           const verifyResponse = await fetch('/api/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -52,9 +69,9 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
           const verifyData = await verifyResponse.json();
 
           if (verifyResponse.ok && verifyData.success) {
-            localStorage.setItem('sg_token', verifyData.token);
-            localStorage.setItem('sg_tier', verifyData.tier);
-            localStorage.setItem('sg_expires_at', verifyData.expires_at);
+            storageManager.setToken(verifyData.token);
+            storageManager.setTier(verifyData.tier);
+            storageManager.setExpiresAt(verifyData.expires_at);
             onClose();
             window.location.reload();
           } else {
@@ -62,11 +79,11 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
           }
         },
         prefill: { name: '', email: '', contact: '' },
-        theme: { color: '#F59E0B' },
+        theme: { color: '#6366F1' },
       };
 
-      const rzp = new Razorpay(options);
-      (rzp as any).open();
+      const rzp: RazorpayInstance = new Razorpay(options);
+      rzp.open();
     } catch (error) {
       console.error('Payment error:', error);
       alert('Failed to initiate payment. Please try again.');
@@ -105,13 +122,13 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                 onClick={() => setSelectedPlan('individual')}
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   selectedPlan === 'individual'
-                    ? 'border-[#F59E0B] bg-[rgba(245,158,11,0.05)]'
+                    ? 'border-[#6366F1] bg-[rgba(99,102,241,0.05)]'
                     : 'border-[#262626] bg-[#141414] hover:border-[#404040]'
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
                   <span className="font-medium text-[#ededed]">Individual</span>
-                  <span className="text-xl font-bold text-[#F59E0B]">₹499</span>
+                  <span className="text-xl font-bold text-[#6366F1]">₹499</span>
                 </div>
                 <div className="text-sm text-[#71717a]">Unlimited lookups per month</div>
               </button>
@@ -120,13 +137,13 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
                 onClick={() => setSelectedPlan('ca_firm')}
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   selectedPlan === 'ca_firm'
-                    ? 'border-[#F59E0B] bg-[rgba(245,158,11,0.05)]'
+                    ? 'border-[#6366F1] bg-[rgba(99,102,241,0.05)]'
                     : 'border-[#262626] bg-[#141414] hover:border-[#404040]'
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
                   <span className="font-medium text-[#ededed]">CA Firm</span>
-                  <span className="text-xl font-bold text-[#F59E0B]">₹1,999</span>
+                  <span className="text-xl font-bold text-[#6366F1]">₹1,999</span>
                 </div>
                 <div className="text-sm text-[#71717a]">50 GSTINs per month</div>
               </button>

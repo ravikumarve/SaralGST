@@ -1,14 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function FlowFieldCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isHQ, setIsHQ] = useState(false);
-
-  useEffect(() => {
-    setIsHQ(window.location.pathname.startsWith('/hq'));
-  }, []);
+  const pathname = usePathname();
+  const isHQ = pathname.startsWith('/hq');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -153,7 +151,7 @@ export default function FlowFieldCanvas() {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [isHQ]);
 
   return (
     <canvas
@@ -162,7 +160,7 @@ export default function FlowFieldCanvas() {
       aria-hidden="true"
       role="presentation"
       className="fixed top-0 left-0 w-screen h-screen pointer-events-none opacity-80"
-      style={{ zIndex: 0, mixBlendMode: 'screen', display: isHQ ? 'none' : 'block' }}
+      style={{ mixBlendMode: 'screen', display: isHQ ? 'none' : 'block' }}
     />
   );
 }

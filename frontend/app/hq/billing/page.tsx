@@ -40,19 +40,19 @@ export default function BillingPage() {
       <p className="text-[#71717a] text-sm mb-8">Your subscription and payment history</p>
 
       {/* Plans */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         {plans.map((plan) => {
           const isCurrent = tier === plan.tier;
           return (
             <div
               key={plan.tier}
-              className={`bg-[#0a0a0a] border rounded-2xl p-6 ${
-                isCurrent ? 'border-[#F59E0B]' : plan.popular ? 'border-[rgba(245,158,11,0.3)]' : 'border-[#262626]'
+              className={`hq-card p-6 ${
+                isCurrent ? 'border-[#6366F1]' : plan.popular ? 'border-[rgba(99,102,241,0.3)]' : 'border-[#262626]'
               }`}
             >
-              {plan.popular && <div className="mono text-[10px] text-[#F59E0B] uppercase tracking-wider mb-3">Most Popular</div>}
+              {plan.popular && <div className="mono text-[10px] text-[#6366F1] uppercase tracking-wider mb-3">Most Popular</div>}
               <h3 className="text-lg font-bold text-[#ededed] mb-1">{plan.name}</h3>
-              <div className="text-2xl font-bold text-[#F59E0B] mb-4">{plan.price}</div>
+              <div className="text-2xl font-bold text-[#6366F1] mb-4">{plan.price}</div>
               <ul className="space-y-2 mb-6">
                 {plan.features.map((f) => (
                   <li key={f} className="text-sm text-[#a1a1aa] flex items-center gap-2">
@@ -79,12 +79,12 @@ export default function BillingPage() {
       </div>
 
       {/* Invoices */}
-      <div className="bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6">
+      <div className="hq-card p-6">
         <h2 className="text-sm font-semibold text-[#ededed] mb-4">Payment History</h2>
         {loading ? (
           <div className="text-[#71717a] text-sm">Loading...</div>
         ) : invoices.length === 0 ? (
-          <div className="text-[#71717a] text-sm py-8 text-center border border-dashed border-[#262626] rounded-xl">
+          <div className="text-[#71717a] text-sm py-8 text-center border border-dashed border-[#262626] rounded-xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
             No invoices yet.
           </div>
         ) : (
@@ -103,7 +103,7 @@ export default function BillingPage() {
                 <tr key={inv.id} className="border-b border-[#262626] last:border-0">
                   <td className="px-4 py-3 text-[#ededed]">{new Date(inv.createdAt).toLocaleDateString()}</td>
                   <td className="px-4 py-3 text-[#a1a1aa] capitalize">{inv.plan}</td>
-                  <td className="px-4 py-3 text-[#F59E0B] mono">₹{inv.amount.toLocaleString()}</td>
+                  <td className="px-4 py-3 text-[#6366F1] mono">₹{inv.amount.toLocaleString()}</td>
                   <td className="px-4 py-3">
                     <span className={`mono text-[10px] px-2 py-1 rounded-full ${
                       inv.status === 'paid' ? 'text-[#10b981] bg-[rgba(16,185,129,0.1)]' : 'text-[#71717a] bg-[#141414]'

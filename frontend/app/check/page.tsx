@@ -78,8 +78,8 @@ export default function CheckPage() {
 
         {/* Error */}
         {error && (
-          <div className="mt-8 p-4 border-l-2 border-[#FBBF24] bg-[rgba(251,191,36,0.05)] rounded-r-xl max-w-2xl w-full">
-            <p className="text-sm text-[#FBBF24]">{error}</p>
+          <div className="mt-8 p-4 border-l-2 border-[#a5b4fc] bg-[rgba(165,180,252,0.05)] rounded-r-xl max-w-2xl w-full">
+            <p className="text-sm text-[#a5b4fc]">{error}</p>
           </div>
         )}
 

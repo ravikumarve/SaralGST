@@ -1,23 +1,25 @@
 import type { Metadata } from "next";
 import {
-  Plus_Jakarta_Sans,
-  Inter,
+  Instrument_Serif,
+  Outfit,
   JetBrains_Mono,
 } from "next/font/google";
 import FloatingNav from "@/components/FloatingNav";
-import FlowFieldCanvas from "@/components/FlowFieldCanvas";
+import LiquidCanvas from "@/components/LiquidCanvas";
+import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-display",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400"],
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const outfit = Outfit({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
@@ -59,7 +61,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%23F59E0B"/><rect x="6" y="6" width="20" height="20" rx="3" fill="%23020202"/></svg>',
+        url: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%236366F1"/><rect x="6" y="6" width="20" height="20" rx="3" fill="%23000000"/></svg>',
         type: "image/svg+xml",
       },
     ],
@@ -74,10 +76,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakartaSans.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased`}
+      className={`${instrumentSerif.variable} ${outfit.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <body>
-        <FlowFieldCanvas />
+        <CustomCursor />
+        <LiquidCanvas />
         <div className="dot-matrix" aria-hidden="true" />
         <FloatingNav />
         {children}

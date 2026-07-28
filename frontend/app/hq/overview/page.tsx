@@ -43,14 +43,14 @@ export default function OverviewPage() {
         <h1 className="text-2xl font-bold text-[#ededed]">Overview</h1>
         <p className="text-[#71717a] text-sm mt-1">
           Welcome back{user?.name ? `, ${user.name}` : ''} ·{' '}
-          <span className="text-[#F59E0B]">{tierName}</span> tier
+          <span className="text-[#6366F1]">{tierName}</span> tier
         </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6">
+          <div key={stat.label} className="hq-stat">
             <div className="text-3xl font-bold text-[#ededed] mb-1">{stat.value}</div>
             <div className="text-sm text-[#a1a1aa]">{stat.label}</div>
             {stat.subtitle && <div className="text-[10px] text-[#52525b] mt-1 mono">{stat.subtitle}</div>}
@@ -59,10 +59,10 @@ export default function OverviewPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6">
+      <div className="hq-card p-6">
         <h2 className="text-lg font-semibold text-[#ededed] mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <a href="/check" className="px-4 py-3 bg-[#F59E0B]/10 border border-[rgba(245,158,11,0.2)] rounded-xl text-sm text-[#F59E0B] hover:bg-[#F59E0B]/20 transition-colors text-center">
+          <a href="/check" className="px-4 py-3 bg-[#6366F1]/10 border border-[rgba(99,102,241,0.2)] rounded-xl text-sm text-[#6366F1] hover:bg-[#6366F1]/20 transition-colors text-center">
             Check GST Rate
           </a>
           <a href="/hq/api-keys" className="px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-sm text-[#a1a1aa] hover:text-[#ededed] transition-colors text-center">

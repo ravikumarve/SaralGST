@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const NAV_ITEMS = [
   { label: 'Engine', href: '/#features' },
@@ -11,11 +12,8 @@ const NAV_ITEMS = [
 
 export default function FloatingNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isHQ, setIsHQ] = useState(false);
-
-  useEffect(() => {
-    setIsHQ(window.location.pathname.startsWith('/hq'));
-  }, []);
+  const pathname = usePathname();
+  const isHQ = pathname.startsWith('/hq');
 
   // Close mobile menu on Escape
   useEffect(() => {
@@ -69,6 +67,7 @@ export default function FloatingNav() {
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label="Toggle navigation menu"
         aria-expanded={mobileOpen}
+        aria-controls="mobile-nav-menu"
       >
         <span /><span /><span />
       </button>
@@ -79,7 +78,7 @@ export default function FloatingNav() {
       </Link>
 
       {/* Mobile dropdown */}
-      <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`} role="navigation" aria-label="Mobile navigation">
+      <div id="mobile-nav-menu" className={`mobile-menu ${mobileOpen ? 'open' : ''}`} role="navigation" aria-label="Mobile navigation">
         {NAV_ITEMS.map((item) =>
           item.href.startsWith('http') ? (
             <a

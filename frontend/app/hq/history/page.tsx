@@ -66,17 +66,18 @@ export default function HistoryPage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search by product name or HSN code..."
-        className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#71717a] focus:outline-none focus:border-[#F59E0B]/40 transition-colors mb-6"
+        className="w-full px-4 py-3 bg-[rgba(10,10,10,0.6)] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#71717a] focus:outline-none focus:border-[#6366F1]/40 transition-colors mb-6 backdrop-blur-sm"
       />
 
       {loading ? (
         <div className="text-[#71717a] text-sm">Loading history...</div>
       ) : filtered.length === 0 ? (
-        <div className="text-[#71717a] text-sm py-12 text-center border border-dashed border-[#262626] rounded-2xl">
+        <div className="text-[#71717a] text-sm py-12 text-center border border-dashed border-[#262626] rounded-2xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
           {search ? 'No results match your search.' : 'No lookups yet. Head to the check page to get started.'}
         </div>
       ) : (
-        <div className="bg-[#0a0a0a] border border-[#262626] rounded-2xl overflow-hidden">
+        <div className="hq-card overflow-hidden">
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#262626]">
@@ -94,7 +95,7 @@ export default function HistoryPage() {
                   <td className="px-5 py-4 text-[#a1a1aa] mono">{item.hsnCode || '—'}</td>
                   <td className="px-5 py-4">
                     {item.resultRate != null ? (
-                      <span className="mono text-[#F59E0B]">{item.resultRate}%</span>
+                      <span className="mono text-[#6366F1]">{item.resultRate}%</span>
                     ) : (
                       <span className="text-[#71717a]">—</span>
                     )}
@@ -109,6 +110,7 @@ export default function HistoryPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>

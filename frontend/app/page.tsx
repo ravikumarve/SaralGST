@@ -117,7 +117,7 @@ export default function Home() {
             &nbsp;&nbsp;<span className="c-key">&quot;price&quot;</span>: <span className="c-str">50000</span><br />
             {'}'}
           </div>
-          <div className="c-comment" style={{ marginTop: '1rem' }}>// Response</div>
+          <div className="c-comment" style={{ marginTop: '1rem' }}>{'// Response'}</div>
           <div style={{ marginLeft: '1rem' }}>
             {'{'}<br />
             &nbsp;&nbsp;<span className="c-key">&quot;hsn_code&quot;</span>: <span className="c-str">&quot;8528&quot;</span>,<br />
@@ -218,10 +218,10 @@ export default function Home() {
       {/* ===== Footer ===== */}
       <footer>
         <div className="footer-brand">
-          <a href="/" className="logo">
+          <Link href="/" className="logo">
             <span className="logo-mark" />
             SaralGST
-          </a>
+          </Link>
           <p>Proprietary SaaS built for Indian MSMEs. Next.js 16 and FastAPI powered architecture providing absolute clarity on GST 2.0 reforms.</p>
         </div>
         <div className="footer-col">

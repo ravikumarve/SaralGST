@@ -19,7 +19,7 @@ export default function SettingsPage() {
       <p className="text-[#71717a] text-sm mb-8">Manage your account preferences</p>
 
       {/* Profile */}
-      <div className="bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6 mb-6">
+      <div className="hq-card p-6 mb-6">
         <h2 className="text-sm font-semibold text-[#ededed] mb-4">Profile</h2>
         <div className="space-y-4">
           <div>
@@ -27,7 +27,7 @@ export default function SettingsPage() {
             <input
               type="text"
               defaultValue={user?.name || ''}
-              className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#71717a] focus:outline-none focus:border-[#F59E0B]/40 transition-colors"
+              className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#71717a] focus:outline-none focus:border-[#6366F1]/40 transition-colors"
               placeholder="Your name"
             />
           </div>
@@ -43,13 +43,13 @@ export default function SettingsPage() {
           </div>
           <div>
             <label className="block text-sm text-[#a1a1aa] mb-2">Tier</label>
-            <div className="text-sm text-[#F59E0B] font-medium capitalize">{user?.tier || 'free'}</div>
+            <div className="text-sm text-[#6366F1] font-medium capitalize">{user?.tier || 'free'}</div>
           </div>
         </div>
       </div>
 
       {/* Notifications */}
-      <div className="bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6 mb-6">
+      <div className="hq-card p-6 mb-6">
         <h2 className="text-sm font-semibold text-[#ededed] mb-4">Notifications</h2>
         <div className="space-y-4">
           {[
@@ -64,7 +64,7 @@ export default function SettingsPage() {
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" defaultChecked className="sr-only peer" />
-                <div className="w-9 h-5 bg-[#262626] rounded-full peer peer-checked:bg-[#F59E0B] transition-colors" />
+                <div className="w-9 h-5 bg-[#262626] rounded-full peer peer-checked:bg-[#6366F1] transition-colors" />
                 <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-[#ededed] rounded-full transition-transform peer-checked:translate-x-4" />
               </label>
             </div>
@@ -74,8 +74,8 @@ export default function SettingsPage() {
 
       {/* Danger zone */}
       <div className="bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6">
-        <h2 className="text-sm font-semibold text-[#FBBF24] mb-4">Danger Zone</h2>
-        <button className="px-5 py-2.5 text-sm text-[#FBBF24] bg-[rgba(251,191,36,0.1)] border border-[rgba(251,191,36,0.2)] rounded-xl hover:bg-[rgba(251,191,36,0.2)] transition-colors">
+        <h2 className="text-sm font-semibold text-[#a5b4fc] mb-4">Danger Zone</h2>
+        <button className="px-5 py-2.5 text-sm text-[#a5b4fc] bg-[rgba(165,180,252,0.1)] border border-[rgba(165,180,252,0.2)] rounded-xl hover:bg-[rgba(165,180,252,0.2)] transition-colors">
           Delete Account
         </button>
       </div>
@@ -83,7 +83,7 @@ export default function SettingsPage() {
       {/* Save button */}
       <button
         onClick={handleSave}
-        className="mt-8 px-6 py-3 bg-[#F59E0B] text-[#020202] font-bold rounded-xl hover:bg-[#FBBF24] transition-colors"
+        className="mt-8 px-6 py-3 bg-[#6366F1] text-[#000000] font-bold rounded-xl hover:bg-[#a5b4fc] transition-colors"
       >
         {saved ? 'Saved ✓' : 'Save Settings'}
       </button>

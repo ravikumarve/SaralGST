@@ -26,7 +26,7 @@ export default function UsagePage() {
       <h1 className="text-2xl font-bold text-[#ededed] mb-1">Usage</h1>
       <p className="text-[#71717a] text-sm mb-8">Your API lookup activity over time</p>
 
-      <div className="bg-[#0a0a0a] border border-[#262626] rounded-2xl p-6 mb-6">
+      <div className="hq-card p-6 mb-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-sm font-semibold text-[#ededed]">Daily Lookups</h2>
           <span className="text-xs text-[#71717a] mono">{total} total</span>
@@ -35,7 +35,7 @@ export default function UsagePage() {
         {loading ? (
           <div className="h-64 flex items-center justify-center text-[#71717a] text-sm">Loading chart...</div>
         ) : daily.length === 0 ? (
-          <div className="h-64 flex items-center justify-center text-[#71717a] text-sm border border-dashed border-[#262626] rounded-xl">
+          <div className="h-64 flex items-center justify-center text-[#71717a] text-sm border border-dashed border-[#262626] rounded-xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
             No usage data yet. Start making lookups to see activity here.
           </div>
         ) : (
@@ -49,7 +49,7 @@ export default function UsagePage() {
                   contentStyle={{ background: '#0a0a0a', border: '1px solid #262626', borderRadius: 12, fontSize: 12 }}
                   labelStyle={{ color: '#ededed' }}
                 />
-                <Bar dataKey="count" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" fill="#6366F1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -58,11 +58,11 @@ export default function UsagePage() {
 
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: 'Total Requests', value: total, color: '#F59E0B' },
+          { label: 'Total Requests', value: total, color: '#6366F1' },
           { label: 'Avg Daily', value: daily.length > 0 ? Math.round(total / Math.max(daily.length, 1)) : 0, color: '#10b981' },
-          { label: 'Peak Day', value: daily.length > 0 ? Math.max(...daily.map((d) => d.count)) : 0, color: '#FBBF24' },
+          { label: 'Peak Day', value: daily.length > 0 ? Math.max(...daily.map((d) => d.count)) : 0, color: '#a5b4fc' },
         ].map((s) => (
-          <div key={s.label} className="bg-[#0a0a0a] border border-[#262626] rounded-2xl p-5">
+          <div key={s.label} className="hq-stat">
             <div className="text-2xl font-bold text-[#ededed]" style={{ color: s.color }}>{s.value}</div>
             <div className="text-xs text-[#71717a] mt-1">{s.label}</div>
           </div>
