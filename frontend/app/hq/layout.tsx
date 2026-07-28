@@ -3,162 +3,62 @@
 import { SessionProvider, useSession, signOut } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import CommandPalette from '@/components/CommandPalette';
 
 const NAV_ITEMS = [
-  { href: '/hq/overview', label: 'Overview', icon: '◆' },
-  { href: '/hq/playground', label: 'Playground', icon: '〉' },
+  { href: '/hq/overview', label: 'Dashboard', icon: '◇' },
+  { href: '/hq/playground', label: 'Playground', icon: '→' },
   { href: '/hq/api-keys', label: 'API Keys', icon: '⚷' },
-  { href: '/hq/usage', label: 'Usage', icon: '▤' },
-  { href: '/hq/history', label: 'History', icon: '☰' },
   { href: '/hq/favorites', label: 'Favorites', icon: '☆' },
-  { href: '/hq/billing', label: 'Billing', icon: '₹' },
   { href: '/hq/settings', label: 'Settings', icon: '⚙' },
 ];
 
-function Sidebar({
-  pathname,
-  isOpen,
-  collapsed,
-  onClose,
-  onToggleCollapse,
-}: {
-  pathname: string;
-  isOpen: boolean;
-  collapsed: boolean;
-  onClose: () => void;
-  onToggleCollapse: () => void;
-}) {
+function Sidebar({ pathname }: { pathname: string }) {
   const { data: session } = useSession();
   const user = session?.user;
-  const isAdmin = user?.role === 'admin';
+  const initials = user?.name
+    ? user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+    : user?.email?.charAt(0).toUpperCase() || '?';
 
   return (
-    <>
-      {/* Mobile overlay backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm lg:hidden"
-          style={{ zIndex: 'var(--z-overlay)' }}
-          onClick={onClose}
-          aria-hidden="true"
-        />
-      )}
+    <aside className="w-[80px] bg-[#050505] border-r border-[rgba(255,255,255,0.06)] flex flex-col items-center py-8 shrink-0 z-20">
+      {/* Logo mark */}
+      <Link href="/hq/overview" className="w-9 h-9 border border-[#f8f9fa] flex items-center justify-center rounded-[4px] text-base font-medium text-[#f8f9fa] no-underline mb-12">
+        S
+      </Link>
 
-      <aside
-        id="hq-sidebar"
-        className={`bg-[#0a0a0a]/95 backdrop-blur-xl border-r border-[#262626] h-screen flex flex-col shrink-0 fixed lg:sticky top-0 left-0 overflow-y-auto transition-all duration-300 ease-in-out ${
-          collapsed ? 'w-20' : 'w-64'
-        } ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
-        style={{ zIndex: 'var(--z-sidebar)' }}
+      {/* Nav icons */}
+      <nav className="flex flex-col gap-6 items-center">
+        {NAV_ITEMS.map((item) => {
+          const isActive = pathname === item.href || (item.href !== '/hq/overview' && pathname.startsWith(item.href));
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              title={item.label}
+              aria-label={item.label}
+              className={`w-11 h-11 rounded-lg flex items-center justify-center text-lg transition-all duration-200 ${
+                isActive
+                  ? 'text-[#f8f9fa] bg-[rgba(255,255,255,0.08)]'
+                  : 'text-[#52525b] hover:text-[#f8f9fa] hover:bg-[rgba(255,255,255,0.03)]'
+              }`}
+            >
+              {item.icon}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Avatar */}
+      <button
+        onClick={() => signOut({ callbackUrl: '/hq/login' })}
+        title="Sign Out"
+        className="mt-auto w-10 h-10 rounded-full bg-[#000000] border border-[rgba(255,255,255,0.12)] flex items-center justify-center font-mono text-sm text-[#a1a1aa] cursor-pointer hover:text-[#f8f9fa] transition-colors"
       >
-        {/* Logo + Close + Collapse row */}
-        <div className={`shrink-0 flex items-center border-b border-[#262626] transition-all duration-300 ${
-          collapsed ? 'p-4 justify-center' : 'p-6 justify-between'
-        }`}>
-          <Link href="/hq/overview" className="flex items-center gap-3 no-underline" onClick={onClose}>
-            <span className="logo-mark shrink-0" />
-            {!collapsed && <span className="text-[#ededed] font-[var(--font-serif)] text-[1.1rem]">SaralGST</span>}
-          </Link>
-
-          <div className="flex items-center gap-1">
-            {/* Collapse toggle (desktop) */}
-            <button
-              onClick={onToggleCollapse}
-              className="hidden lg:flex text-[#52525b] hover:text-[#ededed] transition-colors p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.04)]"
-              aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-              title={collapsed ? 'Expand' : 'Collapse'}
-            >
-              <svg className="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                style={{ transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-              </svg>
-            </button>
-
-            {/* Close (mobile) */}
-            <button
-              onClick={onClose}
-              className="lg:hidden text-[#71717a] hover:text-[#ededed] transition-colors p-1"
-              aria-label="Close sidebar"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* User Info — hidden when collapsed */}
-        {!collapsed && (
-          <div className="px-6 py-4 border-b border-[#262626] shrink-0">
-            <div className="text-sm text-[#ededed] font-medium truncate">{user?.name || user?.email}</div>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="mono text-[10px] uppercase tracking-wider text-[#6366F1]">{user?.tier}</span>
-              {isAdmin && <span className="mono text-[10px] text-[#71717a]">· Admin</span>}
-            </div>
-          </div>
-        )}
-
-        {/* Navigation */}
-        <nav className={`flex-1 overflow-y-auto transition-all duration-300 ${collapsed ? 'p-2 space-y-1' : 'p-3 space-y-0.5'}`}>
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href || (item.href !== '/hq/overview' && pathname.startsWith(item.href));
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                aria-current={isActive ? 'page' : undefined}
-                title={collapsed ? item.label : undefined}
-                className={`flex items-center rounded-xl transition-all duration-200 ${
-                  collapsed
-                    ? 'justify-center p-3'
-                    : 'gap-3 px-4 py-2.5 text-sm'
-                } ${
-                  isActive
-                    ? 'bg-[rgba(99,102,241,0.12)] text-[#6366F1] border border-[rgba(99,102,241,0.3)]'
-                    : 'text-[#a1a1aa] hover:text-[#ededed] hover:bg-[rgba(255,255,255,0.04)]'
-                }`}
-              >
-                <span className={`text-center shrink-0 ${
-                  collapsed ? 'text-base' : 'w-5 font-mono text-xs'
-                }`}>{item.icon}</span>
-                {!collapsed && <span className="truncate">{item.label}</span>}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Footer — Sign Out + Collapse toggle for collapsed mode */}
-        <div className={`shrink-0 border-t border-[#262626] transition-all duration-300 ${
-          collapsed ? 'p-2' : 'p-4'
-        }`}>
-          {!collapsed && (
-            <button
-              onClick={() => signOut({ callbackUrl: '/hq/login' })}
-              className="w-full px-4 py-2 text-sm text-[#a1a1aa] hover:text-[#ededed] hover:bg-[rgba(255,255,255,0.04)] rounded-xl transition-colors text-left"
-            >
-              Sign Out
-            </button>
-          )}
-
-          {/* Collapse toggle in footer for collapsed mode (desktop) */}
-          {collapsed && (
-            <button
-              onClick={onToggleCollapse}
-              className="hidden lg:flex w-full justify-center p-3 text-[#52525b] hover:text-[#ededed] hover:bg-[rgba(255,255,255,0.04)] rounded-xl transition-colors"
-              aria-label="Expand sidebar"
-              title="Expand"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-              </svg>
-            </button>
-          )}
-        </div>
-      </aside>
-    </>
+        {initials}
+      </button>
+    </aside>
   );
 }
 
@@ -167,11 +67,28 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
-  // CMD+K / Ctrl+K keyboard shortcut
+  // Dynamic page titles
+  useEffect(() => {
+    const titles: Record<string, string> = {
+      '/hq/overview': 'Dashboard — Saral HQ',
+      '/hq/playground': 'Playground — Saral HQ',
+      '/hq/api-keys': 'API Keys — Saral HQ',
+      '/hq/usage': 'Usage — Saral HQ',
+      '/hq/history': 'History — Saral HQ',
+      '/hq/favorites': 'Favorites — Saral HQ',
+      '/hq/billing': 'Billing — Saral HQ',
+      '/hq/settings': 'Settings — Saral HQ',
+    };
+    document.title = titles[pathname] || 'SaralGST';
+  }, [pathname]);
+
+  // Mount + CMD+K listener
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -186,27 +103,6 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [paletteOpen]);
 
-  // Dynamic page titles for HQ
-  useEffect(() => {
-    const titles: Record<string, string> = {
-      '/hq/overview': 'Overview — Saral HQ',
-      '/hq/playground': 'API Playground — Saral HQ',
-      '/hq/api-keys': 'API Keys — Saral HQ',
-      '/hq/usage': 'Usage — Saral HQ',
-      '/hq/history': 'History — Saral HQ',
-      '/hq/favorites': 'Favorites — Saral HQ',
-      '/hq/billing': 'Billing — Saral HQ',
-      '/hq/settings': 'Settings — Saral HQ',
-    };
-    const base = '/hq/overview';
-    document.title = titles[pathname] || titles[base] || 'SaralGST';
-  }, [pathname]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Always render login/register without guard
   if (pathname === '/hq/login' || pathname === '/hq/register') {
     return <>{children}</>;
   }
@@ -224,84 +120,64 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     return null;
   }
 
+  const user = session?.user;
+  const pageTitle =
+    pathname === '/hq/overview' ? 'Dashboard' :
+    pathname === '/hq/playground' ? 'Playground' :
+    pathname === '/hq/api-keys' ? 'API Keys' :
+    pathname === '/hq/usage' ? 'Usage' :
+    pathname === '/hq/history' ? 'History' :
+    pathname === '/hq/favorites' ? 'Favorites' :
+    pathname === '/hq/billing' ? 'Billing' :
+    pathname === '/hq/settings' ? 'Settings' : 'Dashboard';
+
   return (
     <div className="flex h-screen bg-[#000000] overflow-hidden">
-      <Sidebar
-        pathname={pathname}
-        isOpen={sidebarOpen}
-        collapsed={sidebarCollapsed}
-        onClose={() => setSidebarOpen(false)}
-        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
+      <Sidebar pathname={pathname} />
 
-      {/* Main workspace: Topbar + Content */}
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="flex flex-col flex-1 relative">
+        {/* Subtle indigo glow */}
+        <div className="absolute top-[-10vh] left-[20vw] w-[50vw] h-[40vh] bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.05)_0%,transparent_60%)] pointer-events-none z-0 blur-[60px]" />
+
         {/* ===== Topbar ===== */}
-        <header className="h-16 flex items-center justify-between px-6 border-b border-[#262626] bg-[#000000] shrink-0">
+        <header className="h-20 flex items-center justify-between px-16 border-b border-[rgba(255,255,255,0.06)] z-10">
           <div className="flex items-center gap-4">
-            {/* Mobile hamburger */}
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-[#a1a1aa] hover:text-[#ededed] transition-colors p-1 -ml-1"
-              aria-label="Open sidebar menu"
-              aria-controls="hq-sidebar"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-
-            <div className="hidden sm:flex items-center gap-3">
-              <span className="mono text-[10px] uppercase tracking-[2px] text-[#52525b]">Workspace</span>
-              <span className="text-sm text-[#a1a1aa]">/</span>
-              <span className="text-sm text-[#ededed] font-medium" id="hq-page-title">
-                {pathname === '/hq/overview' ? 'Dashboard' :
-                 pathname === '/hq/playground' ? 'Playground' :
-                 pathname === '/hq/api-keys' ? 'API Keys' :
-                 pathname === '/hq/usage' ? 'Usage' :
-                 pathname === '/hq/history' ? 'History' :
-                 pathname === '/hq/favorites' ? 'Favorites' :
-                 pathname === '/hq/billing' ? 'Billing' :
-                 pathname === '/hq/settings' ? 'Settings' : 'Dashboard'}
-              </span>
-            </div>
+            <span className="font-mono text-xs uppercase tracking-[2px] text-[#52525b]">Workspace</span>
+            <span className="font-[var(--font-serif)] text-[1.8rem] text-[#f8f9fa] tracking-[0.02em]">{pageTitle}</span>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* CMD+K style search hint — clickable */}
+          <div className="flex items-center gap-6">
+            {/* CMD+K search hint */}
             <button
               onClick={() => setPaletteOpen(true)}
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-[#0a0a0a] border border-[#262626] rounded-lg text-xs text-[#52525b] hover:text-[#a1a1aa] hover:border-[#36363a] transition-colors"
+              className="flex items-center gap-2 font-mono text-xs text-[#52525b] pr-6 border-r border-[rgba(255,255,255,0.06)] hover:text-[#a1a1aa] transition-colors"
             >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
-              <span>CMD+K</span>
+              CMD+K
             </button>
 
-            {/* Create button */}
+            {/* Create button — pearl on void */}
             <Link
               href="/hq/playground"
-              className="flex items-center gap-1.5 px-4 py-1.5 bg-[#6366F1] text-white text-xs font-medium rounded-lg hover:bg-[#a5b4fc] hover:text-[#000000] transition-colors"
+              className="btn-primary inline-flex items-center gap-2 px-6 py-2.5 font-[var(--font-sans)] text-sm font-medium rounded-[4px] uppercase tracking-[1px] border border-transparent bg-[#f8f9fa] text-[#000000] hover:bg-transparent hover:text-[#f8f9fa] hover:border-[#f8f9fa] transition-all duration-200"
             >
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14m7-7H5" />
               </svg>
-              <span className="hidden sm:inline">Create</span>
+              Create
             </Link>
           </div>
         </header>
 
-        {/* Main Content */}
-        <main className="flex-1 overflow-y-auto bg-[#000000]">
-          <div className="min-h-full">
-            {children}
-          </div>
+        {/* Main content */}
+        <main className="flex-1 overflow-y-auto z-10">
+          {children}
         </main>
       </div>
 
-      {/* Command Palette */}
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </div>
   );

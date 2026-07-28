@@ -26,25 +26,11 @@ interface HistoryItem {
   createdAt: string;
 }
 
-const COMMANDS = [
-  { label: 'Check GST Rate', href: '/check', icon: '◆', shortcut: 'G' },
-  { label: 'API Playground', href: '/hq/playground', icon: '〉', shortcut: 'P' },
-  { label: 'Generate API Key', href: '/hq/api-keys', icon: '⚷', shortcut: 'K' },
-  { label: 'View Billing', href: '/hq/billing', icon: '₹', shortcut: 'B' },
-];
-
 function getGreeting(): string {
   const h = new Date().getHours();
   if (h < 12) return 'Good morning';
   if (h < 17) return 'Good afternoon';
   return 'Good evening';
-}
-
-function getDateContext(): string {
-  const now = new Date();
-  const weekday = now.toLocaleDateString('en-IN', { weekday: 'long' });
-  const date = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
-  return `${weekday}, ${date}`;
 }
 
 export default function OverviewPage() {
@@ -60,181 +46,199 @@ export default function OverviewPage() {
 
     fetch('/api/hq/history')
       .then((r) => r.json())
-      .then((res) => setActivity(res.history?.slice(0, 5) ?? []))
+      .then((res) => setActivity(res.history?.slice(0, 3) ?? []))
       .catch(console.error);
   }, []);
 
   const user = session?.user;
-  const tierName = user?.tier === 'ca_firm' ? 'CA Firm' : user?.tier === 'paid' ? 'Pro' : 'Free';
-
-  const stats = [
-    { label: 'Total Lookups', value: data?.totalLookups ?? 0, subtitle: 'All time' },
-    { label: "Today's Lookups", value: data?.lookupsToday ?? 0, subtitle: data?.remainingToday ? `${data.remainingToday} remaining today` : undefined },
-    { label: 'Active API Keys', value: data?.activeKeys ?? 0, subtitle: `${Math.max(0, (data?.apiKeysCount ?? 0) - (data?.activeKeys ?? 0))} inactive` },
-    { label: 'Database', value: data?.itemsCount ?? 54, subtitle: data?.dataVersion ?? 'GST 2.0' },
-  ];
+  const totalKeys = data?.apiKeysCount ?? 0;
+  const activeKeys = data?.activeKeys ?? 0;
+  const overdueKeys = Math.max(0, totalKeys - activeKeys);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] min-h-full">
-      {/* ===== EDITORIAL COLUMN ===== */}
-      <div className="p-8 md:p-10 lg:p-12">
-        {/* Hero Header */}
-        <div className="mb-12">
-          <p className="mono text-[10px] tracking-[2px] text-[#6366F1] mb-3">DASHBOARD</p>
-          <h1 className="font-[var(--font-serif)] text-4xl md:text-5xl lg:text-6xl text-[#ededed] leading-[1.1] tracking-tight">
-            {getGreeting()},<br />
-            <span className="text-[#6366F1]">{user?.name?.split(' ')[0] || 'there'}</span>.
-          </h1>
-          <p className="text-sm text-[#71717a] mt-4">
-            {getDateContext()} · <span className="text-[#a5b4fc]">{tierName}</span> tier
-          </p>
+    <div className="p-16 grid grid-cols-[1.5fr_1fr] gap-16">
+      {/* ===== LEFT: EDITORIAL COLUMN ===== */}
+      <div className="flex flex-col gap-16">
+        {/* Hero Stats — 2-column grid */}
+        <div className="grid grid-cols-2 gap-12 pb-16 border-b border-[rgba(255,255,255,0.06)]">
+          {/* Stat 1 */}
+          <div className="flex flex-col">
+            <p className="font-mono text-xs uppercase tracking-[2px] text-[#52525b] mb-4">Total Lookups</p>
+            <p className="font-[var(--font-serif)] text-5xl text-[#f8f9fa] leading-[0.9] mb-4">
+              {(data?.totalLookups ?? 0).toLocaleString()}
+            </p>
+            <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
+              {data?.lookupsToday ? `${data.lookupsToday} today` : 'All time'}.
+              {data?.remainingToday ? ` ${data.remainingToday} remaining today.` : ''}
+            </p>
+          </div>
+
+          {/* Stat 2 — with left border */}
+          <div className="flex flex-col pl-12 border-l border-[rgba(255,255,255,0.06)]">
+            <p className="font-mono text-xs uppercase tracking-[2px] text-[#52525b] mb-4">Active API Keys</p>
+            <p className="font-[var(--font-serif)] text-5xl text-[#f8f9fa] leading-[0.9] mb-4">
+              {data?.activeKeys ?? 0}
+            </p>
+            <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
+              {overdueKeys > 0 ? `${overdueKeys} key${overdueKeys > 1 ? 's' : ''} inactive.` : 'All keys active.'}
+              {data?.itemsCount ? ` ${data.itemsCount} HSN codes indexed.` : ''}
+            </p>
+          </div>
         </div>
 
-        {/* Editorial Stats — 2 x 2 with serif numbers */}
-        <div className="grid grid-cols-2 gap-x-10 gap-y-10 mb-14">
-          {stats.map((stat) => (
-            <div key={stat.label} className="border-b border-[#262626] pb-4">
-              <div className="font-[var(--font-serif)] text-4xl md:text-5xl lg:text-6xl text-[#ededed] leading-none mb-2 tracking-tight">
-                {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
-              </div>
-              <div className="mono text-[11px] tracking-[1.5px] text-[#6366F1]">
-                {stat.label.toUpperCase()}
-              </div>
-              {stat.subtitle && (
-                <div className="text-xs text-[#52525b] mt-1.5">{stat.subtitle}</div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Latest Activity */}
+        {/* Elegant Table */}
         <div>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="font-[var(--font-serif)] text-xl text-[#ededed]">Latest Activity</h2>
-            <Link
-              href="/hq/history"
-              className="text-xs text-[#52525b] hover:text-[#a1a1aa] transition-colors mono"
-            >
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="font-[var(--font-serif)] text-[2.2rem] text-[#f8f9fa]">Recent Activity</h2>
+            <Link href="/hq/history" className="font-mono text-xs text-[#52525b] hover:text-[#a1a1aa] transition-colors uppercase tracking-[1.5px]">
               View all &rarr;
             </Link>
           </div>
 
-          {activity.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="mono text-[10px] tracking-[1px] text-[#52525b] border-b border-[#262626]">
-                    <th className="pb-3 pr-4 font-normal">Query</th>
-                    <th className="pb-3 pr-4 font-normal">HSN</th>
-                    <th className="pb-3 pr-4 font-normal">Rate</th>
-                    <th className="pb-3 pr-4 font-normal hidden sm:table-cell">When</th>
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="text-left py-4 font-mono text-xs text-[#52525b] uppercase tracking-[1.5px] font-normal border-b border-[rgba(255,255,255,0.12)]">
+                  Query &amp; HSN
+                </th>
+                <th className="text-left py-4 font-mono text-xs text-[#52525b] uppercase tracking-[1.5px] font-normal border-b border-[rgba(255,255,255,0.12)]">
+                  Rate
+                </th>
+                <th className="text-right py-4 font-mono text-xs text-[#52525b] uppercase tracking-[1.5px] font-normal border-b border-[rgba(255,255,255,0.12)]">
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {activity.length > 0 ? (
+                activity.map((item) => (
+                  <tr key={item.id} className="group">
+                    <td className="py-6 border-b border-[rgba(255,255,255,0.06)] group-hover:border-b-[rgba(255,255,255,0.12)] transition-colors">
+                      <span className="block text-base font-normal text-[#f8f9fa] mb-1.5">{item.query}</span>
+                      <span className="font-mono text-xs text-[#52525b]">HSN: {item.hsnCode || '—'}</span>
+                    </td>
+                    <td className="py-6 border-b border-[rgba(255,255,255,0.06)] group-hover:border-b-[rgba(255,255,255,0.12)] transition-colors">
+                      <span className="text-sm text-[#a1a1aa] font-light">{item.resultRate !== null ? `${item.resultRate}%` : '—'}</span>
+                      <span className="block font-mono text-xs text-[#52525b] mt-1">
+                        {new Date(item.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
+                      </span>
+                    </td>
+                    <td className="py-6 border-b border-[rgba(255,255,255,0.06)] group-hover:border-b-[rgba(255,255,255,0.12)] transition-colors text-right">
+                      <span className={`inline-block px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-[1px] border text-center ${
+                        item.success
+                          ? 'border-[rgba(99,102,241,0.3)] text-[#a5b4fc] bg-[rgba(99,102,241,0.1)]'
+                          : 'border-[rgba(255,255,255,0.06)] text-[#a1a1aa]'
+                      }`}>
+                        {item.success ? 'Success' : 'Failed'}
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {activity.map((item) => (
-                    <tr key={item.id} className="border-b border-[#1a1a1a] text-sm hover:bg-[rgba(255,255,255,0.02)] transition-colors">
-                      <td className="py-3.5 pr-4 text-[#ededed] max-w-[180px] truncate">{item.query}</td>
-                      <td className="py-3.5 pr-4">
-                        <span className="mono text-xs text-[#a1a1aa]">{item.hsnCode || '—'}</span>
-                      </td>
-                      <td className="py-3.5 pr-4">
-                        <span className={`mono text-xs ${item.resultRate !== null ? 'text-[#a5b4fc]' : 'text-[#52525b]'}`}>
-                          {item.resultRate !== null ? `${item.resultRate}%` : '—'}
-                        </span>
-                      </td>
-                      <td className="py-3.5 pr-4 hidden sm:table-cell">
-                        <span className="mono text-xs text-[#52525b]">
-                          {new Date(item.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="py-12 text-center">
-              <p className="text-sm text-[#52525b] mb-1">No lookups yet.</p>
-              <Link href="/check" className="text-xs text-[#6366F1] hover:text-[#a5b4fc] transition-colors">
-                Check your first GST rate &rarr;
-              </Link>
-            </div>
-          )}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} className="py-12 text-center text-sm text-[#52525b] border-b border-[rgba(255,255,255,0.06)]">
+                    No lookups yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
-      {/* ===== COMMAND COLUMN ===== */}
-      <div className="p-8 md:p-10 lg:p-12 lg:pl-0 lg:border-l border-[#262626]">
-        <div className="lg:pl-10">
-          {/* Command Center */}
-          <div className="mb-8">
-            <p className="mono text-[10px] tracking-[2px] text-[#52525b] mb-3">COMMAND CENTER</p>
-            <div className="border border-[#262626] rounded-2xl overflow-hidden divide-y divide-[#262626]">
-              {COMMANDS.map((cmd) => (
-                <Link
-                  key={cmd.label}
-                  href={cmd.href}
-                  className="flex items-center justify-between px-5 py-3.5 hover:bg-[rgba(255,255,255,0.02)] transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm w-5 text-center text-[#6366F1] font-mono">{cmd.icon}</span>
-                    <span className="text-sm text-[#ededed] group-hover:text-[#6366F1] transition-colors">
-                      {cmd.label}
-                    </span>
-                  </div>
-                  <span className="mono text-[9px] tracking-[1px] text-[#52525b] bg-[#0a0a0a] border border-[#262626] rounded-md px-2 py-0.5">
-                    ⌘+{cmd.shortcut}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* System Status */}
-          <div className="mb-8">
-            <p className="mono text-[10px] tracking-[2px] text-[#52525b] mb-3">SYSTEM</p>
-            <div className="border border-[#262626] rounded-2xl p-5">
-              <div className="flex items-center gap-2.5 mb-3">
-                <span className="w-2 h-2 rounded-full bg-[#10b981] shadow-[0_0_6px_rgba(16,185,129,0.4)]" />
-                <span className="text-sm text-[#ededed]">All systems nominal</span>
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-[#52525b]">Database</span>
-                  <span className="mono text-xs text-[#a1a1aa]">{data?.dataVersion ?? 'v2.0'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-[#52525b]">Items</span>
-                  <span className="mono text-xs text-[#a1a1aa]">{data?.itemsCount ?? 54}</span>
-                </div>
-                {data?.lastLookup && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-[#52525b]">Last lookup</span>
-                    <span className="mono text-xs text-[#a1a1aa]">{data.lastLookup}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Upgrade Callout */}
-          {user?.tier === 'free' && (
-            <div>
-              <p className="mono text-[10px] tracking-[2px] text-[#52525b] mb-3">UPGRADE</p>
+      {/* ===== RIGHT: COMMAND COLUMN ===== */}
+      <div className="flex flex-col gap-12">
+        {/* Command Palette */}
+        <div>
+          <h3 className="font-mono text-xs uppercase tracking-[2px] text-[#52525b] mb-6 pb-4 border-b border-[rgba(255,255,255,0.06)]">
+            Command Palette
+          </h3>
+          <div className="flex flex-col gap-3">
+            {[
+              { label: 'Check GST Rate', href: '/check', desc: 'Lookup any product or HSN code' },
+              { label: 'Generate API Key', href: '/hq/api-keys', desc: 'Create a new HMAC token' },
+              { label: 'View Billing', href: '/hq/billing', desc: 'Plans, invoices & payment history' },
+            ].map((cmd) => (
               <Link
-                href="/hq/billing"
-                className="block border border-[#6366F1]/30 rounded-2xl p-5 bg-[rgba(99,102,241,0.04)] hover:bg-[rgba(99,102,241,0.08)] transition-colors group"
+                key={cmd.label}
+                href={cmd.href}
+                className="flex items-center justify-between px-6 py-5 bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] hover:border-[rgba(255,255,255,0.12)] hover:-translate-x-1 hover:bg-[rgba(255,255,255,0.03)] transition-all duration-300 group"
               >
-                <p className="text-sm text-[#ededed] font-medium mb-1">Go Pro</p>
-                <p className="text-xs text-[#71717a] mb-3">
-                  Unlock 10,000 lookups/day, team API keys, and priority support.
-                </p>
-                <span className="text-xs text-[#6366F1] group-hover:text-[#a5b4fc] transition-colors">
-                  View plans &rarr;
-                </span>
+                <div>
+                  <span className="text-sm text-[#f8f9fa] font-normal block">{cmd.label}</span>
+                  <span className="font-mono text-xs text-[#52525b] mt-1 block">{cmd.desc}</span>
+                </div>
+                <svg className="w-5 h-5 text-[#52525b] group-hover:text-[#a1a1aa] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
               </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Attention Required (feed) */}
+        <div>
+          <h3 className="font-mono text-xs uppercase tracking-[2px] text-[#52525b] mb-6 pb-4 border-b border-[rgba(255,255,255,0.06)]">
+            Overview
+          </h3>
+          <div className="flex flex-col gap-8">
+            {/* Feed item 1 */}
+            <div className="flex gap-5 items-start">
+              <div className="w-9 h-9 rounded-full bg-[#050505] border border-[rgba(255,255,255,0.12)] flex items-center justify-center text-[#f8f9fa] text-base shrink-0">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-medium text-[#f8f9fa] mb-1.5">Database Updated</h4>
+                <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
+                  {data?.dataVersion || 'GST'} with {data?.itemsCount || 54} HSN codes indexed and ready.
+                </p>
+                <p className="font-mono text-xs text-[#52525b] uppercase tracking-[1px] mt-2">
+                  Version: {data?.dataVersion || '2.0'}
+                </p>
+              </div>
             </div>
-          )}
+
+            {/* Feed item 2 */}
+            <div className="flex gap-5 items-start">
+              <div className="w-9 h-9 rounded-full bg-[#050505] border border-[rgba(99,102,241,0.3)] flex items-center justify-center text-[#6366F1] text-base shrink-0">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-medium text-[#f8f9fa] mb-1.5">
+                  {getGreeting()}, {user?.name?.split(' ')[0] || 'there'}
+                </h4>
+                <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
+                  {data?.lookupsToday ? `${data.lookupsToday} lookup${data.lookupsToday > 1 ? 's' : ''} today. ` : ''}
+                  {data?.remainingToday ? `${data.remainingToday} remaining.` : ''}
+                </p>
+                <p className="font-mono text-xs text-[#52525b] uppercase tracking-[1px] mt-2">
+                  Tier: {user?.tier || 'free'}
+                </p>
+              </div>
+            </div>
+
+            {/* Feed item 3 */}
+            <div className="flex gap-5 items-start">
+              <div className="w-9 h-9 rounded-full bg-[#050505] border border-[rgba(255,255,255,0.12)] flex items-center justify-center text-[#f8f9fa] text-base shrink-0">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h4 className="text-sm font-medium text-[#f8f9fa] mb-1.5">Need help?</h4>
+                <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
+                  Try the API Playground to test endpoints, or check the billing page to upgrade your plan.
+                </p>
+                <Link href="/hq/playground" className="font-mono text-xs text-[#6366F1] uppercase tracking-[1px] mt-2 inline-block hover:text-[#a5b4fc] transition-colors">
+                  Open Playground &rarr;
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
