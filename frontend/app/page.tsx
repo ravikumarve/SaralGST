@@ -202,9 +202,9 @@ export default function Home() {
       {/* ===== Footer ===== */}
       <footer>
         <div className="footer-brand">
-          <Link href="/" className="logo">
-            <span className="logo-mark" />
-            SaralGST
+          <Link href="/" className="flex items-center gap-3 no-underline mb-4">
+            <span className="w-[28px] h-[28px] border border-[#f8f9fa] flex items-center justify-center rounded-[2px] text-sm font-medium text-[#f8f9fa]">S</span>
+            <span className="font-[var(--font-serif)] text-xl text-[#f8f9fa]">SaralGST</span>
           </Link>
           <p>Proprietary SaaS built for Indian MSMEs. Next.js 16 and FastAPI powered architecture providing absolute clarity on GST 2.0 reforms.</p>
         </div>
