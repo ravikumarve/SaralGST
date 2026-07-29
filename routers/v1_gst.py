@@ -9,12 +9,14 @@ Author: SaralGST Team
 Version: 1.0.0
 """
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Header
 import logging
+import os
 from typing import Optional, List
 
 from models.lookup import LookupResponse, ErrorResponse
 from services.rate_engine import get_rate_engine, RateEngine
+from services.interpreter import get_interpreter_service
 from services.calculator import calc_service, CalculationRequest, CalculationResponse
 from config import Config
 
@@ -26,12 +28,14 @@ logger = logging.getLogger(__name__)
 async def lookup_gst_rate(
     query: str = Query(..., description="Product name or HSN code"),
     query_type: str = Query("auto", description="Query type: auto, hsn, or product_name"),
-    language: str = Query("en", description="Response language: en or hi")
+    language: str = Query("en", description="Response language: en or hi"),
+    x_api_key: Optional[str] = Header(None, alias="X-Api-Key", description="Gemini API key for NLP-enhanced lookup")
 ):
     """
     GST rate lookup endpoint (GET version for frontend compatibility).
 
     Accepts product names or HSN codes and returns GST rate information.
+    Pass X-Api-Key header with your Gemini API key to enable NLP interpretation.
     """
     try:
         rate_engine = get_rate_engine(str(Config.RATES_FILE))
@@ -77,7 +81,38 @@ async def lookup_gst_rate(
             )
 
         else:
-            # Product name lookup - use description search (no Gemini for GET endpoint)
+            # Product name lookup — use Gemini if API key provided in header
+            api_key = x_api_key or os.getenv("GEMINI_API_KEY")
+            if api_key:
+                try:
+                    interpreter = get_interpreter_service(api_key, rate_engine)
+                    hsn_code, confidence = await interpreter.interpret_product(query)
+                except Exception as e:
+                    logger.warning(f"Gemini interpretation failed, falling back: {e}")
+                    hsn_code = None
+
+                if hsn_code and hsn_code != "UNKNOWN":
+                    result = rate_engine.lookup_by_hsn(hsn_code)
+                    if result:
+                        return LookupResponse(
+                            hsn_code=result.hsn,
+                            description=result.description,
+                            description_hi=result.description_hi,
+                            category=result.category,
+                            old_rate=result.old_rate,
+                            new_rate=result.new_rate,
+                            rate_changed=result.rate_changed,
+                            movement=result.movement,
+                            notification_ref=result.notification_ref,
+                            notes=result.notes,
+                            confidence=confidence,
+                            interpreted_from=query,
+                            warning=None if confidence > 0.7 else "Low confidence — please verify HSN code"
+                        )
+                    else:
+                        logger.warning(f"Gemini HSN {hsn_code} not in local DB, falling back to text search")
+
+            # Fallback: description search
             results = rate_engine.search_by_description(query, limit=1)
 
             if not results:
