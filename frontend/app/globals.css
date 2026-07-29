@@ -154,8 +154,6 @@ header.hq-topbar {
   z-index: var(--z-content);
 }
 
-
-
 /* ===== Buttons ===== */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
@@ -200,33 +198,6 @@ header.hq-topbar {
 @media (hover: hover) {
   .glass-panel:hover { transform: rotateY(0deg) rotateX(0deg) translateY(-10px); box-shadow: 0 50px 100px rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.3); }
 }
-
-.search-bar {
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 15px; margin-bottom: 2rem;
-  box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-}
-.search-icon { color: var(--indigo-light); }
-.search-text { font-family: var(--font-serif); font-size: 1.2rem; color: var(--pearl); flex: 1; }
-.search-enter-hint { color: var(--charcoal); font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; }
-.search-cursor {
-  display: inline-block; width: 2px; height: 1.2rem;
-  background: var(--indigo-light); animation: blink 1s infinite;
-  vertical-align: middle; margin-left: 2px;
-}
-
-@keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0;} }
-
-.result-data { display: flex; flex-direction: column; gap: 1.5rem; }
-.rd-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-faint); }
-.rd-row:last-child { border-bottom: none; padding-bottom: 0; }
-
-.rd-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--charcoal); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-.rd-val { font-size: 1.2rem; font-weight: 600; color: var(--pearl); }
-.rd-val.highlight { font-family: var(--font-mono); font-size: 2.5rem; color: var(--emerald); font-weight: 700; text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); line-height: 1; }
-
-.split-pills { display: flex; gap: 10px; margin-top: 10px; }
-.split-pill { font-family: var(--font-mono); font-size: 0.7rem; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 100px; color: var(--mercury); border: 1px solid var(--border-faint); }
 
 /* ===== Bento Matrix (Features) ===== */
 .matrix-header { margin-bottom: 6rem; text-align: center; }
@@ -338,25 +309,6 @@ footer { padding: 6rem 0 3rem; display: grid; grid-template-columns: 2fr 1fr 1fr
 
 .footer-bottom { margin-top: 6rem; padding-top: 2rem; border-top: 1px solid var(--border-faint); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.75rem; color: var(--charcoal); }
 
-/* ===== Use Case Cards ===== */
-.use-case-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-faint);
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-.use-case-card.accent {
-  background: rgba(99, 102, 241, 0.04);
-  border-color: rgba(99, 102, 241, 0.2);
-}
-.use-case-card h4 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--pearl); }
-.use-case-card p { color: var(--mercury); font-size: 0.95rem; }
-
-/* ===== Section Header (generic) ===== */
-.section-header { max-width: 600px; margin-bottom: 3rem; }
-.section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--pearl); }
-.section-header p { color: var(--mercury); font-size: 1.1rem; line-height: 1.6; }
-
 /* ===== Misc UI ===== */
 /* Status badge (indigo variant) */
 .status-badge {
@@ -369,10 +321,6 @@ footer { padding: 6rem 0 3rem; display: grid; grid-template-columns: 2fr 1fr 1fr
   font-family: var(--font-mono), monospace;
   font-size: 0.85rem;
 }
-
-/* Metric display */
-.metric-value { font-size: 3rem; font-family: var(--font-serif); color: var(--pearl); margin-top: auto; }
-.metric-label { color: var(--charcoal); margin-top: 5px; }
 
 /* ===== Custom Scrollbar ===== */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -393,20 +341,6 @@ a:hover { color: var(--indigo-light); }
 /* ===== Base Input / Button ===== */
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 input, textarea { font-family: inherit; border: none; background: none; outline: none; }
-
-/* ===== Search UI (inside bento) ===== */
-.search-ui { margin-top: auto; background: var(--bg-surface); border: 1px solid var(--border-faint); border-radius: 12px; padding: 1.5rem; }
-.search-ui-header { display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-faint); }
-.live-result { display: flex; justify-content: space-between; align-items: flex-end; }
-.rate-large { font-size: 4rem; line-height: 1; font-weight: 700; font-family: var(--font-serif); color: var(--emerald); }
-
-/* ===== Code Block (legacy, for bento) ===== */
-.code-block { background: #000; border: 1px solid var(--border-faint); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; flex-grow: 1; }
-.code-line { display: flex; gap: 1rem; margin-bottom: 0.5rem; }
-.code-num { color: var(--charcoal); user-select: none; }
-.code-txt { color: var(--mercury); }
-.code-kw { color: var(--indigo); }
-.code-str { color: var(--emerald); }
 
 /* ===== HQ cards (solid border cards — Portley design) ===== */
 .glass-card { background: #0a0a0a; border: 1px solid #262626; border-radius: 16px; overflow: hidden; }
@@ -442,7 +376,6 @@ input, textarea { font-family: inherit; border: none; background: none; outline:
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .search-cursor { animation: none; opacity: 1; }
 }
 
 /* ===== Responsive ===== */
@@ -459,7 +392,6 @@ input, textarea { font-family: inherit; border: none; background: none; outline:
 @media (max-width: 768px) {
   .hero h1 { font-size: 2.8rem; }
   .glass-panel { padding: 1.5rem; }
-  .rd-row { flex-direction: column; align-items: flex-start; gap: 10px; }
   .bento-node, .api-block, .stack-card, .code-window { padding: 2rem 1.5rem; }
   .cta-band { padding: 4rem 2rem; }
   .pricing-cards { grid-template-columns: 1fr; }
@@ -484,5 +416,4 @@ input, textarea { font-family: inherit; border: none; background: none; outline:
   section { padding: 5rem 0; }
   .bento-node { padding: 1.5rem; }
   .bento-node h3 { font-size: 1.3rem; }
-  .rd-val.highlight { font-size: 2rem; }
 }
