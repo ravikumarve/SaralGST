@@ -24,7 +24,7 @@ function Sidebar({ pathname }: { pathname: string }) {
   return (
     <aside className="w-[80px] bg-[#050505] border-r border-[rgba(255,255,255,0.06)] flex flex-col items-center py-8 shrink-0 z-20">
       {/* Logo mark */}
-      <Link href="/hq/overview" className="w-9 h-9 border border-[#f8f9fa] flex items-center justify-center rounded-[4px] text-base font-medium text-[#f8f9fa] no-underline mb-12">
+      <Link href="/hq/overview" className="w-9 h-9 border border-[#f8f9fa] flex items-center justify-center rounded-[4px] text-[1.1rem] font-medium text-[#f8f9fa] no-underline mb-12">
         S
       </Link>
 
@@ -38,7 +38,7 @@ function Sidebar({ pathname }: { pathname: string }) {
               href={item.href}
               title={item.label}
               aria-label={item.label}
-              className={`w-11 h-11 rounded-lg flex items-center justify-center text-lg transition-all duration-200 ${
+              className={`w-11 h-11 rounded-lg flex items-center justify-center text-[1.25rem] transition-all duration-200 ${
                 isActive
                   ? 'text-[#f8f9fa] bg-[rgba(255,255,255,0.08)]'
                   : 'text-[#52525b] hover:text-[#f8f9fa] hover:bg-[rgba(255,255,255,0.03)]'

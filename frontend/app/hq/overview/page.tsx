@@ -64,7 +64,7 @@ export default function OverviewPage() {
           {/* Stat 1 */}
           <div className="flex flex-col">
             <p className="font-mono text-xs uppercase tracking-[2px] text-[#52525b] mb-4">Total Lookups</p>
-            <p className="font-[var(--font-serif)] text-5xl text-[#f8f9fa] leading-[0.9] mb-4">
+            <p className="font-[var(--font-serif)] text-[5rem] text-[#f8f9fa] leading-[0.9] mb-4">
               {(data?.totalLookups ?? 0).toLocaleString()}
             </p>
             <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
@@ -76,7 +76,7 @@ export default function OverviewPage() {
           {/* Stat 2 — with left border */}
           <div className="flex flex-col pl-12 border-l border-[rgba(255,255,255,0.06)]">
             <p className="font-mono text-xs uppercase tracking-[2px] text-[#52525b] mb-4">Active API Keys</p>
-            <p className="font-[var(--font-serif)] text-5xl text-[#f8f9fa] leading-[0.9] mb-4">
+            <p className="font-[var(--font-serif)] text-[5rem] text-[#f8f9fa] leading-[0.9] mb-4">
               {data?.activeKeys ?? 0}
             </p>
             <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
@@ -114,7 +114,7 @@ export default function OverviewPage() {
                 activity.map((item) => (
                   <tr key={item.id} className="group">
                     <td className="py-6 border-b border-[rgba(255,255,255,0.06)] group-hover:border-b-[rgba(255,255,255,0.12)] transition-colors">
-                      <span className="block text-base font-normal text-[#f8f9fa] mb-1.5">{item.query}</span>
+                      <span className="block text-[1.1rem] font-normal text-[#f8f9fa] mb-1.5">{item.query}</span>
                       <span className="font-mono text-xs text-[#52525b]">HSN: {item.hsnCode || '—'}</span>
                     </td>
                     <td className="py-6 border-b border-[rgba(255,255,255,0.06)] group-hover:border-b-[rgba(255,255,255,0.12)] transition-colors">
@@ -165,7 +165,7 @@ export default function OverviewPage() {
                 className="flex items-center justify-between px-6 py-5 bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] hover:border-[rgba(255,255,255,0.12)] hover:-translate-x-1 hover:bg-[rgba(255,255,255,0.03)] transition-all duration-300 group"
               >
                 <div>
-                  <span className="text-sm text-[#f8f9fa] font-normal block">{cmd.label}</span>
+                  <span className="text-[0.95rem] text-[#f8f9fa] font-normal block">{cmd.label}</span>
                   <span className="font-mono text-xs text-[#52525b] mt-1 block">{cmd.desc}</span>
                 </div>
                 <svg className="w-5 h-5 text-[#52525b] group-hover:text-[#a1a1aa] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -190,7 +190,7 @@ export default function OverviewPage() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h4 className="text-sm font-medium text-[#f8f9fa] mb-1.5">Database Updated</h4>
+                <h4 className="text-[0.95rem] font-medium text-[#f8f9fa] mb-1.5">Database Updated</h4>
                 <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
                   {data?.dataVersion || 'GST'} with {data?.itemsCount || 54} HSN codes indexed and ready.
                 </p>
@@ -208,7 +208,7 @@ export default function OverviewPage() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h4 className="text-sm font-medium text-[#f8f9fa] mb-1.5">
+                <h4 className="text-[0.95rem] font-medium text-[#f8f9fa] mb-1.5">
                   {getGreeting()}, {user?.name?.split(' ')[0] || 'there'}
                 </h4>
                 <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
@@ -229,7 +229,7 @@ export default function OverviewPage() {
                 </svg>
               </div>
               <div className="flex-1">
-                <h4 className="text-sm font-medium text-[#f8f9fa] mb-1.5">Need help?</h4>
+                <h4 className="text-[0.95rem] font-medium text-[#f8f9fa] mb-1.5">Need help?</h4>
                 <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
                   Try the API Playground to test endpoints, or check the billing page to upgrade your plan.
                 </p>
