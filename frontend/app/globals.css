@@ -1,19 +1,21 @@
 @import "tailwindcss";
+@source "../app";
+@source "../components";
 
 :root {
-  /* Portley Indigo Void Palette */
+  /* Portley Pearl Void Palette */
   --bg-void: #000000;
   --bg-surface: #0A0A0A;
   --bg-surface-deep: #050505;
 
   --border-faint: rgba(255, 255, 255, 0.06);
   --border-light: rgba(255, 255, 255, 0.12);
-  --border-glow: rgba(99, 102, 241, 0.3);
+  --border-glow: rgba(255, 255, 255, 0.15);
 
   /* Accents */
-  --indigo: #6366F1;
-  --indigo-light: #a5b4fc;
-  --indigo-dim: rgba(99, 102, 241, 0.15);
+  --indigo: #F8F9FA;
+  --indigo-light: #F8F9FA;
+  --indigo-dim: rgba(255, 255, 255, 0.08);
   --emerald: #10B981;
 
   --pearl: #F8F9FA;
@@ -84,57 +86,6 @@ body {
   overflow-y: auto;
 }
 
-/* ===== Custom Cursor: Aura Pulse ===== */
-@media (pointer: fine) {
-  body { cursor: none; }
-  a, button, input, textarea, select, [role="button"], [role="tab"], [role="link"] { cursor: none; }
-}
-
-#aura-dot {
-  position: fixed;
-  width: 4px; height: 4px;
-  background: var(--pearl);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transform: translate(-50%, -50%);
-  will-change: left, top;
-  transition: opacity 0.15s ease;
-}
-
-#aura-ring {
-  position: fixed;
-  width: 28px; height: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  animation: aura-breathe 3s ease-in-out infinite;
-  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.35s ease,
-              background 0.35s ease,
-              opacity 0.3s ease,
-              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: width, height, transform;
-}
-
-@keyframes aura-breathe {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
-  50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; }
-}
-
-#aura-ring.active {
-  width: 48px; height: 48px;
-  border-color: var(--indigo);
-  background: rgba(99, 102, 241, 0.08);
-  animation: none;
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-}
-
 /* ===== Background Layers ===== */
 /* Precision dot-matrix mask */
 .dot-matrix {
@@ -152,13 +103,6 @@ body {
   width: 80vw; height: 70vh;
   background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.08), transparent 60%);
   z-index: var(--z-decorative); pointer-events: none; filter: blur(100px);
-}
-
-/* Liquid mercury canvas layer */
-#liquid-canvas {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  z-index: var(--z-decorative); pointer-events: none; opacity: 0.8;
-  mix-blend-mode: screen;
 }
 
 /* ===== Typography ===== */
@@ -190,6 +134,17 @@ p, li, .prose {
   color: var(--pearl);
 }
 
+/* HQ content area — unlayered override for Tailwind v4 @layer bug */
+/* The browser treats @layer rules as unknown (type 0), causing * reset in */
+/* @layer base to override .p-16 / .px-16 in @layer utilities. */
+main.hq-content {
+  padding: 4rem;
+}
+header.hq-topbar {
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
 /* ===== Layout ===== */
 .container {
   max-width: 1240px;
@@ -199,18 +154,7 @@ p, li, .prose {
   z-index: var(--z-content);
 }
 
-section {
-  padding: 8rem 0;
-  border-bottom: 1px solid var(--border-faint);
-}
 
-/* ===== Navigation ===== */
-nav {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 1.5rem 2rem; margin-top: 2rem; border-radius: 100px;
-  background: var(--bg-surface); border: 1px solid var(--border-faint); position: relative; z-index: var(--z-nav);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
-}
 
 /* ===== Buttons ===== */
 .btn {
@@ -221,13 +165,13 @@ nav {
 }
 
 .btn-primary {
-  background: var(--indigo);
-  color: #fff; border: none; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.25);
+  background: var(--pearl);
+  color: #000000; border: 1px solid var(--pearl); box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
 }
-.btn-primary:hover { background: var(--indigo-light); transform: translateY(-2px); box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4); }
+.btn-primary:hover { background: transparent; color: var(--pearl); transform: translateY(-2px); box-shadow: 0 15px 40px rgba(255, 255, 255, 0.15); }
 
 .btn-outline { background: transparent; color: var(--pearl); border: 1px solid var(--border-faint); }
-.btn-outline:hover { border-color: var(--indigo); background: rgba(99, 102, 241, 0.05); }
+.btn-outline:hover { border-color: var(--pearl); background: rgba(255, 255, 255, 0.05); }
 
 /* ===== Hero ===== */
 .hero { min-height: 85vh; display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: center; padding-top: 0; border: none; }
@@ -344,7 +288,7 @@ nav {
 .cw-dot:nth-child(2) { background: #febc2e; }
 .cw-dot:nth-child(3) { background: #28c840; }
 
-.c-comment { color: #71717a; }
+.c-comment { color: var(--mercury); }
 .c-method { color: var(--indigo); font-weight: 700; }
 .c-route { color: var(--pearl); }
 .c-key { color: var(--emerald); }
@@ -499,7 +443,6 @@ input, textarea { font-family: inherit; border: none; background: none; outline:
     scroll-behavior: auto !important;
   }
   .search-cursor { animation: none; opacity: 1; }
-  #liquid-canvas { display: none !important; }
 }
 
 /* ===== Responsive ===== */
@@ -514,10 +457,6 @@ input, textarea { font-family: inherit; border: none; background: none; outline:
 }
 
 @media (max-width: 768px) {
-  section { padding: 4rem 0; }
-  nav { padding: 1rem 1.5rem; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
   .hero h1 { font-size: 2.8rem; }
   .glass-panel { padding: 1.5rem; }
   .rd-row { flex-direction: column; align-items: flex-start; gap: 10px; }

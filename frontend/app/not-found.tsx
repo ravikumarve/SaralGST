@@ -3,11 +3,11 @@ import Link from 'next/link';
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-center px-6" role="alert">
-      <div className="mono text-[#a5b4fc] text-xs uppercase tracking-[0.2em] mb-6">
+      <div className="mono text-[#f8f9fa] text-xs uppercase tracking-[0.2em] mb-6">
         LOG_00 — Error 404
       </div>
 
-      <h1 className="text-[8rem] md:text-[12rem] font-bold leading-none mb-4" style={{ color: '#000000', textShadow: '0 0 40px rgba(99,102,241,0.3), 0 0 80px rgba(99,102,241,0.1)' }}>
+      <h1 className="text-[8rem] md:text-[12rem] font-bold leading-none mb-4" style={{ color: '#000000', textShadow: '0 0 40px rgba(255,255,255,0.15), 0 0 80px rgba(255,255,255,0.05)' }}>
         404
       </h1>
 

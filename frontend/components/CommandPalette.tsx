@@ -45,20 +45,15 @@ export default function CommandPalette({
       )
     : COMMANDS;
 
-  // Reset selection when results change
-  useEffect(() => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
     setSelectedIndex(0);
-  }, [query]);
+  };
 
-  // Focus input on open
+  // Focus input on mount (component remounts via key prop on each open)
   useEffect(() => {
-    if (open) {
-      setQuery('');
-      setSelectedIndex(0);
-      // Small delay to ensure the DOM is ready
-      setTimeout(() => inputRef.current?.focus(), 50);
-    }
-  }, [open]);
+    inputRef.current?.focus();
+  }, []);
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -123,9 +118,9 @@ export default function CommandPalette({
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleChange}
             placeholder="Search pages, actions…"
-            className="flex-1 bg-transparent text-sm text-[#ededed] placeholder-[#52525b] focus:outline-none"
+            className="flex-1 bg-transparent text-sm text-[#f8f9fa] placeholder-[#52525b] focus:outline-none"
           />
           <kbd className="mono text-[10px] text-[#52525b] bg-[#141414] border border-[#262626] rounded-md px-1.5 py-0.5 leading-none">
             ESC
@@ -146,12 +141,12 @@ export default function CommandPalette({
                 onMouseEnter={() => setSelectedIndex(i)}
                 className={`w-full flex items-center justify-between px-5 py-3 text-left transition-colors ${
                   i === selectedIndex
-                    ? 'bg-[rgba(99,102,241,0.08)] text-[#ededed]'
-                    : 'text-[#a1a1aa] hover:text-[#ededed] hover:bg-[rgba(255,255,255,0.02)]'
+                    ? 'bg-[rgba(255,255,255,0.08)] text-[#f8f9fa]'
+                    : 'text-[#a1a1aa] hover:text-[#f8f9fa] hover:bg-[rgba(255,255,255,0.02)]'
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="font-mono text-sm w-5 text-center shrink-0 text-[#6366F1]">{cmd.icon}</span>
+                  <span className="font-mono text-sm w-5 text-center shrink-0 text-[#f8f9fa]">{cmd.icon}</span>
                   <span className="text-sm truncate">{cmd.label}</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -170,15 +165,15 @@ export default function CommandPalette({
         {/* Footer hint */}
         <div className="flex items-center gap-4 px-5 py-3 border-t border-[#262626] bg-[#050505]">
           <div className="flex items-center gap-1.5 text-[10px] text-[#52525b] mono">
-            <kbd className="text-[#71717a] bg-[#141414] border border-[#262626] rounded px-1 py-0.5 leading-none">↑↓</kbd>
+            <kbd className="text-[#52525b] bg-[#141414] border border-[#262626] rounded px-1 py-0.5 leading-none">↑↓</kbd>
             <span>Navigate</span>
           </div>
           <div className="flex items-center gap-1.5 text-[10px] text-[#52525b] mono">
-            <kbd className="text-[#71717a] bg-[#141414] border border-[#262626] rounded px-1 py-0.5 leading-none">⏎</kbd>
+            <kbd className="text-[#52525b] bg-[#141414] border border-[#262626] rounded px-1 py-0.5 leading-none">⏎</kbd>
             <span>Open</span>
           </div>
           <div className="flex items-center gap-1.5 text-[10px] text-[#52525b] mono">
-            <kbd className="text-[#71717a] bg-[#141414] border border-[#262626] rounded px-1 py-0.5 leading-none">ESC</kbd>
+            <kbd className="text-[#52525b] bg-[#141414] border border-[#262626] rounded px-1 py-0.5 leading-none">ESC</kbd>
             <span>Close</span>
           </div>
         </div>

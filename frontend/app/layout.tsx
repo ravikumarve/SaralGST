@@ -5,8 +5,6 @@ import {
   JetBrains_Mono,
 } from "next/font/google";
 import FloatingNav from "@/components/FloatingNav";
-import LiquidCanvas from "@/components/LiquidCanvas";
-import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -61,7 +59,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%236366F1"/><rect x="6" y="6" width="20" height="20" rx="3" fill="%23000000"/></svg>',
+        url: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="%23F8F9FA"/><rect x="6" y="6" width="20" height="20" rx="3" fill="%23000000"/></svg>',
         type: "image/svg+xml",
       },
     ],
@@ -79,8 +77,6 @@ export default function RootLayout({
       className={`${instrumentSerif.variable} ${outfit.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <body>
-        <CustomCursor />
-        <LiquidCanvas />
         <div className="dot-matrix" aria-hidden="true" />
         <FloatingNav />
         {children}

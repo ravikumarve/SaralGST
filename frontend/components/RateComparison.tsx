@@ -43,7 +43,7 @@ export default function RateComparison({ result }: RateComparisonProps) {
           <span className={`mono text-xs px-3 py-1 rounded-full border ${
             isDown
               ? 'text-[#10b981] bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.3)]'
-              : 'text-[#a5b4fc] bg-[rgba(165,180,252,0.1)] border-[rgba(165,180,252,0.3)]'
+              : 'text-[#f8f9fa] bg-[rgba(255,255,255,0.08)] border-[rgba(255,255,255,0.15)]'
           }`}>
             {isDown ? '↓' : '↑'} {getMovementLabel()} {getRateChange()}
           </span>
@@ -51,19 +51,19 @@ export default function RateComparison({ result }: RateComparisonProps) {
       )}
 
       {/* Bar visualization */}
-      <div className="relative h-16 bg-[#141414] rounded-xl overflow-hidden mb-4 border border-[#262626]">
+      <div className="relative h-16 bg-[#050505] rounded-[8px] overflow-hidden mb-4 border border-[rgba(255,255,255,0.06)]">
         {/* Old rate bar */}
         <div
-          className="absolute left-0 top-0 h-full bg-[#0d0d0d] border-r border-[#262626] flex items-center justify-end pr-3 transition-all duration-700 ease-out"
+          className="absolute left-0 top-0 h-full bg-[#0a0a0a] border-r border-[rgba(255,255,255,0.06)] flex items-center justify-end pr-3 transition-all duration-700 ease-out"
           style={{ width: animated ? `${Math.max(result.old_rate, 5)}%` : '0%' }}
         >
-          <span className="mono text-sm font-bold text-[#71717a]">{result.old_rate}%</span>
+          <span className="mono text-sm font-bold text-[#a1a1aa]">{result.old_rate}%</span>
         </div>
 
         {/* New rate bar */}
         <div
           className={`absolute left-0 top-0 h-full flex items-center justify-end pr-3 transition-all duration-700 ease-out ${
-            isDown ? 'bg-[rgba(16,185,129,0.2)]' : isUp ? 'bg-[rgba(165,180,252,0.2)]' : 'bg-[rgba(245,158,11,0.1)]'
+            isDown ? 'bg-[rgba(16,185,129,0.15)]' : isUp ? 'bg-[rgba(255,255,255,0.1)]' : 'bg-[rgba(255,255,255,0.05)]'
           }`}
           style={{
             width: animated ? `${Math.max(result.new_rate, 5)}%` : '0%',
@@ -71,32 +71,32 @@ export default function RateComparison({ result }: RateComparisonProps) {
           }}
         >
           <span className={`mono text-sm font-bold ${
-            isDown ? 'text-[#10b981]' : isUp ? 'text-[#a5b4fc]' : 'text-[#6366F1]'
+            isDown ? 'text-[#10b981]' : isUp ? 'text-[#f8f9fa]' : 'text-[#f8f9fa]'
           }`}>
             {result.new_rate}%
           </span>
         </div>
 
         {/* Labels */}
-        <div className="absolute bottom-1 left-2 mono text-[10px] text-[#71717a]">Old</div>
-        <div className="absolute bottom-1 right-2 mono text-[10px] text-[#71717a]">New</div>
+        <div className="absolute bottom-1 left-2 mono text-[10px] text-[#a1a1aa]">Old</div>
+        <div className="absolute bottom-1 right-2 mono text-[10px] text-[#a1a1aa]">New</div>
       </div>
 
       {/* Summary */}
-      <div className="text-center text-sm text-[#71717a]">
+      <div className="text-center text-sm text-[#a1a1aa]">
         {changed ? (
           <p>
             Rate changed from{' '}
-            <span className="font-bold text-[#ededed]">{result.old_rate}%</span>
+            <span className="font-bold text-[#f8f9fa]">{result.old_rate}%</span>
             {' '}to{' '}
             <span className={`font-bold ${
-              isDown ? 'text-[#10b981]' : isUp ? 'text-[#a5b4fc]' : 'text-[#ededed]'
+              isDown ? 'text-[#10b981]' : isUp ? 'text-[#f8f9fa]' : 'text-[#f8f9fa]'
             }`}>
               {result.new_rate}%
             </span>
           </p>
         ) : (
-          <p>Rate unchanged at <span className="font-bold text-[#ededed]">{result.new_rate}%</span></p>
+          <p>Rate unchanged at <span className="font-bold text-[#f8f9fa]">{result.new_rate}%</span></p>
         )}
       </div>
     </div>

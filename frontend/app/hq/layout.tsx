@@ -3,7 +3,7 @@
 import { SessionProvider, useSession, signOut } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import CommandPalette from '@/components/CommandPalette';
 
 const NAV_ITEMS = [
@@ -14,7 +14,7 @@ const NAV_ITEMS = [
   { href: '/hq/settings', label: 'Settings', icon: '⚙' },
 ];
 
-function Sidebar({ pathname }: { pathname: string }) {
+function Sidebar({ pathname, collapsed, onToggle }: { pathname: string; collapsed: boolean; onToggle: () => void }) {
   const { data: session } = useSession();
   const user = session?.user;
   const initials = user?.name
@@ -22,14 +22,36 @@ function Sidebar({ pathname }: { pathname: string }) {
     : user?.email?.charAt(0).toUpperCase() || '?';
 
   return (
-    <aside className="w-[80px] bg-[#050505] border-r border-[rgba(255,255,255,0.06)] flex flex-col items-center py-8 shrink-0 z-20">
-      {/* Logo mark */}
-      <Link href="/hq/overview" className="w-9 h-9 border border-[#f8f9fa] flex items-center justify-center rounded-[4px] text-[1.1rem] font-medium text-[#f8f9fa] no-underline mb-12">
-        S
-      </Link>
+    <aside
+      className={`${
+        collapsed ? 'w-20' : 'w-64'
+      } bg-[#050505] border-r border-[rgba(255,255,255,0.06)] flex flex-col py-8 shrink-0 z-20 transition-all duration-300`}
+    >
+      {/* Logo mark + brand name */}
+      <div className={`flex items-center mb-12 ${collapsed ? 'justify-center' : 'px-6'}`}>
+        <Link href="/hq/overview" className="flex items-center gap-3 no-underline">
+          <span className="w-9 h-9 border border-[#f8f9fa] flex items-center justify-center rounded-[4px] text-[1.1rem] font-medium text-[#f8f9fa] shrink-0">
+            S
+          </span>
+          <span className={`font-[var(--font-serif)] text-xl text-[#f8f9fa] whitespace-nowrap transition-opacity duration-300 ${collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
+            SaralGST
+          </span>
+        </Link>
+        {/* Sidebar collapse toggle — only visible when expanded, nestled by logo */}
+        <button
+          onClick={onToggle}
+          className={`ml-auto w-7 h-7 flex items-center justify-center text-[#52525b] hover:text-[#f8f9fa] transition-colors rounded-[4px] hover:bg-[rgba(255,255,255,0.03)] ${collapsed ? 'hidden' : ''}`}
+          aria-label="Collapse sidebar"
+          title="Collapse sidebar"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.75 19.5l-7.5-7.5 7.5-7.5" />
+          </svg>
+        </button>
+      </div>
 
-      {/* Nav icons */}
-      <nav className="flex flex-col gap-6 items-center">
+      {/* Nav items */}
+      <nav className={`flex flex-col gap-2 ${collapsed ? 'items-center' : 'px-4'}`}>
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href || (item.href !== '/hq/overview' && pathname.startsWith(item.href));
           return (
@@ -38,26 +60,35 @@ function Sidebar({ pathname }: { pathname: string }) {
               href={item.href}
               title={item.label}
               aria-label={item.label}
-              className={`w-11 h-11 rounded-lg flex items-center justify-center text-[1.25rem] transition-all duration-200 ${
+              className={`flex items-center gap-4 rounded-lg transition-all duration-200 ${
+                collapsed
+                  ? 'w-11 h-11 justify-center'
+                  : 'px-4 py-3'
+              } ${
                 isActive
                   ? 'text-[#f8f9fa] bg-[rgba(255,255,255,0.08)]'
                   : 'text-[#52525b] hover:text-[#f8f9fa] hover:bg-[rgba(255,255,255,0.03)]'
               }`}
             >
-              {item.icon}
+              <span className="text-[1.25rem] shrink-0 w-5 text-center">{item.icon}</span>
+              <span className={`text-sm font-[var(--font-sans)] whitespace-nowrap transition-opacity duration-300 ${collapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
+                {item.label}
+              </span>
             </Link>
           );
         })}
       </nav>
 
       {/* Avatar */}
-      <button
-        onClick={() => signOut({ callbackUrl: '/hq/login' })}
-        title="Sign Out"
-        className="mt-auto w-10 h-10 rounded-full bg-[#000000] border border-[rgba(255,255,255,0.12)] flex items-center justify-center font-mono text-sm text-[#a1a1aa] cursor-pointer hover:text-[#f8f9fa] transition-colors"
-      >
-        {initials}
-      </button>
+      <div className={`mt-auto ${collapsed ? 'flex justify-center' : 'px-4'}`}>
+        <button
+          onClick={() => signOut({ callbackUrl: '/hq/login' })}
+          title="Sign Out"
+          className="w-10 h-10 rounded-full bg-[#000000] border border-[rgba(255,255,255,0.12)] flex items-center justify-center font-mono text-sm text-[#a1a1aa] cursor-pointer hover:text-[#f8f9fa] transition-colors shrink-0"
+        >
+          {initials}
+        </button>
+      </div>
     </aside>
   );
 }
@@ -66,8 +97,9 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const toggleSidebar = useCallback(() => setSidebarCollapsed((prev) => !prev), []);
 
   // Dynamic page titles
   useEffect(() => {
@@ -84,11 +116,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     document.title = titles[pathname] || 'SaralGST';
   }, [pathname]);
 
-  // Mount + CMD+K listener
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  // CMD+K keyboard listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -107,10 +135,10 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  if (!mounted || status === 'loading') {
+  if (status === 'loading') {
     return (
       <div className="h-screen bg-[#000000] flex items-center justify-center">
-        <div className="text-[#71717a] text-sm">Loading Saral HQ...</div>
+        <div className="text-[#a1a1aa] text-sm">Loading Saral HQ...</div>
       </div>
     );
   }
@@ -120,9 +148,8 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     return null;
   }
 
-  const user = session?.user;
   const pageTitle =
-    pathname === '/hq/overview' ? 'Dashboard' :
+    pathname === '/hq/overview' ? 'SaralGST' :
     pathname === '/hq/playground' ? 'Playground' :
     pathname === '/hq/api-keys' ? 'API Keys' :
     pathname === '/hq/usage' ? 'Usage' :
@@ -133,14 +160,14 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen bg-[#000000] overflow-hidden">
-      <Sidebar pathname={pathname} />
+      <Sidebar pathname={pathname} collapsed={sidebarCollapsed} onToggle={toggleSidebar} />
 
       <div className="flex flex-col flex-1 relative">
         {/* Subtle indigo glow */}
-        <div className="absolute top-[-10vh] left-[20vw] w-[50vw] h-[40vh] bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.05)_0%,transparent_60%)] pointer-events-none z-0 blur-[60px]" />
+        <div className="absolute top-[-10vh] left-[20vw] w-[50vw] h-[40vh] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.04)_0%,transparent_60%)] pointer-events-none z-0 blur-[60px]" />
 
         {/* ===== Topbar ===== */}
-        <header className="h-20 flex items-center justify-between px-16 border-b border-[rgba(255,255,255,0.06)] z-10">
+        <header className="hq-topbar h-20 flex items-center justify-between px-16 border-b border-[rgba(255,255,255,0.06)] z-10">
           <div className="flex items-center gap-4">
             <span className="font-mono text-xs uppercase tracking-[2px] text-[#52525b]">Workspace</span>
             <span className="font-[var(--font-serif)] text-[1.8rem] text-[#f8f9fa] tracking-[0.02em]">{pageTitle}</span>
@@ -162,7 +189,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
             {/* Create button — pearl on void */}
             <Link
               href="/hq/playground"
-              className="btn-primary inline-flex items-center gap-2 px-6 py-2.5 font-[var(--font-sans)] text-sm font-medium rounded-[4px] uppercase tracking-[1px] border border-transparent bg-[#f8f9fa] text-[#000000] hover:bg-transparent hover:text-[#f8f9fa] hover:border-[#f8f9fa] transition-all duration-200"
+              className="inline-flex items-center gap-2 px-[1.5rem] py-[0.6rem] text-sm font-medium rounded-[4px] uppercase tracking-[1px] border border-[#f8f9fa] bg-[#f8f9fa] text-[#000000] hover:bg-transparent hover:text-[#f8f9fa] transition-all duration-200"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14m7-7H5" />
@@ -172,13 +199,13 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto z-10">
+        {/* Main content — p-16 gives uniform 4rem breathing room on all sides */}
+        <main className="hq-content flex-1 overflow-y-auto z-10">
           {children}
         </main>
       </div>
 
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+      <CommandPalette key={String(paletteOpen)} open={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </div>
   );
 }

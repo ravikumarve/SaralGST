@@ -35,11 +35,11 @@ export default function BillingPage() {
   ];
 
   return (
-    <div className="p-8 md:p-10 lg:p-12 max-w-6xl">
-      <div className="mb-10">
-        <p className="mono text-[10px] tracking-[2px] text-[#6366F1] mb-2">BILLING</p>
-        <h1 className="font-[var(--font-serif)] text-3xl md:text-4xl text-[#ededed] tracking-tight">Plans & Payments</h1>
-        <p className="text-[#71717a] text-sm mt-2">Your subscription and payment history</p>
+    <div>
+      <div className="mb-12">
+        <span className="font-mono text-xs uppercase tracking-[2px] text-[#52525b]">BILLING</span>
+        <h1 className="font-[var(--font-serif)] text-[1.8rem] text-[#f8f9fa] tracking-[0.02em] mt-2">Plans & Payments</h1>
+        <p className="text-[#a1a1aa] text-sm mt-2 font-light">Your subscription and payment history</p>
       </div>
 
       {/* Plans */}
@@ -50,12 +50,12 @@ export default function BillingPage() {
             <div
               key={plan.tier}
               className={`hq-card p-6 ${
-                isCurrent ? 'border-[#6366F1]' : plan.popular ? 'border-[rgba(99,102,241,0.3)]' : 'border-[#262626]'
+                isCurrent ? 'border-[#f8f9fa]' : plan.popular ? 'border-[rgba(255,255,255,0.15)]' : 'border-[#262626]'
               }`}
             >
-              {plan.popular && <div className="mono text-[10px] text-[#6366F1] uppercase tracking-wider mb-3">Most Popular</div>}
-              <h3 className="text-lg font-bold text-[#ededed] mb-1">{plan.name}</h3>
-              <div className="text-2xl font-bold text-[#6366F1] mb-4">{plan.price}</div>
+              {plan.popular && <div className="mono text-[10px] text-[#f8f9fa] uppercase tracking-wider mb-3">Most Popular</div>}
+              <h3 className="text-lg font-bold text-[#f8f9fa] mb-1">{plan.name}</h3>
+              <div className="text-2xl font-bold text-[#f8f9fa] mb-4">{plan.price}</div>
               <ul className="space-y-2 mb-6">
                 {plan.features.map((f) => (
                   <li key={f} className="text-sm text-[#a1a1aa] flex items-center gap-2">
@@ -71,7 +71,7 @@ export default function BillingPage() {
                 <a
                   href="https://gumroad.com"
                   target="_blank"
-                  className="block w-full py-2.5 text-center text-sm bg-[#141414] text-[#a1a1aa] rounded-xl hover:text-[#ededed] hover:bg-[#262626] transition-colors"
+                  className="block w-full py-2.5 text-center text-sm bg-[#141414] text-[#a1a1aa] rounded-xl hover:text-[#f8f9fa] hover:bg-[#262626] transition-colors"
                 >
                   Upgrade
                 </a>
@@ -83,33 +83,33 @@ export default function BillingPage() {
 
       {/* Invoices */}
       <div className="hq-card p-6">
-        <h2 className="text-sm font-semibold text-[#ededed] mb-4">Payment History</h2>
+        <h2 className="text-sm font-semibold text-[#f8f9fa] mb-4">Payment History</h2>
         {loading ? (
-          <div className="text-[#71717a] text-sm">Loading...</div>
+          <div className="text-[#a1a1aa] text-sm">Loading...</div>
         ) : invoices.length === 0 ? (
-          <div className="text-[#71717a] text-sm py-8 text-center border border-dashed border-[#262626] rounded-xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
+          <div className="text-[#a1a1aa] text-sm py-8 text-center border border-dashed border-[#262626] rounded-xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
             No invoices yet.
           </div>
         ) : (
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#262626]">
-                <th className="text-left px-4 py-3 text-[#71717a] font-medium">Date</th>
-                <th className="text-left px-4 py-3 text-[#71717a] font-medium">Plan</th>
-                <th className="text-left px-4 py-3 text-[#71717a] font-medium">Amount</th>
-                <th className="text-left px-4 py-3 text-[#71717a] font-medium">Status</th>
-                <th className="text-left px-4 py-3 text-[#71717a] font-medium">Razorpay ID</th>
+                <th className="text-left px-4 py-3 text-[#a1a1aa] font-medium">Date</th>
+                <th className="text-left px-4 py-3 text-[#a1a1aa] font-medium">Plan</th>
+                <th className="text-left px-4 py-3 text-[#a1a1aa] font-medium">Amount</th>
+                <th className="text-left px-4 py-3 text-[#a1a1aa] font-medium">Status</th>
+                <th className="text-left px-4 py-3 text-[#a1a1aa] font-medium">Razorpay ID</th>
               </tr>
             </thead>
             <tbody>
               {invoices.map((inv) => (
                 <tr key={inv.id} className="border-b border-[#262626] last:border-0">
-                  <td className="px-4 py-3 text-[#ededed]">{new Date(inv.createdAt).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-[#f8f9fa]">{new Date(inv.createdAt).toLocaleDateString()}</td>
                   <td className="px-4 py-3 text-[#a1a1aa] capitalize">{inv.plan}</td>
-                  <td className="px-4 py-3 text-[#6366F1] mono">₹{inv.amount.toLocaleString()}</td>
+                  <td className="px-4 py-3 text-[#f8f9fa] mono">₹{inv.amount.toLocaleString()}</td>
                   <td className="px-4 py-3">
                     <span className={`mono text-[10px] px-2 py-1 rounded-full ${
-                      inv.status === 'paid' ? 'text-[#10b981] bg-[rgba(16,185,129,0.1)]' : 'text-[#71717a] bg-[#141414]'
+                      inv.status === 'paid' ? 'text-[#10b981] bg-[rgba(16,185,129,0.1)]' : 'text-[#a1a1aa] bg-[#141414]'
                     }`}>
                       {inv.status}
                     </span>

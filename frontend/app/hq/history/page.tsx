@@ -46,16 +46,16 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="p-8 md:p-10 lg:p-12 max-w-6xl">
-      <div className="flex items-center justify-between mb-10">
+    <div>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
         <div>
-          <p className="mono text-[10px] tracking-[2px] text-[#6366F1] mb-2">HISTORY</p>
-          <h1 className="font-[var(--font-serif)] text-3xl md:text-4xl text-[#ededed] tracking-tight">Lookup History</h1>
-          <p className="text-[#71717a] text-sm mt-2">All your GST rate lookups</p>
+          <span className="font-mono text-xs uppercase tracking-[2px] text-[#52525b]">HISTORY</span>
+          <h1 className="font-[var(--font-serif)] text-[1.8rem] text-[#f8f9fa] tracking-[0.02em] mt-2">Lookup History</h1>
+          <p className="text-[#a1a1aa] text-sm mt-2 font-light">All your GST rate lookups</p>
         </div>
         <button
           onClick={exportCSV}
-          className="px-4 py-2 bg-[#141414] border border-[#262626] rounded-xl text-sm text-[#a1a1aa] hover:text-[#ededed] transition-colors shrink-0"
+          className="px-4 py-2 bg-[#141414] border border-[#262626] rounded-xl text-sm text-[#a1a1aa] hover:text-[#f8f9fa] transition-colors shrink-0"
         >
           Export CSV
         </button>
@@ -67,13 +67,13 @@ export default function HistoryPage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search by product name or HSN code..."
-        className="w-full px-4 py-3 bg-[rgba(10,10,10,0.6)] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#71717a] focus:outline-none focus:border-[#6366F1]/40 transition-colors mb-6 backdrop-blur-sm"
+        className="w-full px-4 py-3 bg-[rgba(10,10,10,0.6)] border border-[#262626] rounded-xl text-[#f8f9fa] placeholder-[#a1a1aa] focus:outline-none focus:border-[#f8f9fa]/40 transition-colors mb-6 backdrop-blur-sm"
       />
 
       {loading ? (
-        <div className="text-[#71717a] text-sm">Loading history...</div>
+        <div className="text-[#a1a1aa] text-sm">Loading history...</div>
       ) : filtered.length === 0 ? (
-        <div className="text-[#71717a] text-sm py-12 text-center border border-dashed border-[#262626] rounded-2xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
+        <div className="text-[#a1a1aa] text-sm py-12 text-center border border-dashed border-[#262626] rounded-2xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
           {search ? 'No results match your search.' : 'No lookups yet. Head to the check page to get started.'}
         </div>
       ) : (
@@ -82,29 +82,29 @@ export default function HistoryPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#262626]">
-                <th className="text-left px-5 py-3 text-[#71717a] font-medium">Query</th>
-                <th className="text-left px-5 py-3 text-[#71717a] font-medium">HSN</th>
-                <th className="text-left px-5 py-3 text-[#71717a] font-medium">Rate</th>
-                <th className="text-left px-5 py-3 text-[#71717a] font-medium">Source</th>
-                <th className="text-left px-5 py-3 text-[#71717a] font-medium">Date</th>
+                <th className="text-left px-5 py-3 text-[#a1a1aa] font-medium">Query</th>
+                <th className="text-left px-5 py-3 text-[#a1a1aa] font-medium">HSN</th>
+                <th className="text-left px-5 py-3 text-[#a1a1aa] font-medium">Rate</th>
+                <th className="text-left px-5 py-3 text-[#a1a1aa] font-medium">Source</th>
+                <th className="text-left px-5 py-3 text-[#a1a1aa] font-medium">Date</th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((item) => (
                 <tr key={item.id} className="border-b border-[#262626] last:border-0 hover:bg-[#141414] transition-colors">
-                  <td className="px-5 py-4 text-[#ededed]">{item.query}</td>
+                  <td className="px-5 py-4 text-[#f8f9fa]">{item.query}</td>
                   <td className="px-5 py-4 text-[#a1a1aa] mono">{item.hsnCode || '—'}</td>
                   <td className="px-5 py-4">
                     {item.resultRate != null ? (
-                      <span className="mono text-[#6366F1]">{item.resultRate}%</span>
+                      <span className="mono text-[#f8f9fa]">{item.resultRate}%</span>
                     ) : (
-                      <span className="text-[#71717a]">—</span>
+                      <span className="text-[#a1a1aa]">—</span>
                     )}
                   </td>
                   <td className="px-5 py-4">
                     <span className="mono text-[10px] uppercase text-[#52525b]">{item.source}</span>
                   </td>
-                  <td className="px-5 py-4 text-[#71717a] text-xs mono">
+                  <td className="px-5 py-4 text-[#a1a1aa] text-xs mono">
                     {new Date(item.createdAt).toLocaleString()}
                   </td>
                 </tr>

@@ -56,7 +56,7 @@ export default function OverviewPage() {
   const overdueKeys = Math.max(0, totalKeys - activeKeys);
 
   return (
-    <div className="p-16 grid grid-cols-[1.5fr_1fr] gap-16">
+    <div className="grid grid-cols-[1.5fr_1fr] gap-16">
       {/* ===== LEFT: EDITORIAL COLUMN ===== */}
       <div className="flex flex-col gap-16">
         {/* Hero Stats — 2-column grid */}
@@ -126,7 +126,7 @@ export default function OverviewPage() {
                     <td className="py-6 border-b border-[rgba(255,255,255,0.06)] group-hover:border-b-[rgba(255,255,255,0.12)] transition-colors text-right">
                       <span className={`inline-block px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-[1px] border text-center ${
                         item.success
-                          ? 'border-[rgba(99,102,241,0.3)] text-[#a5b4fc] bg-[rgba(99,102,241,0.1)]'
+                          ? 'border-[rgba(255,255,255,0.15)] text-[#f8f9fa] bg-[rgba(255,255,255,0.08)]'
                           : 'border-[rgba(255,255,255,0.06)] text-[#a1a1aa]'
                       }`}>
                         {item.success ? 'Success' : 'Failed'}
@@ -202,7 +202,7 @@ export default function OverviewPage() {
 
             {/* Feed item 2 */}
             <div className="flex gap-5 items-start">
-              <div className="w-9 h-9 rounded-full bg-[#050505] border border-[rgba(99,102,241,0.3)] flex items-center justify-center text-[#6366F1] text-base shrink-0">
+              <div className="w-9 h-9 rounded-full bg-[#050505] border border-[rgba(255,255,255,0.15)] flex items-center justify-center text-[#f8f9fa] text-base shrink-0">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
@@ -233,7 +233,7 @@ export default function OverviewPage() {
                 <p className="text-sm text-[#a1a1aa] font-light leading-[1.6]">
                   Try the API Playground to test endpoints, or check the billing page to upgrade your plan.
                 </p>
-                <Link href="/hq/playground" className="font-mono text-xs text-[#6366F1] uppercase tracking-[1px] mt-2 inline-block hover:text-[#a5b4fc] transition-colors">
+                <Link href="/hq/playground" className="font-mono text-xs text-[#a1a1aa] uppercase tracking-[1px] mt-2 inline-block hover:text-[#f8f9fa] transition-colors">
                   Open Playground &rarr;
                 </Link>
               </div>

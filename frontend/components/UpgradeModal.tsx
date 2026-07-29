@@ -79,7 +79,7 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
           }
         },
         prefill: { name: '', email: '', contact: '' },
-        theme: { color: '#6366F1' },
+        theme: { color: '#f8f9fa' },
       };
 
       const rzp: RazorpayInstance = new Razorpay(options);
@@ -97,18 +97,18 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/80" />
         <Dialog.Content className="fixed inset-0 z-50 flex items-center justify-center p-6">
-          <div className="w-full max-w-md bg-[#0d0d0d] border border-[#262626] rounded-2xl p-8 shadow-2xl">
+          <div className="w-full max-w-md bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] p-8 shadow-2xl">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-[#ededed] mb-2">
+                <h2 className="text-2xl font-bold text-[#f8f9fa] mb-2">
                   Aaj ki limit ho gayi
                 </h2>
-                <p className="text-sm text-[#71717a]">
+                <p className="text-sm text-[#a1a1aa]">
                   ₹499/mahine mein unlimited lookups — cancel kabhee bhi
                 </p>
               </div>
               <Dialog.Close asChild>
-                <button className="text-[#71717a] hover:text-[#ededed] transition-colors">
+                <button className="text-[#a1a1aa] hover:text-[#f8f9fa] transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -120,32 +120,32 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
             <div className="space-y-4 mb-6">
               <button
                 onClick={() => setSelectedPlan('individual')}
-                className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                className={`w-full p-4 rounded-[8px] border transition-all text-left ${
                   selectedPlan === 'individual'
-                    ? 'border-[#6366F1] bg-[rgba(99,102,241,0.05)]'
-                    : 'border-[#262626] bg-[#141414] hover:border-[#404040]'
+                    ? 'border-[#f8f9fa] bg-[rgba(255,255,255,0.05)]'
+                    : 'border-[rgba(255,255,255,0.06)] bg-[#050505] hover:border-[rgba(255,255,255,0.12)]'
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-medium text-[#ededed]">Individual</span>
-                  <span className="text-xl font-bold text-[#6366F1]">₹499</span>
+                  <span className="font-medium text-[#f8f9fa]">Individual</span>
+                  <span className="text-xl font-bold text-[#f8f9fa]">₹499</span>
                 </div>
-                <div className="text-sm text-[#71717a]">Unlimited lookups per month</div>
+                <div className="text-sm text-[#a1a1aa]">Unlimited lookups per month</div>
               </button>
 
               <button
                 onClick={() => setSelectedPlan('ca_firm')}
-                className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                className={`w-full p-4 rounded-[8px] border transition-all text-left ${
                   selectedPlan === 'ca_firm'
-                    ? 'border-[#6366F1] bg-[rgba(99,102,241,0.05)]'
-                    : 'border-[#262626] bg-[#141414] hover:border-[#404040]'
+                    ? 'border-[#f8f9fa] bg-[rgba(255,255,255,0.05)]'
+                    : 'border-[rgba(255,255,255,0.06)] bg-[#050505] hover:border-[rgba(255,255,255,0.12)]'
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-medium text-[#ededed]">CA Firm</span>
-                  <span className="text-xl font-bold text-[#6366F1]">₹1,999</span>
+                  <span className="font-medium text-[#f8f9fa]">CA Firm</span>
+                  <span className="text-xl font-bold text-[#f8f9fa]">₹1,999</span>
                 </div>
-                <div className="text-sm text-[#71717a]">50 GSTINs per month</div>
+                <div className="text-sm text-[#a1a1aa]">50 GSTINs per month</div>
               </button>
             </div>
 
@@ -153,12 +153,12 @@ export default function UpgradeModal({ open, onClose }: UpgradeModalProps) {
             <button
               onClick={handlePayment}
               disabled={loading}
-              className="w-full py-3.5 bg-[#ededed] text-[#050505] font-bold rounded-xl hover:bg-white/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="w-full py-3.5 bg-[#f8f9fa] text-[#000000] font-bold rounded-[4px] hover:bg-transparent hover:text-[#f8f9fa] border border-[#f8f9fa] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               {loading ? 'Processing...' : 'Pay Now'}
             </button>
 
-            <p className="mt-4 text-[10px] text-[#71717a] text-center mono">
+            <p className="mt-4 text-[10px] text-[#a1a1aa] text-center mono">
               Secure payment powered by Razorpay
             </p>
           </div>

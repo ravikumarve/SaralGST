@@ -22,23 +22,23 @@ export default function UsagePage() {
   }, []);
 
   return (
-    <div className="p-8 md:p-10 lg:p-12 max-w-6xl">
-      <div className="mb-10">
-        <p className="mono text-[10px] tracking-[2px] text-[#6366F1] mb-2">USAGE</p>
-        <h1 className="font-[var(--font-serif)] text-3xl md:text-4xl text-[#ededed] tracking-tight">Lookup Activity</h1>
-        <p className="text-[#71717a] text-sm mt-2">Your API usage over time</p>
+    <div>
+      <div className="mb-12">
+        <span className="font-mono text-xs uppercase tracking-[2px] text-[#52525b]">USAGE</span>
+        <h1 className="font-[var(--font-serif)] text-[1.8rem] text-[#f8f9fa] tracking-[0.02em] mt-2">Lookup Activity</h1>
+        <p className="text-[#a1a1aa] text-sm mt-2 font-light">Your API usage over time</p>
       </div>
 
       <div className="hq-card p-6 mb-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-sm font-semibold text-[#ededed]">Daily Lookups</h2>
-          <span className="text-xs text-[#71717a] mono">{total} total</span>
+          <h2 className="text-sm font-semibold text-[#f8f9fa]">Daily Lookups</h2>
+          <span className="text-xs text-[#a1a1aa] mono">{total} total</span>
         </div>
 
         {loading ? (
-          <div className="h-64 flex items-center justify-center text-[#71717a] text-sm">Loading chart...</div>
+          <div className="h-64 flex items-center justify-center text-[#a1a1aa] text-sm">Loading chart...</div>
         ) : daily.length === 0 ? (
-          <div className="h-64 flex items-center justify-center text-[#71717a] text-sm border border-dashed border-[#262626] rounded-xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
+          <div className="h-64 flex items-center justify-center text-[#a1a1aa] text-sm border border-dashed border-[#262626] rounded-xl bg-[rgba(10,10,10,0.4)] backdrop-blur-sm">
             No usage data yet. Start making lookups to see activity here.
           </div>
         ) : (
@@ -46,13 +46,13 @@ export default function UsagePage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={daily}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#262626" />
-                <XAxis dataKey="date" tick={{ fill: '#71717a', fontSize: 11 }} stroke="#262626" />
-                <YAxis allowDecimals={false} tick={{ fill: '#71717a', fontSize: 11 }} stroke="#262626" />
+                <XAxis dataKey="date" tick={{ fill: '#a1a1aa', fontSize: 11 }} stroke="#262626" />
+                <YAxis allowDecimals={false} tick={{ fill: '#a1a1aa', fontSize: 11 }} stroke="#262626" />
                 <Tooltip
                   contentStyle={{ background: '#0a0a0a', border: '1px solid #262626', borderRadius: 12, fontSize: 12 }}
-                  labelStyle={{ color: '#ededed' }}
+                  labelStyle={{ color: '#f8f9fa' }}
                 />
-                <Bar dataKey="count" fill="#6366F1" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" fill="#f8f9fa" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -61,13 +61,13 @@ export default function UsagePage() {
 
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: 'Total Requests', value: total, color: '#6366F1' },
+          { label: 'Total Requests', value: total, color: '#f8f9fa' },
           { label: 'Avg Daily', value: daily.length > 0 ? Math.round(total / Math.max(daily.length, 1)) : 0, color: '#10b981' },
-          { label: 'Peak Day', value: daily.length > 0 ? Math.max(...daily.map((d) => d.count)) : 0, color: '#a5b4fc' },
+          { label: 'Peak Day', value: daily.length > 0 ? Math.max(...daily.map((d) => d.count)) : 0, color: '#f8f9fa' },
         ].map((s) => (
           <div key={s.label} className="hq-stat">
-            <div className="text-2xl font-bold text-[#ededed]" style={{ color: s.color }}>{s.value}</div>
-            <div className="text-xs text-[#71717a] mt-1">{s.label}</div>
+            <div className="text-2xl font-bold text-[#f8f9fa]" style={{ color: s.color }}>{s.value}</div>
+            <div className="text-xs text-[#a1a1aa] mt-1">{s.label}</div>
           </div>
         ))}
       </div>

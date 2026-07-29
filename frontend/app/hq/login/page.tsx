@@ -89,7 +89,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-8 text-center">
             <p className="text-sm text-[#52525b]">
               Don&apos;t have an account?{' '}
               <Link href="/hq/register" className="text-[#a1a1aa] hover:text-[#f8f9fa] transition-colors">

@@ -37,34 +37,34 @@ export default function UsageCounter({ onLimitReached }: UsageCounterProps) {
 
   return (
     <div className="fixed top-4 right-4" style={{ zIndex: 'var(--z-tooltip)' }}>
-      <div className="bg-[#0d0d0d] border border-[#262626] rounded-lg p-3.5 shadow-lg shadow-black/40">
+      <div className="bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] p-3.5 shadow-lg shadow-black/40">
         <div className="flex items-center gap-3 mb-2.5">
           <span
             className={`w-2 h-2 rounded-full ${
-              isLimitReached ? 'bg-[#a5b4fc]' : 'bg-[#10b981]'
+              isLimitReached ? 'bg-[#f8f9fa]' : 'bg-[#10b981]'
             }`}
           />
-          <div className="mono text-sm text-[#71717a]">
+          <div className="mono text-sm text-[#a1a1aa]">
             {used}/{total} lookups
           </div>
           {isLimitReached && (
-            <span className="mono text-[10px] text-[#a5b4fc] bg-[rgba(165,180,252,0.1)] px-2 py-0.5 rounded-full border border-[rgba(165,180,252,0.3)]">
+            <span className="mono text-[10px] text-[#f8f9fa] bg-[rgba(255,255,255,0.08)] px-2 py-0.5 rounded-full border border-[rgba(255,255,255,0.15)]">
               Limit Reached
             </span>
           )}
         </div>
 
         {/* Progress bar */}
-        <div className="w-full h-1.5 bg-[#141414] rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-[#050505] rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ease-out ${
-              isLimitReached ? 'bg-[#a5b4fc]' : 'bg-[#6366F1]'
+              isLimitReached ? 'bg-[#f8f9fa]' : 'bg-[#f8f9fa]'
             }`}
             style={{ width: `${Math.min(percentage, 100)}%` }}
           />
         </div>
 
-        <div className="mt-2 text-[10px] text-[#71717a] mono">
+        <div className="mt-2 text-[10px] text-[#a1a1aa] mono">
           Resets at midnight
         </div>
       </div>

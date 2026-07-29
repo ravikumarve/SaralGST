@@ -34,14 +34,14 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl">
-      <div className="bg-[#0d0d0d] border border-[#262626] rounded-xl overflow-hidden focus-within:border-[#404040] transition-colors">
+      <div className="bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] overflow-hidden focus-within:border-[rgba(255,255,255,0.12)] transition-colors">
         {/* Controls + Input */}
         <div className="flex items-center gap-2 pl-4 pr-2 py-2">
           {/* Language toggle */}
           <button
             type="button"
             onClick={() => setLanguage((p) => (p === 'en' ? 'hi' : 'en'))}
-            className="mono text-[11px] text-[#71717a] bg-[#141414] border border-[#262626] px-2 py-1 rounded-md hover:border-[#404040] transition-colors shrink-0"
+            className="mono text-[11px] text-[#a1a1aa] bg-[#050505] border border-[rgba(255,255,255,0.06)] px-2 py-1 rounded-[4px] hover:border-[rgba(255,255,255,0.15)] transition-colors shrink-0"
           >
             {language === 'en' ? 'EN' : 'हिं'}
           </button>
@@ -50,7 +50,7 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
           <button
             type="button"
             onClick={() => { setMode((p) => (p === 'product' ? 'hsn' : 'product')); setQuery(''); }}
-            className="mono text-[11px] text-[#71717a] bg-[#141414] border border-[#262626] px-2 py-1 rounded-md hover:border-[#404040] transition-colors shrink-0"
+            className="mono text-[11px] text-[#a1a1aa] bg-[#050505] border border-[rgba(255,255,255,0.06)] px-2 py-1 rounded-[4px] hover:border-[rgba(255,255,255,0.15)] transition-colors shrink-0"
           >
             {mode === 'product' ? 'Product' : 'HSN'}
           </button>
@@ -63,7 +63,7 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
             placeholder={getPlaceholder()}
             maxLength={200}
             disabled={loading}
-            className={`flex-1 px-3 py-2 bg-transparent text-[#ededed] placeholder-[#71717a] focus:outline-none text-base ${
+            className={`flex-1 px-3 py-2 bg-transparent text-[#f8f9fa] placeholder-[#a1a1aa] focus:outline-none text-base ${
               mode === 'hsn' ? 'mono font-normal' : 'font-sans'
             }`}
           />
@@ -72,7 +72,7 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
           <button
             type="submit"
             disabled={loading || !query.trim()}
-            className="shrink-0 px-4 py-2 bg-[#ededed] text-[#050505] text-sm font-medium rounded-lg hover:bg-white/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="shrink-0 px-4 py-2 bg-[#f8f9fa] text-[#000000] text-sm font-medium rounded-[4px] hover:bg-transparent hover:text-[#f8f9fa] border border-[#f8f9fa] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             {loading ? (
               <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -89,7 +89,7 @@ export default function SearchBox({ onSearch, loading = false, placeholder }: Se
       </div>
 
       {/* Character count */}
-      <div className="text-right mt-2 text-[10px] text-[#71717a] mono">
+      <div className="text-right mt-2 text-[10px] text-[#a1a1aa] mono">
         {query.length}/200
       </div>
     </form>

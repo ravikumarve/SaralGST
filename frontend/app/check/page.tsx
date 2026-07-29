@@ -63,7 +63,7 @@ export default function CheckPage() {
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-4 text-[#ededed] leading-tight">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-4 text-[#f8f9fa] leading-tight">
           GST Rate<br />
           <span className="text-accent">Checker</span>
         </h1>
@@ -78,8 +78,8 @@ export default function CheckPage() {
 
         {/* Error */}
         {error && (
-          <div className="mt-8 p-4 border-l-2 border-[#a5b4fc] bg-[rgba(165,180,252,0.05)] rounded-r-xl max-w-2xl w-full">
-            <p className="text-sm text-[#a5b4fc]">{error}</p>
+          <div className="mt-8 p-4 border-l-2 border-[#f8f9fa] bg-[rgba(255,255,255,0.03)] rounded-r-xl max-w-2xl w-full">
+            <p className="text-sm text-[#f8f9fa]">{error}</p>
           </div>
         )}
 

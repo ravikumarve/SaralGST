@@ -21,15 +21,15 @@ export default function ResultCard({ result }: ResultCardProps) {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-[#0d0d0d] border border-[#262626] rounded-xl p-6 md:p-8">
+    <div className="w-full max-w-2xl bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] p-6 md:p-8">
       {/* Header row */}
       <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <span className="mono text-sm text-[#6366F1]">
+          <span className="mono text-sm text-[#f8f9fa]">
             HSN: {result.hsn_code}
           </span>
           {result.category && (
-            <span className="mono text-[10px] text-[#a5b4fc] bg-[rgba(165,180,252,0.1)] px-2 py-0.5 rounded-full border border-[rgba(165,180,252,0.3)]">
+            <span className="mono text-[10px] text-[#f8f9fa] bg-[rgba(255,255,255,0.08)] px-2 py-0.5 rounded-full border border-[rgba(255,255,255,0.15)]">
               {result.category}
             </span>
           )}
@@ -38,7 +38,7 @@ export default function ResultCard({ result }: ResultCardProps) {
           <span className={`mono text-[10px] px-2 py-0.5 rounded-full border ${
             isDown
               ? 'text-[#10b981] bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.3)]'
-              : 'text-[#a5b4fc] bg-[rgba(165,180,252,0.1)] border-[rgba(165,180,252,0.3)]'
+              : 'text-[#f8f9fa] bg-[rgba(255,255,255,0.08)] border-[rgba(255,255,255,0.15)]'
           }`}>
             {getMovementLabel()}
           </span>
@@ -46,7 +46,7 @@ export default function ResultCard({ result }: ResultCardProps) {
       </div>
 
       {/* Description */}
-      <h3 className="text-xl font-semibold text-[#ededed] mb-1">
+      <h3 className="text-xl font-semibold text-[#f8f9fa] mb-1">
         {result.description}
       </h3>
       {result.description_hi && (
@@ -54,80 +54,80 @@ export default function ResultCard({ result }: ResultCardProps) {
       )}
 
       {/* Rate comparison */}
-      <div className="flex items-center justify-between mb-6 p-5 bg-[#141414] rounded-xl border border-[#262626]">
+      <div className="flex items-center justify-between mb-6 p-5 bg-[#050505] rounded-[8px] border border-[rgba(255,255,255,0.06)]">
         <div className="text-center flex-1">
-          <div className="mono text-xs text-[#71717a] mb-2 uppercase tracking-wider">
+          <div className="mono text-xs text-[#a1a1aa] mb-2 uppercase tracking-wider">
             Pehle
           </div>
-          <div className="text-3xl md:text-4xl font-bold text-[#71717a] line-through">
+          <div className="text-3xl md:text-4xl font-bold text-[#52525b] line-through">
             {result.old_rate}%
           </div>
-          <div className="mono text-[10px] text-[#71717a] mt-1">old</div>
+          <div className="mono text-[10px] text-[#a1a1aa] mt-1">old</div>
         </div>
 
         <div className="flex-1 text-center">
           <div className={`text-lg font-bold ${
-            isDown ? 'text-[#10b981]' : isUp ? 'text-[#a5b4fc]' : 'text-[#71717a]'
+            isDown ? 'text-[#10b981]' : isUp ? 'text-[#f8f9fa]' : 'text-[#a1a1aa]'
           }`}>
             {getMovementLabel()}
           </div>
-          <div className="mono text-[10px] text-[#71717a] mt-1">
+          <div className="mono text-[10px] text-[#a1a1aa] mt-1">
             {result.rate_changed ? 'Changed' : 'Unchanged'}
           </div>
         </div>
 
         <div className="text-center flex-1">
-          <div className="mono text-xs text-[#71717a] mb-2 uppercase tracking-wider">
+          <div className="mono text-xs text-[#a1a1aa] mb-2 uppercase tracking-wider">
             Ab
           </div>
           <div className={`text-4xl md:text-5xl font-bold ${
-            isDown ? 'text-[#10b981]' : isUp ? 'text-[#a5b4fc]' : 'text-[#ededed]'
+            isDown ? 'text-[#10b981]' : isUp ? 'text-[#f8f9fa]' : 'text-[#f8f9fa]'
           }`}>
             {result.new_rate}%
           </div>
-          <div className="mono text-[10px] text-[#71717a] mt-1">GST 2.0</div>
+          <div className="mono text-[10px] text-[#a1a1aa] mt-1">GST 2.0</div>
         </div>
       </div>
 
       {/* Notification reference */}
-      <div className="border-l-2 border-[#6366F1] pl-4 py-1 mb-4">
-        <div className="mono text-xs text-[#71717a] uppercase tracking-wider mb-1 font-medium">
+      <div className="border-l-2 border-[#f8f9fa] pl-4 py-1 mb-4">
+        <div className="mono text-xs text-[#a1a1aa] uppercase tracking-wider mb-1 font-medium">
           Notification Reference
         </div>
-        <div className="text-sm text-[#ededed]">{result.notification_ref}</div>
-        <div className="mono text-[10px] text-[#71717a] mt-1">
+        <div className="text-sm text-[#f8f9fa]">{result.notification_ref}</div>
+        <div className="mono text-[10px] text-[#a1a1aa] mt-1">
           Effective: September 22, 2025
         </div>
       </div>
 
       {/* Notes */}
       {result.notes && (
-        <div className="border-l-2 border-[#a5b4fc] pl-4 py-1 mb-4">
-          <div className="mono text-xs text-[#71717a] uppercase tracking-wider mb-1 font-medium">
+        <div className="border-l-2 border-[#f8f9fa] pl-4 py-1 mb-4">
+          <div className="mono text-xs text-[#a1a1aa] uppercase tracking-wider mb-1 font-medium">
             Notes
           </div>
-          <div className="text-sm text-[#ededed]">{result.notes}</div>
+          <div className="text-sm text-[#f8f9fa]">{result.notes}</div>
         </div>
       )}
 
       {/* Warning */}
       {result.warning && (
-        <div className="border-l-2 border-[#a5b4fc] pl-4 py-1 mb-4 bg-[rgba(165,180,252,0.05)] rounded-r-lg">
-          <div className="mono text-xs text-[#a5b4fc] uppercase tracking-wider mb-1 font-medium">
+        <div className="border-l-2 border-[#f8f9fa] pl-4 py-1 mb-4 bg-[rgba(255,255,255,0.03)] rounded-r-lg">
+          <div className="mono text-xs text-[#f8f9fa] uppercase tracking-wider mb-1 font-medium">
             Warning
           </div>
-          <div className="text-sm text-[#a5b4fc]">{result.warning}</div>
+          <div className="text-sm text-[#f8f9fa]">{result.warning}</div>
         </div>
       )}
 
       {/* Bottom info */}
-      <div className="flex items-center justify-between mt-5 pt-4 border-t border-[#262626]">
+      <div className="flex items-center justify-between mt-5 pt-4 border-t border-[rgba(255,255,255,0.06)]">
         {result.interpreted_from && (
-          <div className="mono text-[10px] text-[#71717a]">
+          <div className="mono text-[10px] text-[#a1a1aa]">
             Interpreted from: {result.interpreted_from}
           </div>
         )}
-        <span className="mono text-[10px] text-[#a5b4fc] bg-[rgba(165,180,252,0.1)] px-2 py-0.5 rounded-full border border-[rgba(165,180,252,0.3)] ml-auto">
+        <span className="mono text-[10px] text-[#f8f9fa] bg-[rgba(255,255,255,0.08)] px-2 py-0.5 rounded-full border border-[rgba(255,255,255,0.15)] ml-auto">
           Confidence: {result.confidence.toFixed(2)}
         </span>
       </div>

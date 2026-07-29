@@ -108,51 +108,52 @@ export default function PlaygroundPage() {
   };
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="max-w-5xl">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#ededed]">API Playground</h1>
-        <p className="text-[#71717a] text-sm mt-1">
-          Test the SaralGST API in real-time ·{' '}
-          <code className="mono text-[#6366F1] text-[11px]">{API_BASE}</code>
+      <div className="mb-10">
+        <div className="flex items-center gap-3 mb-2">
+          <span className="font-mono text-xs uppercase tracking-[2px] text-[#52525b]">PLAYGROUND</span>
+        </div>
+        <h1 className="font-[var(--font-serif)] text-[1.8rem] text-[#f8f9fa] tracking-[0.02em]">API Playground</h1>
+        <p className="text-[#a1a1aa] text-sm mt-2 font-light">
+          Test the SaralGST API in real-time
         </p>
       </div>
 
       {/* Tab Bar */}
-      <div className="flex gap-1 mb-6 hq-card p-1">
+      <div className="flex gap-1 mb-8 bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] p-1">
         {TABS.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+            className={`flex-1 px-4 py-3 rounded-lg text-sm transition-colors ${
               tab === t.id
-                ? 'bg-[rgba(99,102,241,0.12)] text-[#6366F1] border border-[rgba(99,102,241,0.2)]'
-                : 'text-[#71717a] hover:text-[#ededed]'
+                ? 'bg-[rgba(255,255,255,0.08)] text-[#f8f9fa]'
+                : 'text-[#52525b] hover:text-[#f8f9fa]'
             }`}
           >
-            <span className="mono text-[10px] uppercase mr-2 opacity-60">{t.method}</span>
+            <span className="font-mono text-[10px] uppercase tracking-[1px] mr-2">{t.method}</span>
             {t.label}
-            <span className="mono text-[10px] ml-2 opacity-40">{t.path}</span>
           </button>
         ))}
       </div>
 
-      <div key={tab} className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div key={tab} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Input Panel */}
-        <div className="lg:col-span-2 hq-card p-6">
-          <h2 className="text-sm font-semibold text-[#ededed] mb-4">Request</h2>
+        <div className="bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] p-8">
+          <h2 className="font-[var(--font-serif)] text-lg text-[#f8f9fa] mb-6">Request</h2>
 
           {/* Lookup inputs */}
           {tab === 'lookup' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs text-[#71717a] mb-1.5">Query <span className="text-[#6366F1]">*</span></label>
+                <label className="block text-xs text-[#a1a1aa] mb-1.5">Query <span className="text-[#f8f9fa]">*</span></label>
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="e.g., Rice, LED TV, 1006, 8528"
-                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#6366F1]/40 transition-colors text-sm"
+                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#f8f9fa] placeholder-[#52525b] focus:outline-none focus:border-[#f8f9fa]/40 transition-colors text-sm"
                   onKeyDown={(e) => e.key === 'Enter' && sendRequest()}
                 />
               </div>
@@ -166,13 +167,13 @@ export default function PlaygroundPage() {
           {tab === 'explain' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs text-[#71717a] mb-1.5">Item Name <span className="text-[#6366F1]">*</span></label>
+                <label className="block text-xs text-[#a1a1aa] mb-1.5">Item Name <span className="text-[#f8f9fa]">*</span></label>
                 <input
                   type="text"
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
                   placeholder="e.g., Rice, Mobile Phone, Cement"
-                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#6366F1]/40 transition-colors text-sm"
+                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#f8f9fa] placeholder-[#52525b] focus:outline-none focus:border-[#f8f9fa]/40 transition-colors text-sm"
                   onKeyDown={(e) => e.key === 'Enter' && sendRequest()}
                 />
               </div>
@@ -186,18 +187,18 @@ export default function PlaygroundPage() {
           {tab === 'calculate' && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs text-[#71717a] mb-1.5">Base Price (₹) <span className="text-[#6366F1]">*</span></label>
+                <label className="block text-xs text-[#a1a1aa] mb-1.5">Base Price (₹) <span className="text-[#f8f9fa]">*</span></label>
                 <input
                   type="number"
                   value={basePrice}
                   onChange={(e) => setBasePrice(e.target.value)}
                   placeholder="1000"
                   min="0"
-                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#6366F1]/40 transition-colors text-sm"
+                  className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#f8f9fa] placeholder-[#52525b] focus:outline-none focus:border-[#f8f9fa]/40 transition-colors text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs text-[#71717a] mb-1.5">GST Rate (%) <span className="text-[#6366F1]">*</span></label>
+                <label className="block text-xs text-[#a1a1aa] mb-1.5">GST Rate (%) <span className="text-[#f8f9fa]">*</span></label>
                 <div className="relative">
                   <input
                     type="number"
@@ -206,7 +207,7 @@ export default function PlaygroundPage() {
                     placeholder="18"
                     min="0"
                     max="100"
-                    className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#ededed] placeholder-[#52525b] focus:outline-none focus:border-[#6366F1]/40 transition-colors text-sm"
+                    className="w-full px-4 py-3 bg-[#141414] border border-[#262626] rounded-xl text-[#f8f9fa] placeholder-[#52525b] focus:outline-none focus:border-[#f8f9fa]/40 transition-colors text-sm"
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-1">
                     {[0, 5, 12, 18, 28].map((r) => (
@@ -215,8 +216,8 @@ export default function PlaygroundPage() {
                         onClick={() => setGstRate(String(r))}
                         className={`px-1.5 py-0.5 text-[10px] rounded ${
                           gstRate === String(r)
-                            ? 'bg-[#6366F1]/20 text-[#6366F1]'
-                            : 'text-[#52525b] hover:text-[#71717a]'
+                            ? 'bg-[#f8f9fa]/20 text-[#f8f9fa]'
+                            : 'text-[#52525b] hover:text-[#a1a1aa]'
                         }`}
                       >
                         {r}%
@@ -235,7 +236,7 @@ export default function PlaygroundPage() {
           <button
             onClick={sendRequest}
             disabled={loading}
-            className="w-full mt-6 px-5 py-3 bg-[#6366F1] text-[#000000] font-bold rounded-xl hover:bg-[#a5b4fc] disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm flex items-center justify-center gap-2"
+            className="w-full mt-6 px-5 py-3 bg-[#f8f9fa] text-[#000000] font-bold rounded-xl hover:bg-transparent hover:text-[#f8f9fa] border border-[#f8f9fa] disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -260,7 +261,7 @@ export default function PlaygroundPage() {
                 <button
                   key={ex}
                   onClick={() => { setQuery(ex); setTimeout(sendRequest, 100); }}
-                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#6366F1]/30 transition-colors mono"
+                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#a1a1aa] hover:text-[#f8f9fa] hover:border-[#f8f9fa]/30 transition-colors mono"
                 >
                   {ex}
                 </button>
@@ -269,7 +270,7 @@ export default function PlaygroundPage() {
                 <button
                   key={ex}
                   onClick={() => { setItemName(ex); setTimeout(sendRequest, 100); }}
-                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#6366F1]/30 transition-colors mono"
+                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#a1a1aa] hover:text-[#f8f9fa] hover:border-[#f8f9fa]/30 transition-colors mono"
                 >
                   {ex}
                 </button>
@@ -282,7 +283,7 @@ export default function PlaygroundPage() {
                 <button
                   key={ex.label}
                   onClick={() => { setBasePrice(ex.bp); setGstRate(ex.gr); setTimeout(sendRequest, 100); }}
-                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#71717a] hover:text-[#ededed] hover:border-[#6366F1]/30 transition-colors"
+                  className="px-2.5 py-1 text-[10px] bg-[#141414] border border-[#262626] rounded-lg text-[#a1a1aa] hover:text-[#f8f9fa] hover:border-[#f8f9fa]/30 transition-colors"
                 >
                   {ex.label}
                 </button>
@@ -292,8 +293,8 @@ export default function PlaygroundPage() {
         </div>
 
         {/* Response Panel */}
-        <div className="lg:col-span-3 hq-card p-6">
-          <h2 className="text-sm font-semibold text-[#ededed] mb-4">Response</h2>
+        <div className="bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] p-8">
+          <h2 className="font-[var(--font-serif)] text-lg text-[#f8f9fa] mb-6">Response</h2>
 
           {error && (
             <div className="mb-4 p-4 bg-[rgba(239,68,68,0.08)] border border-[rgba(239,68,68,0.2)] rounded-xl">
@@ -367,7 +368,7 @@ export default function PlaygroundPage() {
                 <span className="text-[10px] text-[#52525b] uppercase tracking-wider">Raw JSON</span>
                 <button
                   onClick={() => navigator.clipboard.writeText(rawJson)}
-                  className="text-[10px] text-[#71717a] hover:text-[#6366F1] transition-colors"
+                  className="text-[10px] text-[#a1a1aa] hover:text-[#f8f9fa] transition-colors"
                 >
                   Copy
                 </button>
@@ -385,9 +386,9 @@ export default function PlaygroundPage() {
 
 function ResultRow({ label, value, mono, gold }: { label: string; value: string; mono?: boolean; gold?: boolean }) {
   return (
-    <div className="flex items-center justify-between py-1.5 px-3 bg-[#141414] rounded-xl">
-      <span className="text-[11px] text-[#71717a]">{label}</span>
-      <span className={`text-sm ${gold ? 'text-[#6366F1] font-semibold' : 'text-[#ededed]'} ${mono ? 'mono' : ''}`}>
+    <div className="flex items-center justify-between py-2 px-4 bg-[#050505] border border-[rgba(255,255,255,0.06)] rounded-lg">
+      <span className="text-xs text-[#a1a1aa]">{label}</span>
+      <span className={`text-sm ${gold ? 'text-[#f8f9fa] font-medium' : 'text-[#f8f9fa]'} ${mono ? 'font-mono' : ''}`}>
         {value}
       </span>
     </div>
