@@ -9,15 +9,15 @@ interface UsageCounterProps {
 
 export default function UsageCounter({ onLimitReached }: UsageCounterProps) {
   const mountedRef = useRef(false);
-  const [remaining] = useState<number>(
-    () => typeof window !== 'undefined' ? storageManager.getRemainingLookups() : 3
-  );
-  const [tier] = useState<'free' | 'paid' | 'ca_firm'>(
-    () => typeof window !== 'undefined' ? storageManager.getTier() : 'free'
-  );
+  // Server-safe defaults; sync from localStorage AFTER mount to avoid
+  // hydration mismatch (server renders 0 used, localStorage may say 2).
+  const [remaining, setRemaining] = useState<number>(3);
+  const [tier, setTier] = useState<'free' | 'paid' | 'ca_firm'>('free');
 
   useEffect(() => {
     mountedRef.current = true;
+    setRemaining(storageManager.getRemainingLookups());
+    setTier(storageManager.getTier());
   }, []);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function UsageCounter({ onLimitReached }: UsageCounterProps) {
   const isLimitReached = remaining === 0;
 
   return (
-    <div className="fixed top-4 right-4" style={{ zIndex: 'var(--z-tooltip)' }}>
+    <div className="fixed top-28 right-4" style={{ zIndex: 'var(--z-tooltip)' }}>
       <div className="bg-[#0a0a0a] border border-[rgba(255,255,255,0.06)] rounded-[8px] p-3.5 shadow-lg shadow-black/40">
         <div className="flex items-center gap-3 mb-2.5">
           <span

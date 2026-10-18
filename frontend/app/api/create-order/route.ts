@@ -1,8 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
+// Simple in-memory order-minting guard: max 10 orders/hour per IP.
+// Prevents anonymous abuse of the Razorpay order API without blocking
+// the anonymous upgrade funnel (no login required to pay).
+const orderAttempts = new Map<string, { count: number; windowStart: number }>();
+const ORDER_LIMIT = 10;
+const WINDOW_MS = 60 * 60 * 1000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = orderAttempts.get(ip);
+  if (!entry || now - entry.windowStart > WINDOW_MS) {
+    orderAttempts.set(ip, { count: 1, windowStart: now });
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > ORDER_LIMIT;
+}
+
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: 'Too many order attempts. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
     // Check if Razorpay keys are configured
     if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
       return NextResponse.json(

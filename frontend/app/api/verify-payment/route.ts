@@ -31,23 +31,35 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate HMAC token for session
-    const hmacSecret = process.env.HMAC_SECRET!;
+    // HMAC_SECRET is mandatory — fail closed rather than sign with garbage
+    if (!process.env.HMAC_SECRET) {
+      console.error('HMAC_SECRET not configured - cannot issue session tokens');
+      return NextResponse.json(
+        { error: 'Server token signing not configured' },
+        { status: 500 }
+      );
+    }
+
+    // Generate HMAC token for backend session auth
+    // Format MUST match backend services/tokens.py verify_token():
+    //   "{hmac_hex}:{payment_id}:{tier}:{expires_at_iso}"
     const tier = plan === 'individual' ? 'paid' : 'ca_firm';
     const expiresAt = new Date();
     expiresAt.setMonth(expiresAt.getMonth() + 1); // 1 month expiry
+    const expiresIso = expiresAt.toISOString();
 
-    const token = crypto
-      .createHmac('sha256', hmacSecret)
-      .update(`${razorpay_payment_id}:${tier}:${expiresAt.toISOString()}`)
+    const payload = `${razorpay_payment_id}:${tier}:${expiresIso}`;
+    const tokenHmac = crypto
+      .createHmac('sha256', process.env.HMAC_SECRET)
+      .update(payload)
       .digest('hex');
 
     // Return token and details
     return NextResponse.json({
       success: true,
-      token,
+      token: `${tokenHmac}:${payload}`,
       tier,
-      expires_at: expiresAt.toISOString(),
+      expires_at: expiresIso,
     });
   } catch (error) {
     console.error('Error verifying payment:', error);

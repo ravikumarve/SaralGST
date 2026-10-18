@@ -22,6 +22,14 @@ export default function CheckPage() {
       return;
     }
 
+    // Attach paid-tier token (if purchased) to this lookup
+    const savedToken = storageManager.getToken();
+    if (savedToken) {
+      apiClient.setToken(savedToken);
+    } else {
+      apiClient.clearToken();
+    }
+
     setLoading(true);
     setError(null);
     setResult(null);

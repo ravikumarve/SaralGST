@@ -12,6 +12,11 @@
   --border-light: rgba(255, 255, 255, 0.12);
   --border-glow: rgba(255, 255, 255, 0.15);
 
+  /* Surfaces */
+  --void: #000000;
+  --surface-deep: #050505;
+  --surface-card: #0A0A0A;
+
   /* Accents */
   --indigo: #F8F9FA;
   --indigo-light: #F8F9FA;
@@ -21,6 +26,7 @@
   --pearl: #F8F9FA;
   --mercury: #A1A1AA;
   --charcoal: #52525B;
+  --indigo-glow: #6366F1;
 
   /* Typography */
   --font-serif: 'Instrument Serif', serif;
@@ -55,6 +61,10 @@
   --color-pearl: var(--pearl);
   --color-mercury: var(--mercury);
   --color-charcoal: var(--charcoal);
+  --color-indigo-glow: var(--indigo-glow);
+  --color-void: var(--void);
+  --color-surface-deep: var(--surface-deep);
+  --color-surface-card: var(--surface-card);
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
@@ -70,7 +80,12 @@
 }
 .skip-link:focus { top: 0; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+/* Reset must live in @layer base: an UNLAYERED `*` rule outranks every
+   layered Tailwind utility (cascade-layers spec), which killed px-*/py-*/mt-*
+   across the app. Inside @layer base, utilities (later layer) win. */
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+}
 
 html { height: 100%; width: 100%; }
 
@@ -134,15 +149,18 @@ p, li, .prose {
   color: var(--pearl);
 }
 
-/* HQ content area — unlayered override for Tailwind v4 @layer bug */
-/* The browser treats @layer rules as unknown (type 0), causing * reset in */
-/* @layer base to override .p-16 / .px-16 in @layer utilities. */
-main.hq-content {
-  padding: 4rem;
-}
-header.hq-topbar {
-  padding-left: 4rem;
-  padding-right: 4rem;
+/* Unlayered overrides for Tailwind v4 @layer utility bug */
+/* The browser treats @layer rules as unknown (type 0), causing utility */
+/* classes in @layer utilities to lose to base element selectors. */
+
+/* Spacing fix (from earlier) */
+main.hq-content { padding: 4rem; }
+header.hq-topbar { padding-left: 4rem; padding-right: 4rem; }
+
+/* font-mono override — base h1/h2/h3/h4/h5/h6 and button/inherit rules */
+/* would win over @layer utilities .font-mono without this. */
+h3.font-mono, h4.font-mono, button.font-mono, a.font-mono, span.font-mono {
+  font-family: var(--font-mono), monospace;
 }
 
 /* ===== Layout ===== */
@@ -310,14 +328,14 @@ footer { padding: 6rem 0 3rem; display: grid; grid-template-columns: 2fr 1fr 1fr
 .footer-bottom { margin-top: 6rem; padding-top: 2rem; border-top: 1px solid var(--border-faint); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.75rem; color: var(--charcoal); }
 
 /* ===== Misc UI ===== */
-/* Status badge (indigo variant) */
+/* Status badge (Portley indigo glow) */
 .status-badge {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 0.4rem 1rem;
-  background: var(--indigo-dim);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: 100px;
-  color: var(--indigo-light);
+  color: #a5b4fc;
   font-family: var(--font-mono), monospace;
   font-size: 0.85rem;
 }
@@ -335,12 +353,16 @@ footer { padding: 6rem 0 3rem; display: grid; grid-template-columns: 2fr 1fr 1fr
 :focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
 
 /* ===== Link ===== */
-a { color: var(--indigo); text-decoration: none; transition: color 0.2s ease; }
-a:hover { color: var(--indigo-light); }
+/* Element defaults belong in @layer base — unlayered `a { color }` outranks
+   every layered Tailwind text-color utility (e.g. text-[#000000] on the nav CTA). */
+@layer base {
+  a { color: var(--indigo); text-decoration: none; transition: color 0.2s ease; }
+  a:hover { color: var(--indigo-light); }
 
-/* ===== Base Input / Button ===== */
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
-input, textarea { font-family: inherit; border: none; background: none; outline: none; }
+  /* ===== Base Input / Button ===== */
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  input, textarea { font-family: inherit; border: none; background: none; outline: none; }
+}
 
 /* ===== HQ cards (solid border cards — Portley design) ===== */
 .glass-card { background: #0a0a0a; border: 1px solid #262626; border-radius: 16px; overflow: hidden; }

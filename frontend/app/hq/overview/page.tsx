@@ -126,7 +126,7 @@ export default function OverviewPage() {
                     <td className="py-6 border-b border-[rgba(255,255,255,0.06)] group-hover:border-b-[rgba(255,255,255,0.12)] transition-colors text-right">
                       <span className={`inline-block px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-[1px] border text-center ${
                         item.success
-                          ? 'border-[rgba(255,255,255,0.15)] text-[#f8f9fa] bg-[rgba(255,255,255,0.08)]'
+                          ? 'border-[rgba(99,102,241,0.3)] text-[#a5b4fc] bg-[rgba(99,102,241,0.1)]'
                           : 'border-[rgba(255,255,255,0.06)] text-[#a1a1aa]'
                       }`}>
                         {item.success ? 'Success' : 'Failed'}
