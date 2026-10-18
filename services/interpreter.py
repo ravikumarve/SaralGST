@@ -92,7 +92,7 @@ class InterpreterService:
         prompt = self._build_prompt(query)
         
         try:
-            response = self.model.generate_content(prompt)
+            response = await self.model.generate_content_async(prompt)
             result = response.text.strip()
             
             # Extract HSN code from response
@@ -195,24 +195,25 @@ Product/Service description: {query}"""
         }
 
 
-# Singleton instance for reuse
-_interpreter_service_instance = None
+# Per-key instance cache — never reuse one user's key for another request
+_interpreter_instances: dict = {}
 
 
 def get_interpreter_service(api_key: str, rate_engine: RateEngine) -> InterpreterService:
     """
-    Get or create the InterpreterService singleton instance.
-    
+    Get or create an InterpreterService instance for the given API key.
+
+    One instance per key: a cached singleton keyed only on "first caller"
+    would leak one user's API key into other users' requests.
+
     Args:
         api_key: Google Gemini API key
         rate_engine: RateEngine instance
-    
+
     Returns:
-        InterpreterService instance
+        InterpreterService instance bound to this key
     """
-    global _interpreter_service_instance
-    
-    if _interpreter_service_instance is None:
-        _interpreter_service_instance = InterpreterService(api_key, rate_engine)
-    
-    return _interpreter_service_instance
+    if api_key not in _interpreter_instances:
+        _interpreter_instances[api_key] = InterpreterService(api_key, rate_engine)
+
+    return _interpreter_instances[api_key]

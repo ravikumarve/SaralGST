@@ -10,8 +10,6 @@ Version: 1.0.0
 """
 
 from fastapi import APIRouter, HTTPException, Request, Header, Response
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import logging
 from typing import Optional
@@ -25,11 +23,15 @@ from models.lookup import (
 )
 from services.rate_engine import get_rate_engine, RateEngine
 from services.interpreter import get_interpreter_service, InterpreterService
+from services.ratelimit import limiter, is_paid_request
+from services.tokens import verify_token
 from config import Config
 
 
-# Configure rate limiting
-limiter = Limiter(key_func=get_remote_address)
+# Tiered limit strings (read from env at import; tests override via conftest)
+_FREE_LIMIT = f"{Config.RATE_LIMIT_FREE}/day"
+_PAID_LIMIT = f"{Config.RATE_LIMIT_PAID}/day"
+
 router = APIRouter()
 
 # Logger
@@ -37,6 +39,8 @@ logger = logging.getLogger(__name__)
 
 
 @router.post("/api/lookup", response_model=LookupResponse)
+@limiter.limit(_FREE_LIMIT, exempt_when=is_paid_request)
+@limiter.limit(_PAID_LIMIT)
 async def lookup(
     request: Request,
     lookup_request: LookupRequest,
@@ -47,14 +51,14 @@ async def lookup(
     
     Accepts plain language product names or HSN codes and returns GST rate information.
     
-    Rate Limiting:
-    - Free tier: 3 lookups per day per IP
-    - Paid tier: 1,000 lookups per day per token
+    Rate Limiting (enforced via slowapi, keyed by client IP):
+    - Free tier: RATE_LIMIT_FREE (default 3) lookups per day — 429 when exceeded
+    - Paid tier (valid X-Session-Token): RATE_LIMIT_PAID (default 1,000) per day
     
     Args:
         request: HTTP request for rate limiting
         lookup_request: Lookup request with query, query_type, and language
-        x_session_token: Optional session token for paid tier
+        x_session_token: Optional session token for paid tier (HMAC-verified)
     
     Returns:
         LookupResponse with GST rate information
@@ -64,15 +68,12 @@ async def lookup(
     """
     try:
         # Get services
-        from config import Config
         rate_engine = get_rate_engine(str(Config.RATES_FILE))
         
-        # Check if user has valid token (paid tier)
+        # Check if user has valid token (paid tier) — cryptographic verification
         is_paid = False
         if x_session_token:
-            # TODO: Validate token
-            # For now, just check if token exists
-            is_paid = True
+            is_paid, _tier, _expires = verify_token(x_session_token)
         
         # Determine query type
         query = lookup_request.query.strip()
@@ -193,16 +194,10 @@ async def lookup(
         # Build response
         response_data = response.model_dump()
         
-        # Return as JSON response with headers
+        # Return as JSON response; slowapi injects real X-RateLimit-* headers
         return Response(
             content=json.dumps(response_data),
-            media_type="application/json",
-            headers={
-                "X-RateLimit-Limit": str(Config.RATE_LIMIT_FREE),
-                "X-RateLimit-Remaining": "2",
-                "X-RateLimit-Reset": "1735689600",
-                "X-Lookups-Remaining": "2"
-            }
+            media_type="application/json"
         )
     
     except HTTPException:

@@ -11,12 +11,18 @@ Version: 1.0.0
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# Load backend/.env so uvicorn works without --env-file.
+# Existing process env vars take precedence (load_dotenv does not override).
+BASE_DIR = Path(__file__).parent
+load_dotenv(BASE_DIR / ".env")
+
 
 class Config:
     """Application configuration"""
     
     # Data paths
-    BASE_DIR = Path(__file__).parent
     DATA_DIR = BASE_DIR / "data"
     RATES_FILE = DATA_DIR / "gst_rates.json"
     

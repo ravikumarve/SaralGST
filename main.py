@@ -19,8 +19,6 @@ Version: 1.0.0
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from slowapi import Limiter
-from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from pydantic import BaseModel
 import json
@@ -33,6 +31,7 @@ import logging
 # Import config and routers
 from config import Config
 from routers import lookup, validate, v1_gst
+from services.ratelimit import limiter
 
 # Configure logging
 logging.basicConfig(
@@ -41,13 +40,26 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Lifespan handler (replaces deprecated @app.on_event)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Run on application startup and shutdown."""
+    logger.info("SaralGST API starting up...")
+    logger.info(f"Data version: {Config.DATA_VERSION}")
+    logger.info(f"Items loaded: {len(rates_data['items'])}")
+    logger.info(f"Rate limits - Free: {Config.RATE_LIMIT_FREE}/day, Paid: {Config.RATE_LIMIT_PAID}/day")
+    yield
+    logger.info("SaralGST API shutting down...")
+
+
 # Initialize FastAPI app
 app = FastAPI(
     title="SaralGST API",
     description="India's simplest GST rate checker - GST 2.0 compliant",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    lifespan=lifespan
 )
 
 # Validate configuration on startup
@@ -72,9 +84,12 @@ async def add_api_version_header(request: Request, call_next):
     response = await call_next(request)
     response.headers["X-API-Version"] = Config.API_VERSION
     return response
-# Rate limiting
-limiter = Limiter(key_func=get_remote_address)
+# Rate limiting — shared limiter instance (same object decorates all routers)
 app.state.limiter = limiter
+
+# Expose X-Session-Token to the limiter's exempt_when via ContextVar
+from services.ratelimit import SessionTokenMiddleware
+app.add_middleware(SessionTokenMiddleware)
 
 # Rate limit exceeded handler
 @app.exception_handler(RateLimitExceeded)
@@ -167,21 +182,6 @@ async def global_exception_handler(request: Request, exc: Exception):
             "message": "Internal server error. Please try again later."
         }
     )
-
-# Startup event
-@app.on_event("startup")
-async def startup_event():
-    """Run on application startup"""
-    logger.info("SaralGST API starting up...")
-    logger.info(f"Data version: {Config.DATA_VERSION}")
-    logger.info(f"Items loaded: {len(rates_data['items'])}")
-    logger.info(f"Rate limits - Free: {Config.RATE_LIMIT_FREE}/day, Paid: {Config.RATE_LIMIT_PAID}/day")
-
-# Shutdown event
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Run on application shutdown"""
-    logger.info("SaralGST API shutting down...")
 
 if __name__ == "__main__":
     import uvicorn
